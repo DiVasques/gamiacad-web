@@ -1,0 +1,20 @@
+pre-commit:
+  commands:
+    lint_code:
+      glob: '*.dart'
+      run: dart fix --apply && git add {staged_files}
+    format_code:
+      glob: '*.dart'
+      run: dart format {staged_files} && git add {staged_files}
+    static_code_analysis:
+      glob: '*.dart'
+      run: flutter analyze {all_files}
+
+pre-push:
+  commands:
+    static_code_analysis:
+      glob: '*.dart'
+      run: flutter analyze {all_files}
+    tests:
+      glob: '*test.dart'
+      run: flutter test {all_files}
