@@ -1,5 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  test('Init Commit', () {});
+  test('Base test', () {
+    expect(true, true);
+  });
 }
