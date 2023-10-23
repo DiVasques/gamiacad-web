@@ -3,6 +3,7 @@ import 'package:gami_acad_web/ui/views/login_screen.dart';
 
 class GenericRouter {
   static const String loginRoute = '/login';
+  static const String homeRoute = '/';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     WidgetBuilder builder;
@@ -15,7 +16,7 @@ class GenericRouter {
           builder: (_) {
             return Scaffold(
               body: Center(
-                child: Text('BUG: Rota não definida para ${settings.name}'),
+                child: Text('Rota não definida para ${settings.name}'),
               ),
             );
           },
