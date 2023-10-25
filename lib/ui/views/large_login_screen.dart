@@ -15,8 +15,7 @@ class LargeLoginScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Flexible(
-            flex: 4,
+          Expanded(
             child: Container(
               height: screenWidth >= 1920 ? null : 150,
               alignment: Alignment.centerLeft,
@@ -27,55 +26,47 @@ class LargeLoginScreen extends StatelessWidget {
               ),
             ),
           ),
-          Flexible(
-            flex: 3,
-            child: Center(
-              child: Container(
-                height: screenHeight > 400 ? null : 400,
-                alignment: Alignment.centerRight,
-                decoration: const BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black38,
-                      offset: Offset(-5, 0),
-                      blurRadius: 10,
-                    )
-                  ],
-                  color: AppColors.primaryColor,
-                  borderRadius: BorderRadius.horizontal(
-                    left: Radius.circular(5000),
+          Container(
+            height: screenHeight > 400 ? null : 400,
+            width: 550,
+            alignment: Alignment.centerRight,
+            decoration: const BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black38,
+                  offset: Offset(-5, 0),
+                  blurRadius: 10,
+                )
+              ],
+              color: AppColors.primaryColor,
+            ),
+            child: const Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 60, vertical: 20),
+                  child: Text(
+                    AppTexts.gamiAcadLongTitle,
+                    textAlign: TextAlign.end,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
                   ),
                 ),
-                child: const Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                Row(
                   crossAxisAlignment: CrossAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: <Widget>[
-                    Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 60, vertical: 20),
-                      child: Text(
-                        AppTexts.gamiAcadLongTitle,
-                        textAlign: TextAlign.end,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20,
-                        ),
-                      ),
-                    ),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: <Widget>[
-                        LoginForms(),
-                        SizedBox(
-                          width: 50,
-                        )
-                      ],
-                    ),
+                    LoginForms(),
+                    SizedBox(
+                      width: 50,
+                    )
                   ],
                 ),
-              ),
+              ],
             ),
           ),
         ],

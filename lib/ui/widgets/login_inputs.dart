@@ -43,11 +43,10 @@ class _LoginInputsState extends State<LoginInputs> {
           if (pwdLength < 12) {
             return AppTexts.invalidPassword;
           }
-          if (loginController.wrongCredentials) {
-            return AppTexts.incorrectCredentials;
-          } else {
-            return null;
+          if (loginController.loginError) {
+            return loginController.errorMessage;
           }
+          return null;
         }
 
         return Column(
@@ -70,7 +69,7 @@ class _LoginInputsState extends State<LoginInputs> {
               height: 20,
             ),
             DefaultTextField(
-              initValue: '!12341234123',
+              initValue: 'V!12341234123',
               validator: validatePwd,
               labelText: AppTexts.password,
               style: style,
@@ -80,11 +79,11 @@ class _LoginInputsState extends State<LoginInputs> {
               focusNode: _passwordFocus,
               textInputAction: TextInputAction.done,
               onFieldSubmitted: (_) async {
-                loginController.wrongCredentials = false;
+                loginController.loginError = false;
                 if (!_validateAndSaveFields()) {
                   return;
                 }
-                loginController.handleSingIn().then(
+                loginController.handleSignIn().then(
                   (result) {
                     if (result.status) {
                       Navigator.pushNamedAndRemoveUntil(
