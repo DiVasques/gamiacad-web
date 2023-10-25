@@ -1,12 +1,17 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:gami_acad_web/middlewares/unauthorized_interceptor.dart';
 import 'package:gami_acad_web/ui/routers/generic_router.dart';
 import 'package:gami_acad_web/ui/utils/app_colors.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 final globalNavigatorKey = GlobalKey<NavigatorState>();
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   initializeDateFormatting('pt_BR');
+  await dotenv.load();
+  PlatformDispatcher.instance.onError = UnauthorizedInterceptor.onError;
   runApp(const MainApp());
 }
 

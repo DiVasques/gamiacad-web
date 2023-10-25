@@ -13,7 +13,7 @@ class LoginScreen extends StatelessWidget {
     double screenHeight = MediaQuery.of(context).size.height;
 
     Widget createChild() {
-      if (screenWidth < 1150) {
+      if (screenWidth < 800) {
         return const SmallLoginScreen();
       }
 

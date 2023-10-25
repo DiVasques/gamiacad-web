@@ -21,11 +21,11 @@ class LoginButton extends StatelessWidget {
             animationDuration: const Duration(milliseconds: 600),
             onPressed: loginController.state == ViewState.idle
                 ? () async {
-                    loginController.wrongCredentials = false;
+                    loginController.loginError = false;
                     if (!_validateAndSaveFields()) {
                       return;
                     }
-                    loginController.handleSingIn().then(
+                    loginController.handleSignIn().then(
                       (result) {
                         if (result.status) {
                           Navigator.pushNamedAndRemoveUntil(
