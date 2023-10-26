@@ -27,8 +27,13 @@ class MainApp extends StatelessWidget {
       theme: ThemeData(
         appBarTheme: const AppBarTheme(
           iconTheme: IconThemeData(color: AppColors.primaryColor),
-          elevation: 0,
-          backgroundColor: Colors.transparent,
+          titleTextStyle: TextStyle(
+            color: AppColors.primaryColor,
+            fontWeight: FontWeight.bold,
+            fontSize: 25,
+          ),
+          elevation: 1,
+          backgroundColor: Colors.white,
           centerTitle: true,
         ),
         bottomNavigationBarTheme: const BottomNavigationBarThemeData(
