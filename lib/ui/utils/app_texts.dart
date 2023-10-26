@@ -1,4 +1,5 @@
 class AppTexts {
+  static const expirationDate = 'Disponível até';
   static const gamiAcadLongTitle = 'Portal do Admin GamiAcad';
   static const invalidRegistration = 'CPF inválido';
   static const invalidPassword = 'Senha deve ter mais de 12 caracteres';
@@ -9,6 +10,8 @@ class AppTexts {
   static const missionList = 'Lista de Missões';
   static const ok = 'Ok';
   static const password = 'Senha';
+  static const points = 'Pontos';
+  static const price = 'Preço';
   static const registration = 'CPF';
   static const rewardList = 'Lista de Recompensas';
 }

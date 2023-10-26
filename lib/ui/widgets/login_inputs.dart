@@ -90,6 +90,7 @@ class _LoginInputsState extends State<LoginInputs> {
                         context,
                         GenericRouter.homeRoute,
                         (Route<dynamic> route) => false,
+                        arguments: loginController.userAccess.id,
                       );
                       return;
                     }

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:gami_acad_web/ui/controllers/mission_controller.dart';
 import 'package:gami_acad_web/ui/utils/app_texts.dart';
+import 'package:gami_acad_web/ui/utils/extensions/int_extension.dart';
+import 'package:gami_acad_web/ui/utils/view_state.dart';
 import 'package:gami_acad_web/ui/views/base_section_view.dart';
+import 'package:gami_acad_web/ui/widgets/default_grid_card.dart';
 import 'package:provider/provider.dart';
 
 class MissionListView extends StatelessWidget {
@@ -9,16 +12,36 @@ class MissionListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    int crossAxisCount = screenWidth ~/ 400;
+
     return Consumer<MissionController>(
-        builder: (context, missionController, _) {
-      return BaseSectionView(
-        viewTitle: AppTexts.missionList,
-        state: missionController.state,
-        errorBody: const Center(
-          child: Text('erro'),
-        ),
-        body: const Text(AppTexts.missionList),
-      );
-    });
+      builder: (context, missionController, _) {
+        return BaseSectionView(
+          viewTitle: AppTexts.missionList,
+          state: missionController.state,
+          body: GridView.count(
+            childAspectRatio: 2.5,
+            crossAxisCount: crossAxisCount,
+            crossAxisSpacing: 30,
+            mainAxisSpacing: 30,
+            padding: const EdgeInsets.all(30),
+            children: missionController.state != ViewState.idle
+                ? []
+                : missionController.missions.map(
+                    (mission) {
+                      return DefaultGridCard(
+                        id: mission.id,
+                        title: mission.name,
+                        subTitle: '#${mission.number}',
+                        trailingTextTitle: '${AppTexts.points}: ',
+                        trailingText: mission.points.toStringDecimal(),
+                      );
+                    },
+                  ).toList(),
+          ),
+        );
+      },
+    );
   }
 }

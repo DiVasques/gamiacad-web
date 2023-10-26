@@ -7,7 +7,8 @@ import 'package:gami_acad_web/ui/widgets/home_drawer.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+  final String userId;
+  const HomeScreen({super.key, required this.userId});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +24,7 @@ class HomeScreen extends StatelessWidget {
                 builder: (context, homeController, _) {
                   switch (homeController.selectedView) {
                     case SelectedViewState.mission:
-                      return const MissionView();
+                      return MissionView(userId: userId);
                     case SelectedViewState.reward:
                       return const RewardView();
                   }
