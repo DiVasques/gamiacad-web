@@ -15,7 +15,7 @@ class HomeController extends BaseController {
 
   bool _showDrawerText = false;
   bool get showDrawerText => _showDrawerText;
-  set showDrawerText(showDrawerText) {
+  set showDrawerText(bool showDrawerText) {
     _showDrawerText = showDrawerText;
     notifyListeners();
   }
