@@ -13,7 +13,8 @@ class GenericRouter {
         builder = (BuildContext _) => const LoginScreen();
         break;
       case homeRoute:
-        builder = (BuildContext _) => const HomeScreen();
+        builder = (BuildContext _) =>
+            HomeScreen(userId: settings.arguments as String);
         break;
       default:
         return MaterialPageRoute(

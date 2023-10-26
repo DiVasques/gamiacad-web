@@ -32,6 +32,7 @@ class LoginButton extends StatelessWidget {
                             context,
                             GenericRouter.homeRoute,
                             (Route<dynamic> route) => false,
+                            arguments: loginController.userAccess.id,
                           );
                           return;
                         }
