@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gami_acad_web/ui/views/home_screen.dart';
 import 'package:gami_acad_web/ui/views/login_screen.dart';
 
 class GenericRouter {
@@ -10,6 +11,9 @@ class GenericRouter {
     switch (settings.name) {
       case loginRoute:
         builder = (BuildContext _) => const LoginScreen();
+        break;
+      case homeRoute:
+        builder = (BuildContext _) => const HomeScreen();
         break;
       default:
         return MaterialPageRoute(

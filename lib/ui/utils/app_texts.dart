@@ -6,7 +6,9 @@ class AppTexts {
   static const loginExpired = 'Login Expirado.';
   static const loginExpiredLongText =
       'Entre novamente com suas credenciais para continuar utilizando o aplicativo.';
+  static const missionList = 'Lista de Missões';
   static const ok = 'Ok';
   static const password = 'Senha';
   static const registration = 'CPF';
+  static const rewardList = 'Lista de Recompensas';
 }
