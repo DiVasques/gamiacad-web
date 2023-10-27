@@ -1,5 +1,6 @@
 class AppTexts {
   static const expirationDate = 'Disponível até';
+  static const error = 'Erro';
   static const gamiAcadLongTitle = 'Portal do Admin GamiAcad';
   static const invalidRegistration = 'CPF inválido';
   static const invalidPassword = 'Senha deve ter mais de 12 caracteres';

@@ -4,6 +4,7 @@ import 'package:gami_acad_web/ui/utils/app_texts.dart';
 import 'package:gami_acad_web/ui/utils/extensions/int_extension.dart';
 import 'package:gami_acad_web/ui/utils/view_state.dart';
 import 'package:gami_acad_web/ui/views/base_section_view.dart';
+import 'package:gami_acad_web/ui/widgets/default_error_view.dart';
 import 'package:gami_acad_web/ui/widgets/default_grid_card.dart';
 import 'package:provider/provider.dart';
 
@@ -20,6 +21,10 @@ class MissionListView extends StatelessWidget {
         return BaseSectionView(
           viewTitle: AppTexts.missionList,
           state: missionController.state,
+          errorBody: DefaultErrorView(
+            message: missionController.errorMessage,
+            onPressed: missionController.getMissions,
+          ),
           body: GridView.count(
             childAspectRatio: 2.0,
             crossAxisCount: crossAxisCount,

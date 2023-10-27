@@ -26,6 +26,7 @@ class DefaultGridCard extends StatelessWidget {
     return GestureDetector(
       onTap: onCardTap,
       child: Card(
+        color: Colors.white,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(3),
           side: const BorderSide(color: Colors.black54, width: 1),

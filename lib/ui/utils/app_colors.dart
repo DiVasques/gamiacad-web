@@ -6,5 +6,6 @@ class AppColors {
   static const Color lighterPrimaryColor = Color.fromARGB(255, 61, 178, 7);
 
   static const Color detailsScreensBackground = Colors.white;
-  static const Color cancel = Colors.red;
+  static const Color cancel = Color.fromRGBO(244, 67, 54, 1);
+  static const Color errorGray = Color.fromARGB(255, 87, 87, 87);
 }
