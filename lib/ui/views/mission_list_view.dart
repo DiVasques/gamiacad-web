@@ -13,7 +13,7 @@ class MissionListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
-    int crossAxisCount = screenWidth ~/ 400;
+    int crossAxisCount = screenWidth ~/ 350;
 
     return Consumer<MissionController>(
       builder: (context, missionController, _) {
@@ -21,7 +21,7 @@ class MissionListView extends StatelessWidget {
           viewTitle: AppTexts.missionList,
           state: missionController.state,
           body: GridView.count(
-            childAspectRatio: 2.5,
+            childAspectRatio: 2.0,
             crossAxisCount: crossAxisCount,
             crossAxisSpacing: 30,
             mainAxisSpacing: 30,

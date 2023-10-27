@@ -26,7 +26,7 @@ class HomeScreen extends StatelessWidget {
                     case SelectedViewState.mission:
                       return MissionView(userId: userId);
                     case SelectedViewState.reward:
-                      return const RewardView();
+                      return RewardView(userId: userId);
                   }
                 },
               ),
