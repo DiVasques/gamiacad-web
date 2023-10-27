@@ -38,7 +38,7 @@ class MissionListView extends StatelessWidget {
                       return DefaultGridCard(
                         id: mission.id,
                         title: mission.name,
-                        subTitle: '#${mission.number}',
+                        subTitle: '#${mission.number.toStringLeadingZeroes()}',
                         trailingTextTitle: '${AppTexts.points}: ',
                         trailingText: mission.points.toStringDecimal(),
                       );
