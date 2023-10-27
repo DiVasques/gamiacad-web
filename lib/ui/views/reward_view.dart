@@ -4,12 +4,13 @@ import 'package:gami_acad_web/ui/views/reward_list_view.dart';
 import 'package:provider/provider.dart';
 
 class RewardView extends StatelessWidget {
-  const RewardView({super.key});
+  final String userId;
+  const RewardView({super.key, required this.userId});
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => RewardController(),
+      create: (_) => RewardController(userId: userId),
       child: Consumer<RewardController>(
         builder: (context, rewardController, _) {
           return const RewardListView();

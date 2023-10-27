@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 class HomeDrawer extends StatelessWidget {
   final int drawerSize = 56;
   final double drawerTextWidth = 200;
-  final Duration animationDuration = const Duration(milliseconds: 300);
+  final Duration animationDuration = const Duration(milliseconds: 100);
   final Curve animationCurve = Curves.fastOutSlowIn;
   const HomeDrawer({super.key});
 
