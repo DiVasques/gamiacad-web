@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gami_acad_web/ui/utils/app_texts.dart';
 import 'package:gami_acad_web/ui/utils/view_state.dart';
 
 class BaseSectionView extends StatelessWidget {
@@ -10,7 +11,12 @@ class BaseSectionView extends StatelessWidget {
   const BaseSectionView({
     super.key,
     required this.viewTitle,
-    this.errorBody = const Center(),
+    this.errorBody = const Center(
+      child: Text(
+        AppTexts.error,
+        style: TextStyle(fontSize: 20),
+      ),
+    ),
     this.loadingBody = const Center(
       child: CircularProgressIndicator(),
     ),

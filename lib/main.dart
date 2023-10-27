@@ -25,6 +25,7 @@ class MainApp extends StatelessWidget {
       navigatorKey: globalNavigatorKey,
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
+        useMaterial3: true,
         appBarTheme: const AppBarTheme(
           iconTheme: IconThemeData(color: AppColors.primaryColor),
           titleTextStyle: TextStyle(
@@ -34,6 +35,7 @@ class MainApp extends StatelessWidget {
           ),
           elevation: 1,
           backgroundColor: Colors.white,
+          surfaceTintColor: Colors.white,
           centerTitle: true,
         ),
         bottomNavigationBarTheme: const BottomNavigationBarThemeData(
