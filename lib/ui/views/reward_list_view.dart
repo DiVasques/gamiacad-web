@@ -38,7 +38,7 @@ class RewardListView extends StatelessWidget {
                       return DefaultGridCard(
                         id: reward.id,
                         title: reward.name,
-                        subTitle: '#${reward.number}',
+                        subTitle: '#${reward.number.toStringLeadingZeroes()}',
                         trailingTextTitle: '${AppTexts.price}: ',
                         trailingText: reward.price.toStringDecimal(),
                       );
