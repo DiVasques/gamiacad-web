@@ -24,11 +24,18 @@ class HomeDrawerItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color getColor(SelectedViewState selectedView) {
+    Color getBackgroundColor(SelectedViewState selectedView) {
       if (viewState == selectedView) {
-        return AppColors.lighterPrimaryColor;
+        return AppColors.backgroundColor;
       }
       return AppColors.darkerPrimaryColor;
+    }
+
+    Color getElementColor(SelectedViewState selectedView) {
+      if (viewState == selectedView) {
+        return AppColors.darkerPrimaryColor;
+      }
+      return Colors.white;
     }
 
     return Consumer<HomeController>(
@@ -45,10 +52,10 @@ class HomeDrawerItem extends StatelessWidget {
               child: Container(
                 width: 56,
                 height: 56,
-                color: getColor(homeController.selectedView),
+                color: getBackgroundColor(homeController.selectedView),
                 child: Icon(
                   icon,
-                  color: Colors.white,
+                  color: getElementColor(homeController.selectedView),
                 ),
               ),
             ),
@@ -65,7 +72,7 @@ class HomeDrawerItem extends StatelessWidget {
                 duration: animationDuration,
                 width: homeController.showOpenedDrawer ? drawerTextWidth : 0,
                 height: 56,
-                color: getColor(homeController.selectedView),
+                color: getBackgroundColor(homeController.selectedView),
                 onEnd: () {
                   homeController.showDrawerText = true;
                 },
@@ -73,8 +80,8 @@ class HomeDrawerItem extends StatelessWidget {
                     ? Text(
                         homeController.showDrawerText ? drawerTitle : '',
                         textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          color: Colors.white,
+                        style: TextStyle(
+                          color: getElementColor(homeController.selectedView),
                           fontWeight: FontWeight.bold,
                         ),
                       )
