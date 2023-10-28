@@ -1,4 +1,5 @@
 import 'package:gami_acad_web/repository/mission_repository.dart';
+import 'package:gami_acad_web/repository/models/create_mission.dart';
 import 'package:gami_acad_web/repository/models/exceptions/service_unavailable_exception.dart';
 import 'package:gami_acad_web/repository/models/exceptions/unauthorized_exception.dart';
 import 'package:gami_acad_web/repository/models/mission.dart';
@@ -7,7 +8,7 @@ import 'package:gami_acad_web/ui/controllers/base_controller.dart';
 import 'package:gami_acad_web/ui/utils/error_messages.dart';
 import 'package:gami_acad_web/ui/utils/view_state.dart';
 
-enum MissionViewState { list }
+enum MissionViewState { list, create }
 
 class MissionController extends BaseController {
   late String userId;
@@ -49,6 +50,34 @@ class MissionController extends BaseController {
     } catch (e) {
       setErrorMessage(ErrorMessages.unknownError);
       setState(ViewState.error);
+    }
+  }
+
+  Future<bool> createMission({
+    required String name,
+    required String description,
+    required int points,
+    required DateTime expirationDate,
+  }) async {
+    CreateMission newMission = CreateMission(
+      name: name,
+      description: description,
+      points: points,
+      expirationDate: expirationDate,
+      createdBy: userId,
+    );
+    setState(ViewState.busy);
+    try {
+      Result result = await _missionRepository.createMission(
+        newMission: newMission,
+      );
+      return result.status;
+    } on UnauthorizedException {
+      rethrow;
+    } catch (e) {
+      return false;
+    } finally {
+      setState(ViewState.idle);
     }
   }
 }

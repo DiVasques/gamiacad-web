@@ -20,6 +20,9 @@ class MissionListView extends StatelessWidget {
       builder: (context, missionController, _) {
         return BaseSectionView(
           viewTitle: AppTexts.missionList,
+          headerAction: () =>
+              missionController.selectedView = MissionViewState.create,
+          actionButtonText: AppTexts.add,
           state: missionController.state,
           errorBody: DefaultErrorView(
             message: missionController.errorMessage,

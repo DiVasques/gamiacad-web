@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gami_acad_web/ui/controllers/mission_controller.dart';
+import 'package:gami_acad_web/ui/views/mission_create_view.dart';
 import 'package:gami_acad_web/ui/views/mission_list_view.dart';
 import 'package:provider/provider.dart';
 
@@ -13,7 +14,12 @@ class MissionView extends StatelessWidget {
       create: (_) => MissionController(userId: userId),
       child: Consumer<MissionController>(
         builder: (context, missionController, _) {
-          return const MissionListView();
+          switch (missionController.selectedView) {
+            case MissionViewState.list:
+              return const MissionListView();
+            case MissionViewState.create:
+              return const MissionCreateView();
+          }
         },
       ),
     );
