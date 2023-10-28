@@ -6,6 +6,7 @@ import 'package:gami_acad_web/ui/controllers/mission_controller.dart';
 import 'package:gami_acad_web/ui/utils/app_colors.dart';
 import 'package:gami_acad_web/ui/utils/app_texts.dart';
 import 'package:gami_acad_web/ui/utils/extensions/date_extension.dart';
+import 'package:gami_acad_web/ui/utils/extensions/string_extension.dart';
 import 'package:gami_acad_web/ui/utils/field_validators.dart';
 import 'package:gami_acad_web/ui/views/base_section_view.dart';
 import 'package:gami_acad_web/ui/widgets/default_text_field.dart';
@@ -178,22 +179,27 @@ class _MissionCreateViewState extends State<MissionCreateView> {
                         ),
                         TextButton(
                           onPressed: () async {
-                            bool validationResult =
-                                await validateFields(_formKey);
-                            if (validationResult == false) {
+                            if (!_formKey.currentState!.validate()) {
                               return;
                             }
+                            bool result = await missionController.createMission(
+                              name: _nameController.text,
+                              description: _descriptionController.text,
+                              points: int.parse(_pointsController.text),
+                              expirationDate: _expirationDateController.text
+                                  .toLocalDateTime(),
+                            );
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 duration: const Duration(seconds: 2),
                                 content: Text(
-                                  validationResult
+                                  result
                                       ? AppTexts.missionCreateSucesso
                                       : AppTexts.missionCreateError,
                                 ),
                               ),
                             );
-                            if (validationResult) {
+                            if (result) {
                               missionController.getMissions();
                               missionController.selectedView =
                                   MissionViewState.list;
@@ -245,13 +251,5 @@ class _MissionCreateViewState extends State<MissionCreateView> {
       );
     }
     _expirationDateController.text = selectedDate.toLocalDateTimeString();
-  }
-
-  Future<bool> validateFields(GlobalKey<FormState> formKey) async {
-    final formState = formKey.currentState;
-    if (!formState!.validate()) {
-      return false;
-    }
-    return true;
   }
 }

@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:gami_acad_web/repository/models/create_mission.dart';
 import 'package:gami_acad_web/repository/models/exceptions/forbidden_exception.dart';
 import 'package:gami_acad_web/repository/models/exceptions/service_unavailable_exception.dart';
 import 'package:gami_acad_web/repository/models/exceptions/unauthorized_exception.dart';
@@ -32,6 +33,35 @@ class MissionRepository {
         missions = (response.data['missions'] as List<dynamic>)
             .map((mission) => Mission.fromJson(mission))
             .toList();
+        return result;
+      }
+      return result;
+    } on DioException catch (error) {
+      if (error.response?.statusCode == 401) {
+        throw UnauthorizedException();
+      }
+      if (error.response?.statusCode == 403) {
+        throw ForbiddenException();
+      }
+      throw ServiceUnavailableException();
+    } catch (e) {
+      throw ServiceUnavailableException();
+    }
+  }
+
+  Future<Result> createMission({required CreateMission newMission}) async {
+    try {
+      var response = await _gamiAcadDioClient.post(
+        path: '/mission',
+        body: newMission.toJson(),
+      );
+      var result = Result(
+        status: false,
+        code: response.statusCode,
+        message: response.statusMessage,
+      );
+      if (response.statusCode == 201) {
+        result.status = true;
         return result;
       }
       return result;
