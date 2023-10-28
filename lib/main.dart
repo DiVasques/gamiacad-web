@@ -1,15 +1,14 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:gami_acad_web/middlewares/unauthorized_interceptor.dart';
 import 'package:gami_acad_web/ui/routers/generic_router.dart';
 import 'package:gami_acad_web/ui/utils/app_colors.dart';
-import 'package:intl/date_symbol_data_local.dart';
 
 final globalNavigatorKey = GlobalKey<NavigatorState>();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  initializeDateFormatting('pt_BR');
   await dotenv.load();
   PlatformDispatcher.instance.onError = UnauthorizedInterceptor.onError;
   runApp(const MainApp());
@@ -22,6 +21,16 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'GamiAcad',
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('en'),
+        Locale('es'),
+        Locale('pt', 'BR'),
+      ],
       navigatorKey: globalNavigatorKey,
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
@@ -49,10 +58,23 @@ class MainApp extends StatelessWidget {
           space: 2,
           color: Colors.black54,
         ),
+        textButtonTheme: TextButtonThemeData(
+          style: TextButton.styleFrom(
+            backgroundColor: AppColors.primaryColor,
+            iconColor: Colors.white,
+            surfaceTintColor: Colors.white,
+            textStyle: const TextStyle(
+              color: Colors.white,
+            ),
+            foregroundColor: Colors.white,
+          ),
+        ),
         floatingActionButtonTheme: const FloatingActionButtonThemeData(
           backgroundColor: AppColors.primaryColor,
           elevation: 2,
         ),
+        snackBarTheme: const SnackBarThemeData(
+            behavior: SnackBarBehavior.floating, width: 400),
         fontFamily: 'Montserrat',
         primaryColor: AppColors.primaryColor,
         scaffoldBackgroundColor: AppColors.backgroundColor,
