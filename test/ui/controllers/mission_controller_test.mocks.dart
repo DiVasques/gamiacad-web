@@ -88,4 +88,22 @@ class MockMissionRepository extends _i1.Mock implements _i3.MissionRepository {
           ),
         )),
       ) as _i5.Future<_i2.Result>);
+
+  @override
+  _i5.Future<_i2.Result> deactivateMission({required String? missionId}) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #deactivateMission,
+          [],
+          {#missionId: missionId},
+        ),
+        returnValue: _i5.Future<_i2.Result>.value(_FakeResult_0(
+          this,
+          Invocation.method(
+            #deactivateMission,
+            [],
+            {#missionId: missionId},
+          ),
+        )),
+      ) as _i5.Future<_i2.Result>);
 }

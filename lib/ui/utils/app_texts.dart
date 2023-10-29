@@ -1,28 +1,37 @@
 class AppTexts {
   static const add = 'Adicionar';
   static const back = 'Voltar';
+  static const cancel = 'Cancelar';
+  static const confirmation = 'Confirmação';
   static const create = 'Criar';
-  static const description = 'Descrição';
   static const datePlaceholder = '01/01/2001 00:00';
-  static const expirationDate = 'Disponível até';
+  static const deactivate = 'Desativar';
+  static const description = 'Descrição';
+  static const edit = 'Editar';
   static const error = 'Erro';
+  static const expirationDate = 'Disponível até';
   static const gamiAcadLongTitle = 'Portal do Admin GamiAcad';
-  static const invalidRegistration = 'CPF inválido';
   static const invalidPassword = 'Senha deve ter mais de 12 caracteres';
-  static const login = 'Entrar';
-  static const loginExpired = 'Login Expirado.';
-  static const loginExpiredLongText =
-      'Entre novamente com suas credenciais para continuar utilizando a aplicação.';
-  static const missionList = 'Lista de Missões';
-  static const missionCreate = 'Criar Missão';
-  static const missionCreateError =
-      'Erro ao criar a Missão. Tente novamente mais tarde.';
-  static const missionCreateSucesso = 'Missão criada com sucesso!';
+  static const invalidRegistration = 'CPF inválido';
   static const name = 'Nome';
   static const ok = 'Ok';
   static const password = 'Senha';
   static const points = 'Pontos';
   static const price = 'Preço';
   static const registration = 'CPF';
+  static const yes = 'Sim';
+  static const login = 'Entrar';
+  static const loginExpired = 'Login Expirado.';
+  static const loginExpiredLongText =
+      'Entre novamente com suas credenciais para continuar utilizando a aplicação.';
+  static const missionCreate = 'Criar Missão';
+  static const missionCreateError =
+      'Erro ao criar a Missão. Tente novamente mais tarde.';
+  static const missionCreateSuccess = 'Missão criada com sucesso!';
+  static const missionDeactivateConfirmation = 'Deseja desativar essa missão?';
+  static const missionDeactivateError =
+      'Erro ao desativar a Missão. Tente novamente mais tarde.';
+  static const missionDeactivateSuccess = 'Missão desativada com sucesso!';
+  static const missionList = 'Lista de Missões';
   static const rewardList = 'Lista de Recompensas';
 }

@@ -194,7 +194,7 @@ class _MissionCreateViewState extends State<MissionCreateView> {
                                 duration: const Duration(seconds: 2),
                                 content: Text(
                                   result
-                                      ? AppTexts.missionCreateSucesso
+                                      ? AppTexts.missionCreateSuccess
                                       : AppTexts.missionCreateError,
                                 ),
                               ),

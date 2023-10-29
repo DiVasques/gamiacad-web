@@ -80,4 +80,22 @@ class MissionController extends BaseController {
       setState(ViewState.idle);
     }
   }
+
+  Future<bool> deactivateMission({
+    required String missionId,
+  }) async {
+    setState(ViewState.busy);
+    try {
+      Result result = await _missionRepository.deactivateMission(
+        missionId: missionId,
+      );
+      return result.status;
+    } on UnauthorizedException {
+      rethrow;
+    } catch (e) {
+      return false;
+    } finally {
+      setState(ViewState.idle);
+    }
+  }
 }

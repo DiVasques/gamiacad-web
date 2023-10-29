@@ -7,8 +7,7 @@ class DefaultGridCard extends StatelessWidget {
   final String? trailingText;
   final String? trailingTextTitle;
   final void Function()? onCardTap;
-  final void Function()? onTapEdit;
-  final void Function()? onTapDelete;
+  final List<Widget>? actions;
   const DefaultGridCard({
     super.key,
     required this.id,
@@ -17,21 +16,20 @@ class DefaultGridCard extends StatelessWidget {
     this.trailingText,
     this.trailingTextTitle,
     this.onCardTap,
-    this.onTapEdit,
-    this.onTapDelete,
+    this.actions,
   });
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onCardTap,
-      child: Card(
-        color: Colors.white,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(3),
-          side: const BorderSide(color: Colors.black54, width: 1),
-        ),
-        elevation: 1,
+    return Card(
+      color: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(3),
+        side: const BorderSide(color: Colors.black54, width: 1),
+      ),
+      elevation: 1,
+      child: InkWell(
+        onTap: onCardTap,
         child: Padding(
           padding: const EdgeInsets.all(10),
           child: Column(
@@ -72,21 +70,7 @@ class DefaultGridCard extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.end,
-                children: <Widget>[
-                  InkWell(
-                      onTap: onTapEdit,
-                      child: Icon(
-                        Icons.edit,
-                        color: Colors.grey[700],
-                      )),
-                  InkWell(
-                    onTap: onTapDelete,
-                    child: const Icon(
-                      Icons.delete,
-                      color: Colors.red,
-                    ),
-                  ),
-                ],
+                children: actions ?? [],
               )
             ],
           ),
