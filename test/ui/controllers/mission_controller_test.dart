@@ -22,19 +22,21 @@ void main() {
 
     String userId = 'userId';
 
+    String missionId = 'missionId';
+
     Mission mission = Mission(
-      id: 'id',
-      name: 'name',
-      description: 'description',
-      number: 1,
-      points: 100,
-      expirationDate: DateTime.now(),
-      createdAt: DateTime.now(),
-      updatedAt: DateTime.now(),
-      createdBy: 'createdBy',
-      participants: ["123"],
-      completers: ["456"],
-    );
+        id: missionId,
+        name: 'name',
+        description: 'description',
+        number: 1,
+        points: 100,
+        expirationDate: DateTime.now(),
+        createdAt: DateTime.now(),
+        updatedAt: DateTime.now(),
+        createdBy: 'createdBy',
+        participants: ["123"],
+        completers: ["456"],
+        active: true);
 
     CreateMission newMission = CreateMission(
       name: 'name',
@@ -118,6 +120,7 @@ void main() {
         expect(missionController.state, ViewState.error);
       });
     });
+
     group('createMission', () {
       test('should return true when successful creating mission', () async {
         // Arrange
@@ -142,7 +145,7 @@ void main() {
         expect(result, true);
       });
 
-      test('should return unsuccessful result on failed get missions',
+      test('should return unsuccessful result on failed create mission',
           () async {
         // Arrange
         when(missionRepository.createMission(
@@ -206,6 +209,79 @@ void main() {
           points: newMission.points,
           expirationDate: newMission.expirationDate,
         );
+
+        // Assert
+        expect(missionController.state, ViewState.idle);
+        expect(result, false);
+      });
+    });
+
+    group('deactivateMission', () {
+      test('should return true when successful deactivating mission', () async {
+        // Arrange
+        when(missionRepository.deactivateMission(missionId: missionId))
+            .thenAnswer((_) async => Result(status: true, message: 'Success'));
+        missionController = MissionController(
+          userId: userId,
+          missionRepository: missionRepository,
+        );
+
+        // Act
+        var result =
+            await missionController.deactivateMission(missionId: missionId);
+
+        // Assert
+        expect(missionController.state, ViewState.idle);
+        expect(result, true);
+      });
+
+      test('should return unsuccessful result when failing', () async {
+        // Arrange
+        when(missionRepository.deactivateMission(missionId: missionId))
+            .thenAnswer((_) async => Result(status: false, message: 'Error'));
+        missionController = MissionController(
+          userId: userId,
+          missionRepository: missionRepository,
+        );
+
+        // Act
+        var result =
+            await missionController.deactivateMission(missionId: missionId);
+
+        // Assert
+        expect(missionController.state, ViewState.idle);
+        expect(result, false);
+      });
+
+      test('should throw when unauthorized', () async {
+        // Arrange
+        when(missionRepository.deactivateMission(missionId: missionId))
+            .thenThrow((_) async => UnauthorizedException);
+        missionController = MissionController(
+          userId: userId,
+          missionRepository: missionRepository,
+        );
+
+        // Act and Assert
+        try {
+          await missionController.deactivateMission(missionId: missionId);
+        } catch (e) {
+          expect(e.runtimeType, UnauthorizedException);
+        }
+      });
+
+      test('should return error when another exception', () async {
+        // Arrange
+        when(missionRepository.deactivateMission(missionId: missionId))
+            .thenThrow((_) async => ServiceUnavailableException);
+        missionController = MissionController(
+          userId: userId,
+          missionRepository: missionRepository,
+        );
+
+        // Act
+        var result =
+            await missionController.deactivateMission(missionId: missionId);
 
         // Assert
         expect(missionController.state, ViewState.idle);

@@ -10,6 +10,7 @@ class Mission {
   String createdBy;
   List<String> participants;
   List<String> completers;
+  bool active;
   Mission({
     required this.id,
     required this.name,
@@ -22,6 +23,7 @@ class Mission {
     required this.createdBy,
     required this.participants,
     required this.completers,
+    required this.active,
   });
 
   factory Mission.fromJson(Map<String, dynamic> json) => Mission(
@@ -40,6 +42,7 @@ class Mission {
         completers: (json['completers'] as List<dynamic>)
             .map((c) => c as String)
             .toList(),
+        active: json['active'],
       );
 
   Map<String, dynamic> toJson() => {
@@ -54,5 +57,6 @@ class Mission {
         'createdBy': createdBy,
         'participants': participants,
         'completers': completers,
+        'active': active,
       };
 }

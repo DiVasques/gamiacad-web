@@ -40,7 +40,7 @@ class HomeDrawer extends StatelessWidget {
                 viewState: SelectedViewState.reward,
               ),
               Expanded(
-                child: GestureDetector(
+                child: InkWell(
                   onTap: homeController.drawerTapFunction,
                   child: AnimatedContainer(
                     curve: animationCurve,
