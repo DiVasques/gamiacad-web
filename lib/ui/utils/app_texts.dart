@@ -12,7 +12,7 @@ class AppTexts {
   static const login = 'Entrar';
   static const loginExpired = 'Login Expirado.';
   static const loginExpiredLongText =
-      'Entre novamente com suas credenciais para continuar utilizando o aplicativo.';
+      'Entre novamente com suas credenciais para continuar utilizando a aplicação.';
   static const missionList = 'Lista de Missões';
   static const missionCreate = 'Criar Missão';
   static const missionCreateError =
