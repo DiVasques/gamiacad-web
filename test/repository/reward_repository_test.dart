@@ -20,8 +20,10 @@ void main() {
     late RewardRepository rewardRepository;
     late MockGamiAcadDioClient gamiAcadDioClient;
 
+    String rewardId = 'id';
+
     Reward reward = Reward(
-      id: 'id',
+      id: rewardId,
       name: 'name',
       description: 'description',
       number: 1,
@@ -31,6 +33,7 @@ void main() {
       updatedAt: DateTime.now(),
       claimers: ["123"],
       handed: ["456"],
+      active: true,
     );
 
     CreateReward newReward = CreateReward(
@@ -257,6 +260,104 @@ void main() {
         // Act and Assert
         try {
           await rewardRepository.createReward(newReward: newReward);
+        } catch (e) {
+          expect(e.runtimeType, ServiceUnavailableException);
+        }
+      });
+    });
+
+    group('deactivateReward', () {
+      test('should return success deactivateReward', () async {
+        // Arrange
+        Response response = Response(
+          requestOptions: RequestOptions(),
+          statusCode: 204,
+          statusMessage: 'Success',
+        );
+        when(gamiAcadDioClient.delete(
+          path: '/reward/$rewardId',
+        )).thenAnswer((_) async => response);
+
+        // Act
+        final result =
+            await rewardRepository.deactivateReward(rewardId: rewardId);
+
+        // Assert
+        expect(result.status, true);
+        expect(result.message, 'Success');
+      });
+
+      test('should return unauthorized when 401', () async {
+        // Arrange
+        when(gamiAcadDioClient.delete(
+          path: '/reward/$rewardId',
+        )).thenAnswer(
+          (_) async => throw DioException(
+            requestOptions: RequestOptions(),
+            response:
+                Response(requestOptions: RequestOptions(), statusCode: 401),
+          ),
+        );
+
+        // Act and Assert
+        try {
+          await rewardRepository.deactivateReward(rewardId: rewardId);
+        } catch (e) {
+          expect(e.runtimeType, UnauthorizedException);
+        }
+      });
+
+      test('should return forbidden', () async {
+        // Arrange
+        when(gamiAcadDioClient.delete(
+          path: '/reward/$rewardId',
+        )).thenAnswer(
+          (_) async => throw DioException(
+            requestOptions: RequestOptions(),
+            response:
+                Response(requestOptions: RequestOptions(), statusCode: 403),
+          ),
+        );
+
+        // Act and Assert
+        try {
+          await rewardRepository.deactivateReward(rewardId: rewardId);
+        } catch (e) {
+          expect(e.runtimeType, ForbiddenException);
+        }
+      });
+
+      test('should return service unavailable', () async {
+        // Arrange
+        when(gamiAcadDioClient.delete(
+          path: '/reward/$rewardId',
+        )).thenAnswer(
+          (_) async => throw DioException(
+            requestOptions: RequestOptions(),
+            response:
+                Response(requestOptions: RequestOptions(), statusCode: 404),
+          ),
+        );
+
+        // Act and Assert
+        try {
+          await rewardRepository.deactivateReward(rewardId: rewardId);
+        } catch (e) {
+          expect(e.runtimeType, ServiceUnavailableException);
+        }
+      });
+
+      test('should return service unavailable when unknown error', () async {
+        // Arrange
+        when(gamiAcadDioClient.delete(
+          path: '/reward/$rewardId',
+        )).thenAnswer(
+          (_) async => throw Exception(),
+        );
+
+        // Act and Assert
+        try {
+          await rewardRepository.deactivateReward(rewardId: rewardId);
         } catch (e) {
           expect(e.runtimeType, ServiceUnavailableException);
         }

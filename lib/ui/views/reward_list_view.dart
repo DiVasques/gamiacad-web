@@ -4,6 +4,7 @@ import 'package:gami_acad_web/ui/utils/app_texts.dart';
 import 'package:gami_acad_web/ui/utils/extensions/int_extension.dart';
 import 'package:gami_acad_web/ui/utils/view_state.dart';
 import 'package:gami_acad_web/ui/views/base_section_view.dart';
+import 'package:gami_acad_web/ui/widgets/default_action_dialog.dart';
 import 'package:gami_acad_web/ui/widgets/default_error_view.dart';
 import 'package:gami_acad_web/ui/widgets/default_grid_card.dart';
 import 'package:provider/provider.dart';
@@ -54,6 +55,33 @@ class RewardListView extends StatelessWidget {
                         subTitle: '#${reward.number.toStringLeadingZeroes()}',
                         trailingTextTitle: '${AppTexts.price}: ',
                         trailingText: reward.price.toStringDecimal(),
+                        actions: [
+                          reward.active
+                              ? IconButton(
+                                  icon: const Icon(
+                                    Icons.cancel_outlined,
+                                    color: Colors.red,
+                                  ),
+                                  tooltip: AppTexts.deactivate,
+                                  onPressed: () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) => DefaultActionDialog(
+                                        titleText: AppTexts.confirmation,
+                                        actionText: AppTexts.yes,
+                                        action: deactivateAction(
+                                          context: context,
+                                          rewardController: rewardController,
+                                          rewardId: reward.id,
+                                        ),
+                                        contentText: AppTexts
+                                            .rewardDeactivateConfirmation,
+                                      ),
+                                    );
+                                  },
+                                )
+                              : const SizedBox(),
+                        ],
                       );
                     },
                   ).toList(),
@@ -61,5 +89,29 @@ class RewardListView extends StatelessWidget {
         );
       },
     );
+  }
+
+  void Function() deactivateAction({
+    required BuildContext context,
+    required RewardController rewardController,
+    required String rewardId,
+  }) {
+    return () {
+      rewardController.deactivateReward(rewardId: rewardId).then(
+        (result) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              duration: const Duration(seconds: 2),
+              content: Text(
+                result
+                    ? AppTexts.rewardDeactivateSuccess
+                    : AppTexts.rewardDeactivateError,
+              ),
+            ),
+          );
+          rewardController.getRewards();
+        },
+      );
+    };
   }
 }

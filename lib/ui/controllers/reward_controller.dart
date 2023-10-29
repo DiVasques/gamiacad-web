@@ -79,4 +79,22 @@ class RewardController extends BaseController {
       setState(ViewState.idle);
     }
   }
+
+  Future<bool> deactivateReward({
+    required String rewardId,
+  }) async {
+    setState(ViewState.busy);
+    try {
+      Result result = await _rewardRepository.deactivateReward(
+        rewardId: rewardId,
+      );
+      return result.status;
+    } on UnauthorizedException {
+      rethrow;
+    } catch (e) {
+      return false;
+    } finally {
+      setState(ViewState.idle);
+    }
+  }
 }

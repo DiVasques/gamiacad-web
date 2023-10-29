@@ -22,8 +22,10 @@ void main() {
 
     String userId = 'userId';
 
+    String rewardId = 'id';
+
     Reward reward = Reward(
-      id: 'id',
+      id: rewardId,
       name: 'name',
       description: 'description',
       number: 1,
@@ -33,6 +35,7 @@ void main() {
       updatedAt: DateTime.now(),
       claimers: ["123"],
       handed: ["456"],
+      active: true,
     );
 
     CreateReward newReward = CreateReward(
@@ -199,6 +202,79 @@ void main() {
           price: newReward.price,
           availability: newReward.availability,
         );
+
+        // Assert
+        expect(rewardController.state, ViewState.idle);
+        expect(result, false);
+      });
+    });
+
+    group('deactivateReward', () {
+      test('should return true when successful deactivating reward', () async {
+        // Arrange
+        when(rewardRepository.deactivateReward(rewardId: rewardId))
+            .thenAnswer((_) async => Result(status: true, message: 'Success'));
+        rewardController = RewardController(
+          userId: userId,
+          rewardRepository: rewardRepository,
+        );
+
+        // Act
+        var result =
+            await rewardController.deactivateReward(rewardId: rewardId);
+
+        // Assert
+        expect(rewardController.state, ViewState.idle);
+        expect(result, true);
+      });
+
+      test('should return unsuccessful result when failing', () async {
+        // Arrange
+        when(rewardRepository.deactivateReward(rewardId: rewardId))
+            .thenAnswer((_) async => Result(status: false, message: 'Error'));
+        rewardController = RewardController(
+          userId: userId,
+          rewardRepository: rewardRepository,
+        );
+
+        // Act
+        var result =
+            await rewardController.deactivateReward(rewardId: rewardId);
+
+        // Assert
+        expect(rewardController.state, ViewState.idle);
+        expect(result, false);
+      });
+
+      test('should throw when unauthorized', () async {
+        // Arrange
+        when(rewardRepository.deactivateReward(rewardId: rewardId))
+            .thenThrow((_) async => UnauthorizedException);
+        rewardController = RewardController(
+          userId: userId,
+          rewardRepository: rewardRepository,
+        );
+
+        // Act and Assert
+        try {
+          await rewardController.deactivateReward(rewardId: rewardId);
+        } catch (e) {
+          expect(e.runtimeType, UnauthorizedException);
+        }
+      });
+
+      test('should return error when another exception', () async {
+        // Arrange
+        when(rewardRepository.deactivateReward(rewardId: rewardId))
+            .thenThrow((_) async => ServiceUnavailableException);
+        rewardController = RewardController(
+          userId: userId,
+          rewardRepository: rewardRepository,
+        );
+
+        // Act
+        var result =
+            await rewardController.deactivateReward(rewardId: rewardId);
 
         // Assert
         expect(rewardController.state, ViewState.idle);
