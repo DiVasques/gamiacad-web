@@ -2,7 +2,7 @@ import 'package:gami_acad_web/ui/utils/error_messages.dart';
 import 'package:intl/intl.dart';
 
 class FieldValidators {
-  static String? validateMissionName(String? input) {
+  static String? validateMissionOrRewardName(String? input) {
     input!.trim();
     RegExp validMissionNamePattern = RegExp(
         r'''^[ a-z\dA-ZàèìòùÀÈÌÒÙáéíóúýÁÉÍÓÚÝâêîôûÂÊÎÔÛãñõÃÑÕäëïöüÿÄËÏÖÜŸçÇßØøÅåÆæœ`'-]+$''');
@@ -32,6 +32,32 @@ class FieldValidators {
     int points = int.parse(input);
     if (points <= 0) {
       return ErrorMessages.invalidPoints;
+    }
+    return null;
+  }
+
+  static String? validatePrice(String? input) {
+    input!.trim();
+    RegExp validDescriptionPattern = RegExp(r'^[\d]+$');
+    if (!validDescriptionPattern.hasMatch(input)) {
+      return ErrorMessages.invalidPrice;
+    }
+    int points = int.parse(input);
+    if (points <= 0) {
+      return ErrorMessages.invalidPrice;
+    }
+    return null;
+  }
+
+  static String? validateAvailability(String? input) {
+    input!.trim();
+    RegExp validDescriptionPattern = RegExp(r'^[\d]+$');
+    if (!validDescriptionPattern.hasMatch(input)) {
+      return ErrorMessages.invalidAvailability;
+    }
+    int points = int.parse(input);
+    if (points <= 0) {
+      return ErrorMessages.invalidAvailability;
     }
     return null;
   }

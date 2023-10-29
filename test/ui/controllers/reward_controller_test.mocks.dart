@@ -5,6 +5,7 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'dart:async' as _i5;
 
+import 'package:gami_acad_web/repository/models/create_reward.dart' as _i6;
 import 'package:gami_acad_web/repository/models/result.dart' as _i2;
 import 'package:gami_acad_web/repository/models/reward.dart' as _i4;
 import 'package:gami_acad_web/repository/reward_repository.dart' as _i3;
@@ -65,6 +66,24 @@ class MockRewardRepository extends _i1.Mock implements _i3.RewardRepository {
           Invocation.method(
             #getRewards,
             [],
+          ),
+        )),
+      ) as _i5.Future<_i2.Result>);
+
+  @override
+  _i5.Future<_i2.Result> createReward({required _i6.CreateReward? newReward}) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #createReward,
+          [],
+          {#newReward: newReward},
+        ),
+        returnValue: _i5.Future<_i2.Result>.value(_FakeResult_0(
+          this,
+          Invocation.method(
+            #createReward,
+            [],
+            {#newReward: newReward},
           ),
         )),
       ) as _i5.Future<_i2.Result>);

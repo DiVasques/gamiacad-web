@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:gami_acad_web/repository/models/create_reward.dart';
 import 'package:gami_acad_web/repository/models/reward.dart';
 import 'package:gami_acad_web/repository/models/exceptions/forbidden_exception.dart';
 import 'package:gami_acad_web/repository/models/exceptions/service_unavailable_exception.dart';
@@ -30,6 +31,13 @@ void main() {
       updatedAt: DateTime.now(),
       claimers: ["123"],
       handed: ["456"],
+    );
+
+    CreateReward newReward = CreateReward(
+      name: 'name',
+      description: 'description',
+      price: 100,
+      availability: 100,
     );
 
     setUp(() {
@@ -146,6 +154,109 @@ void main() {
         // Act and Assert
         try {
           await rewardRepository.getRewards();
+        } catch (e) {
+          expect(e.runtimeType, ServiceUnavailableException);
+        }
+      });
+    });
+
+    group('createReward', () {
+      test('should return success createReward', () async {
+        // Arrange
+        Response response = Response(
+          requestOptions: RequestOptions(),
+          statusCode: 201,
+          statusMessage: 'Success',
+        );
+        when(gamiAcadDioClient.post(
+          path: '/reward',
+          body: newReward.toJson(),
+        )).thenAnswer((_) async => response);
+
+        // Act
+        final result =
+            await rewardRepository.createReward(newReward: newReward);
+
+        // Assert
+        expect(result.status, true);
+        expect(result.message, 'Success');
+      });
+
+      test('should return unauthorized when 401', () async {
+        // Arrange
+        when(gamiAcadDioClient.post(
+          path: '/reward',
+          body: newReward.toJson(),
+        )).thenAnswer(
+          (_) async => throw DioException(
+            requestOptions: RequestOptions(),
+            response:
+                Response(requestOptions: RequestOptions(), statusCode: 401),
+          ),
+        );
+
+        // Act and Assert
+        try {
+          await rewardRepository.createReward(newReward: newReward);
+        } catch (e) {
+          expect(e.runtimeType, UnauthorizedException);
+        }
+      });
+
+      test('should return forbidden', () async {
+        // Arrange
+        when(gamiAcadDioClient.post(
+          path: '/reward',
+          body: newReward.toJson(),
+        )).thenAnswer(
+          (_) async => throw DioException(
+            requestOptions: RequestOptions(),
+            response:
+                Response(requestOptions: RequestOptions(), statusCode: 403),
+          ),
+        );
+
+        // Act and Assert
+        try {
+          await rewardRepository.createReward(newReward: newReward);
+        } catch (e) {
+          expect(e.runtimeType, ForbiddenException);
+        }
+      });
+
+      test('should return service unavailable', () async {
+        // Arrange
+        when(gamiAcadDioClient.post(
+          path: '/reward',
+          body: newReward.toJson(),
+        )).thenAnswer(
+          (_) async => throw DioException(
+            requestOptions: RequestOptions(),
+            response:
+                Response(requestOptions: RequestOptions(), statusCode: 404),
+          ),
+        );
+
+        // Act and Assert
+        try {
+          await rewardRepository.createReward(newReward: newReward);
+        } catch (e) {
+          expect(e.runtimeType, ServiceUnavailableException);
+        }
+      });
+
+      test('should return service unavailable when unknown error', () async {
+        // Arrange
+        when(gamiAcadDioClient.post(
+          path: '/reward',
+          body: newReward.toJson(),
+        )).thenAnswer(
+          (_) async => throw Exception(),
+        );
+
+        // Act and Assert
+        try {
+          await rewardRepository.createReward(newReward: newReward);
         } catch (e) {
           expect(e.runtimeType, ServiceUnavailableException);
         }

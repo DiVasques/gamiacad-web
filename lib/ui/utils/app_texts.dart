@@ -18,6 +18,7 @@ class AppTexts {
   static const password = 'Senha';
   static const points = 'Pontos';
   static const price = 'Preço';
+  static const quantity = 'Quantidade';
   static const registration = 'CPF';
   static const yes = 'Sim';
   static const login = 'Entrar';
@@ -37,5 +38,10 @@ class AppTexts {
   static const missionEditError =
       'Erro ao editar a Missão. Tente novamente mais tarde.';
   static const missionEditSuccess = 'Missão editada com sucesso!';
+  static const rewardAvailability = 'Quantidade Disponível';
+  static const rewardCreate = 'Criar Recompensa';
+  static const rewardCreateError =
+      'Erro ao criar a Recompensa. Tente novamente mais tarde.';
+  static const rewardCreateSuccess = 'Recompensa criada com sucesso!';
   static const rewardList = 'Lista de Recompensas';
 }

@@ -2,58 +2,53 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:gami_acad_web/ui/controllers/mission_controller.dart';
+import 'package:gami_acad_web/ui/controllers/reward_controller.dart';
 import 'package:gami_acad_web/ui/utils/app_colors.dart';
 import 'package:gami_acad_web/ui/utils/app_texts.dart';
-import 'package:gami_acad_web/ui/utils/date_picker.dart';
-import 'package:gami_acad_web/ui/utils/extensions/date_extension.dart';
-import 'package:gami_acad_web/ui/utils/extensions/string_extension.dart';
 import 'package:gami_acad_web/ui/utils/field_validators.dart';
 import 'package:gami_acad_web/ui/views/base_section_view.dart';
 import 'package:gami_acad_web/ui/widgets/default_text_field.dart';
 import 'package:provider/provider.dart';
 
-class MissionEditView extends StatefulWidget {
+class RewardCreateView extends StatefulWidget {
   final double maxViewItemsWidth = 600;
-  const MissionEditView({super.key});
+  const RewardCreateView({super.key});
 
   @override
-  State<MissionEditView> createState() => _MissionEditViewState();
+  State<RewardCreateView> createState() => _RewardCreateViewState();
 }
 
-class _MissionEditViewState extends State<MissionEditView> {
+class _RewardCreateViewState extends State<RewardCreateView> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late FocusNode _nameFocus;
   late FocusNode _descriptionFocus;
-  late FocusNode _expirationDateFocus;
+  late FocusNode _priceFocus;
+  late FocusNode _availabilityFocus;
   late TextEditingController _nameController;
   late TextEditingController _descriptionController;
-  late TextEditingController _expirationDateController;
+  late TextEditingController _priceController;
+  late TextEditingController _availabilityController;
 
   @override
   void initState() {
     _nameFocus = FocusNode();
     _descriptionFocus = FocusNode();
-    _expirationDateFocus = FocusNode();
+    _priceFocus = FocusNode();
+    _availabilityFocus = FocusNode();
     _nameController = TextEditingController();
     _descriptionController = TextEditingController();
-    _expirationDateController = TextEditingController();
+    _priceController = TextEditingController();
+    _availabilityController = TextEditingController();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<MissionController>(
-      builder: (context, missionController, _) {
-        _nameController.text = missionController.selectedMission.name;
-        _descriptionController.text =
-            missionController.selectedMission.description;
-        _expirationDateController.text = missionController
-            .selectedMission.expirationDate
-            .toLocalDateTimeString();
+    return Consumer<RewardController>(
+      builder: (context, rewardController, _) {
         return BaseSectionView(
-          viewTitle: AppTexts.missionEdit,
-          state: missionController.state,
+          viewTitle: AppTexts.rewardCreate,
+          state: rewardController.state,
           body: Form(
             key: _formKey,
             child: SingleChildScrollView(
@@ -94,7 +89,7 @@ class _MissionEditViewState extends State<MissionEditView> {
                     textInputAction: TextInputAction.next,
                     onFieldSubmitted: (_) {
                       FocusScope.of(context).unfocus();
-                      FocusScope.of(context).requestFocus(_expirationDateFocus);
+                      FocusScope.of(context).requestFocus(_priceFocus);
                     },
                     validator: FieldValidators.validateDescription,
                   ),
@@ -102,47 +97,50 @@ class _MissionEditViewState extends State<MissionEditView> {
                     height: 20,
                   ),
                   const Text(
-                    AppTexts.expirationDate,
+                    AppTexts.price,
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   DefaultTextField(
-                    controller: _expirationDateController,
-                    hintText: AppTexts.datePlaceholder,
+                    controller: _priceController,
+                    hintText: AppTexts.price,
                     constraints: BoxConstraints(
                       maxWidth: widget.maxViewItemsWidth / 2,
                     ),
                     keyboardType: TextInputType.number,
                     inputFormatters: [
-                      FilteringTextInputFormatter.allow(RegExp(r'([\d/]+)')),
+                      FilteringTextInputFormatter.digitsOnly,
                     ],
-                    onChanged: (value) async {
-                      await DatePicker.handleDateTimePickerActions(
-                        context: context,
-                        controller: _expirationDateController,
-                        initialDate:
-                            missionController.selectedMission.expirationDate,
-                        firstDate:
-                            missionController.selectedMission.expirationDate,
-                        lastDate: DateTime(2100),
-                      );
+                    focusNode: _priceFocus,
+                    textInputAction: TextInputAction.next,
+                    onFieldSubmitted: (_) async {
+                      FocusScope.of(context).unfocus();
+                      FocusScope.of(context).requestFocus(_availabilityFocus);
                     },
-                    onTap: () async {
-                      await DatePicker.handleDateTimePickerActions(
-                        context: context,
-                        controller: _expirationDateController,
-                        initialDate:
-                            missionController.selectedMission.expirationDate,
-                        firstDate:
-                            missionController.selectedMission.expirationDate,
-                        lastDate: DateTime(2100),
-                      );
-                    },
-                    focusNode: _expirationDateFocus,
+                    validator: FieldValidators.validatePrice,
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  const Text(
+                    AppTexts.rewardAvailability,
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  DefaultTextField(
+                    controller: _availabilityController,
+                    hintText: AppTexts.quantity,
+                    constraints: BoxConstraints(
+                      maxWidth: widget.maxViewItemsWidth / 2,
+                    ),
+                    keyboardType: TextInputType.number,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                    ],
+                    focusNode: _availabilityFocus,
                     textInputAction: TextInputAction.done,
                     onFieldSubmitted: (_) {
                       FocusScope.of(context).unfocus();
                     },
-                    validator: FieldValidators.validateExpirationDate,
+                    validator: FieldValidators.validateAvailability,
                   ),
                   const SizedBox(
                     height: 20,
@@ -163,9 +161,9 @@ class _MissionEditViewState extends State<MissionEditView> {
                             ),
                           ),
                           onPressed: () {
-                            missionController.getMissions();
-                            missionController.selectedView =
-                                MissionViewState.list;
+                            rewardController.getRewards();
+                            rewardController.selectedView =
+                                RewardViewState.list;
                           },
                           child: const Text(AppTexts.back),
                         ),
@@ -174,30 +172,30 @@ class _MissionEditViewState extends State<MissionEditView> {
                             if (!_formKey.currentState!.validate()) {
                               return;
                             }
-                            bool result = await missionController.editMission(
-                              missionId: missionController.selectedMission.id,
+                            bool result = await rewardController.createReward(
                               name: _nameController.text,
                               description: _descriptionController.text,
-                              expirationDate: _expirationDateController.text
-                                  .toLocalDateTime(),
+                              price: int.parse(_priceController.text),
+                              availability:
+                                  int.parse(_availabilityController.text),
                             );
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 duration: const Duration(seconds: 2),
                                 content: Text(
                                   result
-                                      ? AppTexts.missionEditSuccess
-                                      : AppTexts.missionEditError,
+                                      ? AppTexts.rewardCreateSuccess
+                                      : AppTexts.rewardCreateError,
                                 ),
                               ),
                             );
                             if (result) {
-                              missionController.getMissions();
-                              missionController.selectedView =
-                                  MissionViewState.list;
+                              rewardController.getRewards();
+                              rewardController.selectedView =
+                                  RewardViewState.list;
                             }
                           },
-                          child: const Text(AppTexts.edit),
+                          child: const Text(AppTexts.create),
                         ),
                       ],
                     ),
