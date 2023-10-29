@@ -73,7 +73,7 @@ class _MissionCreateViewState extends State<MissionCreateView> {
                       FocusScope.of(context).unfocus();
                       FocusScope.of(context).requestFocus(_descriptionFocus);
                     },
-                    validator: FieldValidators.validateMissionName,
+                    validator: FieldValidators.validateMissionOrRewardName,
                   ),
                   const SizedBox(
                     height: 20,

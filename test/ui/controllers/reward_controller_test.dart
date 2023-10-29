@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:gami_acad_web/repository/models/create_reward.dart';
 import 'package:gami_acad_web/repository/reward_repository.dart';
 import 'package:gami_acad_web/repository/models/exceptions/service_unavailable_exception.dart';
 import 'package:gami_acad_web/repository/models/exceptions/unauthorized_exception.dart';
@@ -21,20 +22,28 @@ void main() {
 
     String userId = 'userId';
 
+    Reward reward = Reward(
+      id: 'id',
+      name: 'name',
+      description: 'description',
+      number: 1,
+      price: 100,
+      availability: 100,
+      createdAt: DateTime.now(),
+      updatedAt: DateTime.now(),
+      claimers: ["123"],
+      handed: ["456"],
+    );
+
+    CreateReward newReward = CreateReward(
+      name: 'name',
+      description: 'description',
+      price: 100,
+      availability: 100,
+    );
+
     setUp(() {
       rewardRepository = MockRewardRepository();
-      Reward reward = Reward(
-        id: 'id',
-        name: 'name',
-        description: 'description',
-        number: 1,
-        price: 100,
-        availability: 100,
-        createdAt: DateTime.now(),
-        updatedAt: DateTime.now(),
-        claimers: ["123"],
-        handed: ["456"],
-      );
       when(rewardRepository.rewards).thenReturn([reward]);
     });
 
@@ -103,6 +112,97 @@ void main() {
 
         // Assert
         expect(rewardController.state, ViewState.error);
+      });
+    });
+
+    group('createReward', () {
+      test('should return true when successful creating reward', () async {
+        // Arrange
+        when(rewardRepository.createReward(newReward: anyNamed('newReward')))
+            .thenAnswer((_) async => Result(status: true, message: 'Success'));
+        rewardController = RewardController(
+          userId: userId,
+          rewardRepository: rewardRepository,
+        );
+
+        // Act
+        var result = await rewardController.createReward(
+          name: newReward.name,
+          description: newReward.description,
+          price: newReward.price,
+          availability: newReward.availability,
+        );
+
+        // Assert
+        expect(rewardController.state, ViewState.idle);
+        expect(result, true);
+      });
+
+      test('should return unsuccessful result on failed create reward',
+          () async {
+        // Arrange
+        when(rewardRepository.createReward(newReward: anyNamed('newReward')))
+            .thenAnswer((_) async => Result(status: false, message: 'Error'));
+        rewardController = RewardController(
+          userId: userId,
+          rewardRepository: rewardRepository,
+        );
+
+        // Act
+        var result = await rewardController.createReward(
+          name: newReward.name,
+          description: newReward.description,
+          price: newReward.price,
+          availability: newReward.availability,
+        );
+
+        // Assert
+        expect(rewardController.state, ViewState.idle);
+        expect(result, false);
+      });
+
+      test('should throw when unauthorized', () async {
+        // Arrange
+        when(rewardRepository.createReward(newReward: anyNamed('newReward')))
+            .thenThrow((_) async => UnauthorizedException);
+        rewardController = RewardController(
+          userId: userId,
+          rewardRepository: rewardRepository,
+        );
+
+        // Act and Assert
+        try {
+          await rewardController.createReward(
+            name: newReward.name,
+            description: newReward.description,
+            price: newReward.price,
+            availability: newReward.availability,
+          );
+        } catch (e) {
+          expect(e.runtimeType, UnauthorizedException);
+        }
+      });
+
+      test('should return error when another exception', () async {
+        // Arrange
+        when(rewardRepository.createReward(newReward: anyNamed('newReward')))
+            .thenThrow((_) async => ServiceUnavailableException);
+        rewardController = RewardController(
+          userId: userId,
+          rewardRepository: rewardRepository,
+        );
+
+        // Act
+        var result = await rewardController.createReward(
+          name: newReward.name,
+          description: newReward.description,
+          price: newReward.price,
+          availability: newReward.availability,
+        );
+
+        // Assert
+        expect(rewardController.state, ViewState.idle);
+        expect(result, false);
       });
     });
   });

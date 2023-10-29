@@ -25,6 +25,18 @@ class RewardListView extends StatelessWidget {
             message: rewardController.errorMessage,
             onPressed: rewardController.getRewards,
           ),
+          headerActions: [
+            TextButton.icon(
+              onPressed: () =>
+                  rewardController.selectedView = RewardViewState.create,
+              icon: const Icon(
+                Icons.add,
+              ),
+              label: const Text(
+                AppTexts.add,
+              ),
+            ),
+          ],
           reloadAction: rewardController.getRewards,
           body: GridView.count(
             childAspectRatio: 1.8,

@@ -7,5 +7,7 @@ class ErrorMessages {
   static const invalidDescription = 'Descrição inválida.';
   static const invalidName = 'Nome inválido.';
   static const invalidExpirationDate = 'Data de expiração inválida.';
+  static const invalidAvailability = 'Quantidade inválida.';
   static const invalidPoints = 'Pontuação inválida.';
+  static const invalidPrice = 'Preço inválido.';
 }
