@@ -98,6 +98,19 @@ class GamiAcadDioClient {
     );
   }
 
+  Future<Response> patch({
+    required String path,
+    Map<String, String>? headers,
+    Object? body,
+    Map<String, dynamic>? query,
+  }) async {
+    return await _dio.patch(
+      path,
+      queryParameters: query,
+      data: body,
+    );
+  }
+
   Future<void> _refreshToken() async {
     Response response = await _dio.post('/login/refresh', data: {
       'token': await _secureStorage.read(key: StorageKeys.refreshToken)

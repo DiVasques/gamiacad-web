@@ -25,8 +25,9 @@ class RewardListView extends StatelessWidget {
             message: rewardController.errorMessage,
             onPressed: rewardController.getRewards,
           ),
+          reloadAction: rewardController.getRewards,
           body: GridView.count(
-            childAspectRatio: 2.0,
+            childAspectRatio: 1.8,
             crossAxisCount: crossAxisCount,
             crossAxisSpacing: 30,
             mainAxisSpacing: 30,

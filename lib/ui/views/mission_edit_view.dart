@@ -6,40 +6,37 @@ import 'package:gami_acad_web/ui/controllers/mission_controller.dart';
 import 'package:gami_acad_web/ui/utils/app_colors.dart';
 import 'package:gami_acad_web/ui/utils/app_texts.dart';
 import 'package:gami_acad_web/ui/utils/date_picker.dart';
+import 'package:gami_acad_web/ui/utils/extensions/date_extension.dart';
 import 'package:gami_acad_web/ui/utils/extensions/string_extension.dart';
 import 'package:gami_acad_web/ui/utils/field_validators.dart';
 import 'package:gami_acad_web/ui/views/base_section_view.dart';
 import 'package:gami_acad_web/ui/widgets/default_text_field.dart';
 import 'package:provider/provider.dart';
 
-class MissionCreateView extends StatefulWidget {
+class MissionEditView extends StatefulWidget {
   final double maxViewItemsWidth = 600;
-  const MissionCreateView({super.key});
+  const MissionEditView({super.key});
 
   @override
-  State<MissionCreateView> createState() => _MissionCreateViewState();
+  State<MissionEditView> createState() => _MissionEditViewState();
 }
 
-class _MissionCreateViewState extends State<MissionCreateView> {
+class _MissionEditViewState extends State<MissionEditView> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late FocusNode _nameFocus;
   late FocusNode _descriptionFocus;
-  late FocusNode _pointsFocus;
   late FocusNode _expirationDateFocus;
   late TextEditingController _nameController;
   late TextEditingController _descriptionController;
-  late TextEditingController _pointsController;
   late TextEditingController _expirationDateController;
 
   @override
   void initState() {
     _nameFocus = FocusNode();
     _descriptionFocus = FocusNode();
-    _pointsFocus = FocusNode();
     _expirationDateFocus = FocusNode();
     _nameController = TextEditingController();
     _descriptionController = TextEditingController();
-    _pointsController = TextEditingController();
     _expirationDateController = TextEditingController();
     super.initState();
   }
@@ -48,8 +45,14 @@ class _MissionCreateViewState extends State<MissionCreateView> {
   Widget build(BuildContext context) {
     return Consumer<MissionController>(
       builder: (context, missionController, _) {
+        _nameController.text = missionController.selectedMission.name;
+        _descriptionController.text =
+            missionController.selectedMission.description;
+        _expirationDateController.text = missionController
+            .selectedMission.expirationDate
+            .toLocalDateTimeString();
         return BaseSectionView(
-          viewTitle: AppTexts.missionCreate,
+          viewTitle: AppTexts.missionEdit,
           state: missionController.state,
           body: Form(
             key: _formKey,
@@ -91,34 +94,9 @@ class _MissionCreateViewState extends State<MissionCreateView> {
                     textInputAction: TextInputAction.next,
                     onFieldSubmitted: (_) {
                       FocusScope.of(context).unfocus();
-                      FocusScope.of(context).requestFocus(_pointsFocus);
-                    },
-                    validator: FieldValidators.validateDescription,
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  const Text(
-                    AppTexts.points,
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  DefaultTextField(
-                    controller: _pointsController,
-                    hintText: AppTexts.points,
-                    constraints: BoxConstraints(
-                      maxWidth: widget.maxViewItemsWidth / 2,
-                    ),
-                    keyboardType: TextInputType.number,
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly,
-                    ],
-                    focusNode: _pointsFocus,
-                    textInputAction: TextInputAction.next,
-                    onFieldSubmitted: (_) async {
-                      FocusScope.of(context).unfocus();
                       FocusScope.of(context).requestFocus(_expirationDateFocus);
                     },
-                    validator: FieldValidators.validatePoints,
+                    validator: FieldValidators.validateDescription,
                   ),
                   const SizedBox(
                     height: 20,
@@ -141,8 +119,10 @@ class _MissionCreateViewState extends State<MissionCreateView> {
                       await DatePicker.handleDateTimePickerActions(
                         context: context,
                         controller: _expirationDateController,
-                        initialDate: DateTime.now(),
-                        firstDate: DateTime.now(),
+                        initialDate:
+                            missionController.selectedMission.expirationDate,
+                        firstDate:
+                            missionController.selectedMission.expirationDate,
                         lastDate: DateTime(2100),
                       );
                     },
@@ -150,8 +130,10 @@ class _MissionCreateViewState extends State<MissionCreateView> {
                       await DatePicker.handleDateTimePickerActions(
                         context: context,
                         controller: _expirationDateController,
-                        initialDate: DateTime.now(),
-                        firstDate: DateTime.now(),
+                        initialDate:
+                            missionController.selectedMission.expirationDate,
+                        firstDate:
+                            missionController.selectedMission.expirationDate,
                         lastDate: DateTime(2100),
                       );
                     },
@@ -192,10 +174,10 @@ class _MissionCreateViewState extends State<MissionCreateView> {
                             if (!_formKey.currentState!.validate()) {
                               return;
                             }
-                            bool result = await missionController.createMission(
+                            bool result = await missionController.editMission(
+                              missionId: missionController.selectedMission.id,
                               name: _nameController.text,
                               description: _descriptionController.text,
-                              points: int.parse(_pointsController.text),
                               expirationDate: _expirationDateController.text
                                   .toLocalDateTime(),
                             );
@@ -204,8 +186,8 @@ class _MissionCreateViewState extends State<MissionCreateView> {
                                 duration: const Duration(seconds: 2),
                                 content: Text(
                                   result
-                                      ? AppTexts.missionCreateSuccess
-                                      : AppTexts.missionCreateError,
+                                      ? AppTexts.missionEditSuccess
+                                      : AppTexts.missionEditError,
                                 ),
                               ),
                             );
@@ -215,7 +197,7 @@ class _MissionCreateViewState extends State<MissionCreateView> {
                                   MissionViewState.list;
                             }
                           },
-                          child: const Text(AppTexts.create),
+                          child: const Text(AppTexts.edit),
                         ),
                       ],
                     ),

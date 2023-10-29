@@ -21,9 +21,19 @@ class MissionListView extends StatelessWidget {
       builder: (context, missionController, _) {
         return BaseSectionView(
           viewTitle: AppTexts.missionList,
-          headerAction: () =>
-              missionController.selectedView = MissionViewState.create,
-          actionButtonText: AppTexts.add,
+          headerActions: [
+            TextButton.icon(
+              onPressed: () =>
+                  missionController.selectedView = MissionViewState.create,
+              icon: const Icon(
+                Icons.add,
+              ),
+              label: const Text(
+                AppTexts.add,
+              ),
+            ),
+          ],
+          reloadAction: missionController.getMissions,
           state: missionController.state,
           errorBody: DefaultErrorView(
             message: missionController.errorMessage,
@@ -46,6 +56,20 @@ class MissionListView extends StatelessWidget {
                         trailingTextTitle: '${AppTexts.points}: ',
                         trailingText: mission.points.toStringDecimal(),
                         actions: [
+                          mission.active &&
+                                  mission.expirationDate.isAfter(DateTime.now())
+                              ? IconButton(
+                                  icon: const Icon(
+                                    Icons.edit,
+                                  ),
+                                  tooltip: AppTexts.edit,
+                                  onPressed: () {
+                                    missionController.selectedMission = mission;
+                                    missionController.selectedView =
+                                        MissionViewState.edit;
+                                  },
+                                )
+                              : const SizedBox(),
                           mission.active
                               ? IconButton(
                                   icon: const Icon(

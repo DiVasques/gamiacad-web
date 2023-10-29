@@ -32,6 +32,10 @@ class AppTexts {
   static const missionDeactivateError =
       'Erro ao desativar a Missão. Tente novamente mais tarde.';
   static const missionDeactivateSuccess = 'Missão desativada com sucesso!';
+  static const missionEdit = 'Editar Missão';
   static const missionList = 'Lista de Missões';
+  static const missionEditError =
+      'Erro ao editar a Missão. Tente novamente mais tarde.';
+  static const missionEditSuccess = 'Missão editada com sucesso!';
   static const rewardList = 'Lista de Recompensas';
 }

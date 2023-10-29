@@ -3,11 +3,11 @@ import 'package:gami_acad_web/ui/utils/app_colors.dart';
 import 'package:gami_acad_web/ui/utils/app_texts.dart';
 
 class DefaultErrorView extends StatelessWidget {
-  final String? message;
+  final String message;
   final void Function()? onPressed;
 
   const DefaultErrorView({
-    this.message,
+    this.message = '',
     this.onPressed,
     super.key,
   });
@@ -27,7 +27,7 @@ class DefaultErrorView extends StatelessWidget {
             ),
           ),
           Text(
-            message ?? '',
+            message,
             textAlign: TextAlign.center,
             style: const TextStyle(
               color: AppColors.errorGray,

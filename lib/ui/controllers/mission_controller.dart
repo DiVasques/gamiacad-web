@@ -1,5 +1,6 @@
 import 'package:gami_acad_web/repository/mission_repository.dart';
 import 'package:gami_acad_web/repository/models/create_mission.dart';
+import 'package:gami_acad_web/repository/models/edit_mission.dart';
 import 'package:gami_acad_web/repository/models/exceptions/service_unavailable_exception.dart';
 import 'package:gami_acad_web/repository/models/exceptions/unauthorized_exception.dart';
 import 'package:gami_acad_web/repository/models/mission.dart';
@@ -8,7 +9,7 @@ import 'package:gami_acad_web/ui/controllers/base_controller.dart';
 import 'package:gami_acad_web/ui/utils/error_messages.dart';
 import 'package:gami_acad_web/ui/utils/view_state.dart';
 
-enum MissionViewState { list, create }
+enum MissionViewState { list, create, edit }
 
 class MissionController extends BaseController {
   late String userId;
@@ -18,6 +19,13 @@ class MissionController extends BaseController {
   MissionViewState get selectedView => _selectedView;
   set selectedView(MissionViewState selectedView) {
     _selectedView = selectedView;
+    notifyListeners();
+  }
+
+  late Mission _selectedMission;
+  Mission get selectedMission => _selectedMission;
+  set selectedMission(Mission mission) {
+    _selectedMission = mission;
     notifyListeners();
   }
 
@@ -70,6 +78,33 @@ class MissionController extends BaseController {
     try {
       Result result = await _missionRepository.createMission(
         newMission: newMission,
+      );
+      return result.status;
+    } on UnauthorizedException {
+      rethrow;
+    } catch (e) {
+      return false;
+    } finally {
+      setState(ViewState.idle);
+    }
+  }
+
+  Future<bool> editMission({
+    required String missionId,
+    required String name,
+    required String description,
+    required DateTime expirationDate,
+  }) async {
+    EditMission newMission = EditMission(
+      name: name,
+      description: description,
+      expirationDate: expirationDate,
+    );
+    setState(ViewState.busy);
+    try {
+      Result result = await _missionRepository.editMission(
+        missionId: missionId,
+        editMission: newMission,
       );
       return result.status;
     } on UnauthorizedException {

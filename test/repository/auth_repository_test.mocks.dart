@@ -226,4 +226,38 @@ class MockGamiAcadDioClient extends _i1.Mock implements _i5.GamiAcadDioClient {
           ),
         )),
       ) as _i4.Future<_i2.Response<dynamic>>);
+
+  @override
+  _i4.Future<_i2.Response<dynamic>> patch({
+    required String? path,
+    Map<String, String>? headers,
+    Object? body,
+    Map<String, dynamic>? query,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #patch,
+          [],
+          {
+            #path: path,
+            #headers: headers,
+            #body: body,
+            #query: query,
+          },
+        ),
+        returnValue:
+            _i4.Future<_i2.Response<dynamic>>.value(_FakeResponse_0<dynamic>(
+          this,
+          Invocation.method(
+            #patch,
+            [],
+            {
+              #path: path,
+              #headers: headers,
+              #body: body,
+              #query: query,
+            },
+          ),
+        )),
+      ) as _i4.Future<_i2.Response<dynamic>>);
 }
