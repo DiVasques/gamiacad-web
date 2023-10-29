@@ -7,6 +7,7 @@ import 'dart:async' as _i5;
 
 import 'package:gami_acad_web/repository/mission_repository.dart' as _i3;
 import 'package:gami_acad_web/repository/models/create_mission.dart' as _i6;
+import 'package:gami_acad_web/repository/models/edit_mission.dart' as _i7;
 import 'package:gami_acad_web/repository/models/mission.dart' as _i4;
 import 'package:gami_acad_web/repository/models/result.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
@@ -85,6 +86,33 @@ class MockMissionRepository extends _i1.Mock implements _i3.MissionRepository {
             #createMission,
             [],
             {#newMission: newMission},
+          ),
+        )),
+      ) as _i5.Future<_i2.Result>);
+
+  @override
+  _i5.Future<_i2.Result> editMission({
+    required String? missionId,
+    required _i7.EditMission? editMission,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #editMission,
+          [],
+          {
+            #missionId: missionId,
+            #editMission: editMission,
+          },
+        ),
+        returnValue: _i5.Future<_i2.Result>.value(_FakeResult_0(
+          this,
+          Invocation.method(
+            #editMission,
+            [],
+            {
+              #missionId: missionId,
+              #editMission: editMission,
+            },
           ),
         )),
       ) as _i5.Future<_i2.Result>);

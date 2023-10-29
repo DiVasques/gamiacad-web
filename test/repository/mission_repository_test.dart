@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:gami_acad_web/repository/models/create_mission.dart';
+import 'package:gami_acad_web/repository/models/edit_mission.dart';
 import 'package:gami_acad_web/repository/models/mission.dart';
 import 'package:gami_acad_web/repository/models/exceptions/forbidden_exception.dart';
 import 'package:gami_acad_web/repository/models/exceptions/service_unavailable_exception.dart';
@@ -42,6 +43,12 @@ void main() {
       points: 100,
       expirationDate: DateTime.now(),
       createdBy: 'createdBy',
+    );
+
+    EditMission editMission = EditMission(
+      name: 'name',
+      description: 'description',
+      expirationDate: DateTime.now(),
     );
 
     setUp(() {
@@ -264,6 +271,113 @@ void main() {
         // Act and Assert
         try {
           await missionRepository.createMission(newMission: newMission);
+        } catch (e) {
+          expect(e.runtimeType, ServiceUnavailableException);
+        }
+      });
+    });
+
+    group('editMission', () {
+      test('should return success editMission', () async {
+        // Arrange
+        Response response = Response(
+          requestOptions: RequestOptions(),
+          statusCode: 204,
+          statusMessage: 'Success',
+        );
+        when(gamiAcadDioClient.patch(
+          path: '/mission/$missionId',
+          body: editMission.toJson(),
+        )).thenAnswer((_) async => response);
+
+        // Act
+        final result = await missionRepository.editMission(
+            missionId: missionId, editMission: editMission);
+
+        // Assert
+        expect(result.status, true);
+        expect(result.message, 'Success');
+      });
+
+      test('should return unauthorized when 401', () async {
+        // Arrange
+        when(gamiAcadDioClient.patch(
+          path: '/mission/$missionId',
+          body: editMission.toJson(),
+        )).thenAnswer(
+          (_) async => throw DioException(
+            requestOptions: RequestOptions(),
+            response:
+                Response(requestOptions: RequestOptions(), statusCode: 401),
+          ),
+        );
+
+        // Act and Assert
+        try {
+          await missionRepository.editMission(
+              missionId: missionId, editMission: editMission);
+        } catch (e) {
+          expect(e.runtimeType, UnauthorizedException);
+        }
+      });
+
+      test('should return forbidden', () async {
+        // Arrange
+        when(gamiAcadDioClient.patch(
+          path: '/mission/$missionId',
+          body: editMission.toJson(),
+        )).thenAnswer(
+          (_) async => throw DioException(
+            requestOptions: RequestOptions(),
+            response:
+                Response(requestOptions: RequestOptions(), statusCode: 403),
+          ),
+        );
+
+        // Act and Assert
+        try {
+          await missionRepository.editMission(
+              missionId: missionId, editMission: editMission);
+        } catch (e) {
+          expect(e.runtimeType, ForbiddenException);
+        }
+      });
+
+      test('should return service unavailable', () async {
+        // Arrange
+        when(gamiAcadDioClient.patch(
+          path: '/mission/$missionId',
+          body: editMission.toJson(),
+        )).thenAnswer(
+          (_) async => throw DioException(
+            requestOptions: RequestOptions(),
+            response:
+                Response(requestOptions: RequestOptions(), statusCode: 404),
+          ),
+        );
+
+        // Act and Assert
+        try {
+          await missionRepository.editMission(
+              missionId: missionId, editMission: editMission);
+        } catch (e) {
+          expect(e.runtimeType, ServiceUnavailableException);
+        }
+      });
+
+      test('should return service unavailable when unknown error', () async {
+        // Arrange
+        when(gamiAcadDioClient.patch(
+          path: '/mission/$missionId',
+          body: editMission.toJson(),
+        )).thenAnswer(
+          (_) async => throw Exception(),
+        );
+
+        // Act and Assert
+        try {
+          await missionRepository.editMission(
+              missionId: missionId, editMission: editMission);
         } catch (e) {
           expect(e.runtimeType, ServiceUnavailableException);
         }

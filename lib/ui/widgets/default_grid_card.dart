@@ -3,20 +3,20 @@ import 'package:flutter/material.dart';
 class DefaultGridCard extends StatelessWidget {
   final String id;
   final String title;
-  final String? subTitle;
+  final String subTitle;
   final String? trailingText;
   final String? trailingTextTitle;
   final void Function()? onCardTap;
-  final List<Widget>? actions;
+  final List<Widget> actions;
   const DefaultGridCard({
     super.key,
     required this.id,
     required this.title,
-    this.subTitle,
+    this.subTitle = '',
     this.trailingText,
     this.trailingTextTitle,
     this.onCardTap,
-    this.actions,
+    this.actions = const [],
   });
 
   @override
@@ -45,7 +45,7 @@ class DefaultGridCard extends StatelessWidget {
                 ),
               ),
               Text(
-                subTitle ?? '',
+                subTitle,
               ),
               RichText(
                 textAlign: TextAlign.center,
@@ -70,7 +70,7 @@ class DefaultGridCard extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.end,
-                children: actions ?? [],
+                children: actions,
               )
             ],
           ),
