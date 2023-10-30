@@ -55,6 +55,11 @@ class RewardListView extends StatelessWidget {
                         subTitle: '#${reward.number.toStringLeadingZeroes()}',
                         trailingTextTitle: '${AppTexts.price}: ',
                         trailingText: reward.price.toStringDecimal(),
+                        onCardTap: () {
+                          rewardController.selectedReward = reward;
+                          rewardController.selectedView =
+                              RewardViewState.details;
+                        },
                         actions: [
                           reward.active && reward.availability > 0
                               ? IconButton(
