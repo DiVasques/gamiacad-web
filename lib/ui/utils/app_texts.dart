@@ -48,5 +48,9 @@ class AppTexts {
   static const rewardDeactivateError =
       'Erro ao desativar a Recompensa. Tente novamente mais tarde.';
   static const rewardDeactivateSuccess = 'Recompensa desativada com sucesso!';
+  static const rewardEdit = 'Editar Recompensa';
+  static const rewardEditError =
+      'Erro ao editar a Recompensa. Tente novamente mais tarde.';
+  static const rewardEditSuccess = 'Recompensa editada com sucesso!';
   static const rewardList = 'Lista de Recompensas';
 }

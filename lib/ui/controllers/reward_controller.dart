@@ -1,4 +1,5 @@
 import 'package:gami_acad_web/repository/models/create_reward.dart';
+import 'package:gami_acad_web/repository/models/edit_reward.dart';
 import 'package:gami_acad_web/repository/models/exceptions/service_unavailable_exception.dart';
 import 'package:gami_acad_web/repository/models/exceptions/unauthorized_exception.dart';
 import 'package:gami_acad_web/repository/models/result.dart';
@@ -8,7 +9,7 @@ import 'package:gami_acad_web/ui/controllers/base_controller.dart';
 import 'package:gami_acad_web/ui/utils/error_messages.dart';
 import 'package:gami_acad_web/ui/utils/view_state.dart';
 
-enum RewardViewState { list, create }
+enum RewardViewState { list, create, edit }
 
 class RewardController extends BaseController {
   late String userId;
@@ -18,6 +19,13 @@ class RewardController extends BaseController {
   RewardViewState get selectedView => _selectedView;
   set selectedView(RewardViewState selectedView) {
     _selectedView = selectedView;
+    notifyListeners();
+  }
+
+  late Reward _selectedReward;
+  Reward get selectedReward => _selectedReward;
+  set selectedReward(Reward reward) {
+    _selectedReward = reward;
     notifyListeners();
   }
 
@@ -69,6 +77,31 @@ class RewardController extends BaseController {
     try {
       Result result = await _rewardRepository.createReward(
         newReward: newReward,
+      );
+      return result.status;
+    } on UnauthorizedException {
+      rethrow;
+    } catch (e) {
+      return false;
+    } finally {
+      setState(ViewState.idle);
+    }
+  }
+
+  Future<bool> editReward({
+    required String rewardId,
+    required String name,
+    required String description,
+  }) async {
+    EditReward newReward = EditReward(
+      name: name,
+      description: description,
+    );
+    setState(ViewState.busy);
+    try {
+      Result result = await _rewardRepository.editReward(
+        rewardId: rewardId,
+        editReward: newReward,
       );
       return result.status;
     } on UnauthorizedException {
