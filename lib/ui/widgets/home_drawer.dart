@@ -3,6 +3,7 @@ import 'package:gami_acad_web/ui/controllers/home_controller.dart';
 import 'package:gami_acad_web/ui/utils/app_colors.dart';
 import 'package:gami_acad_web/ui/utils/app_texts.dart';
 import 'package:gami_acad_web/ui/widgets/home_drawer_item.dart';
+import 'package:gami_acad_web/ui/widgets/home_drawer_logout_item.dart';
 import 'package:provider/provider.dart';
 
 class HomeDrawer extends StatelessWidget {
@@ -51,7 +52,13 @@ class HomeDrawer extends StatelessWidget {
                     color: AppColors.darkerPrimaryColor,
                   ),
                 ),
-              )
+              ),
+              HomeDrawerLogoutItem(
+                drawerSize: drawerSize,
+                drawerTextWidth: drawerTextWidth,
+                animationDuration: animationDuration,
+                animationCurve: animationCurve,
+              ),
             ],
           ),
           homeController.showOpenedDrawer

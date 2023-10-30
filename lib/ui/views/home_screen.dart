@@ -13,7 +13,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => HomeController(),
+      create: (_) => HomeController(userId: userId),
       child: Scaffold(
         appBar: HomeAppBar(),
         body: Stack(

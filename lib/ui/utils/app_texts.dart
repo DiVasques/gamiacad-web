@@ -13,6 +13,7 @@ class AppTexts {
   static const gamiAcadLongTitle = 'Portal do Admin GamiAcad';
   static const invalidPassword = 'Senha deve ter mais de 12 caracteres';
   static const invalidRegistration = 'CPF inválido';
+  static const logout = 'Sair';
   static const name = 'Nome';
   static const ok = 'Ok';
   static const password = 'Senha';
