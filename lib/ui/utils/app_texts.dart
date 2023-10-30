@@ -29,7 +29,7 @@ class AppTexts {
   static const missionCreateError =
       'Erro ao criar a Missão. Tente novamente mais tarde.';
   static const missionCreateSuccess = 'Missão criada com sucesso!';
-  static const missionDeactivateConfirmation = 'Deseja desativar essa missão?';
+  static const missionDeactivateConfirmation = 'Deseja desativar essa Missão?';
   static const missionDeactivateError =
       'Erro ao desativar a Missão. Tente novamente mais tarde.';
   static const missionDeactivateSuccess = 'Missão desativada com sucesso!';
@@ -43,5 +43,10 @@ class AppTexts {
   static const rewardCreateError =
       'Erro ao criar a Recompensa. Tente novamente mais tarde.';
   static const rewardCreateSuccess = 'Recompensa criada com sucesso!';
+  static const rewardDeactivateConfirmation =
+      'Deseja desativar essa Recompensa?';
+  static const rewardDeactivateError =
+      'Erro ao desativar a Recompensa. Tente novamente mais tarde.';
+  static const rewardDeactivateSuccess = 'Recompensa desativada com sucesso!';
   static const rewardList = 'Lista de Recompensas';
 }

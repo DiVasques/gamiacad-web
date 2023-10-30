@@ -9,6 +9,7 @@ class Reward {
   DateTime updatedAt;
   List<String> claimers;
   List<String> handed;
+  bool active;
   Reward({
     required this.id,
     required this.name,
@@ -20,6 +21,7 @@ class Reward {
     required this.updatedAt,
     required this.claimers,
     required this.handed,
+    required this.active,
   });
 
   factory Reward.fromJson(Map<String, dynamic> json) => Reward(
@@ -36,6 +38,7 @@ class Reward {
             .toList(),
         handed:
             (json['handed'] as List<dynamic>).map((c) => c as String).toList(),
+        active: json['active'],
       );
 
   Map<String, dynamic> toJson() => {
@@ -49,5 +52,6 @@ class Reward {
         'updatedAt': updatedAt.toIso8601String(),
         'claimers': claimers,
         'handed': handed,
+        'active': active,
       };
 }
