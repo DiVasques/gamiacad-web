@@ -1,5 +1,6 @@
 class AppTexts {
   static const add = 'Adicionar';
+  static const at = 'às';
   static const back = 'Voltar';
   static const cancel = 'Cancelar';
   static const confirmation = 'Confirmação';

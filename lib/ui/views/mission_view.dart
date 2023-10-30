@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gami_acad_web/ui/controllers/mission_controller.dart';
 import 'package:gami_acad_web/ui/views/mission_create_view.dart';
+import 'package:gami_acad_web/ui/views/mission_details_view.dart';
 import 'package:gami_acad_web/ui/views/mission_edit_view.dart';
 import 'package:gami_acad_web/ui/views/mission_list_view.dart';
 import 'package:provider/provider.dart';
@@ -22,6 +23,8 @@ class MissionView extends StatelessWidget {
               return const MissionCreateView();
             case MissionViewState.edit:
               return const MissionEditView();
+            case MissionViewState.details:
+              return const MissionDetailsView();
           }
         },
       ),

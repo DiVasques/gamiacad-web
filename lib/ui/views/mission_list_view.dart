@@ -55,6 +55,11 @@ class MissionListView extends StatelessWidget {
                         subTitle: '#${mission.number.toStringLeadingZeroes()}',
                         trailingTextTitle: '${AppTexts.points}: ',
                         trailingText: mission.points.toStringDecimal(),
+                        onCardTap: () {
+                          missionController.selectedMission = mission;
+                          missionController.selectedView =
+                              MissionViewState.details;
+                        },
                         actions: [
                           mission.active &&
                                   mission.expirationDate.isAfter(DateTime.now())

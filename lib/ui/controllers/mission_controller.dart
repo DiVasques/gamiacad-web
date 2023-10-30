@@ -9,7 +9,7 @@ import 'package:gami_acad_web/ui/controllers/base_controller.dart';
 import 'package:gami_acad_web/ui/utils/error_messages.dart';
 import 'package:gami_acad_web/ui/utils/view_state.dart';
 
-enum MissionViewState { list, create, edit }
+enum MissionViewState { list, create, edit, details }
 
 class MissionController extends BaseController {
   late String userId;
