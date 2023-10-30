@@ -6,6 +6,7 @@
 import 'dart:async' as _i5;
 
 import 'package:gami_acad_web/repository/models/create_reward.dart' as _i6;
+import 'package:gami_acad_web/repository/models/edit_reward.dart' as _i7;
 import 'package:gami_acad_web/repository/models/result.dart' as _i2;
 import 'package:gami_acad_web/repository/models/reward.dart' as _i4;
 import 'package:gami_acad_web/repository/reward_repository.dart' as _i3;
@@ -84,6 +85,33 @@ class MockRewardRepository extends _i1.Mock implements _i3.RewardRepository {
             #createReward,
             [],
             {#newReward: newReward},
+          ),
+        )),
+      ) as _i5.Future<_i2.Result>);
+
+  @override
+  _i5.Future<_i2.Result> editReward({
+    required String? rewardId,
+    required _i7.EditReward? editReward,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #editReward,
+          [],
+          {
+            #rewardId: rewardId,
+            #editReward: editReward,
+          },
+        ),
+        returnValue: _i5.Future<_i2.Result>.value(_FakeResult_0(
+          this,
+          Invocation.method(
+            #editReward,
+            [],
+            {
+              #rewardId: rewardId,
+              #editReward: editReward,
+            },
           ),
         )),
       ) as _i5.Future<_i2.Result>);

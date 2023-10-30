@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gami_acad_web/ui/controllers/reward_controller.dart';
 import 'package:gami_acad_web/ui/views/reward_create_view.dart';
+import 'package:gami_acad_web/ui/views/reward_edit_view.dart';
 import 'package:gami_acad_web/ui/views/reward_list_view.dart';
 import 'package:provider/provider.dart';
 
@@ -19,6 +20,8 @@ class RewardView extends StatelessWidget {
               return const RewardListView();
             case RewardViewState.create:
               return const RewardCreateView();
+            case RewardViewState.edit:
+              return const RewardEditView();
           }
         },
       ),

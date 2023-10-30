@@ -56,6 +56,19 @@ class RewardListView extends StatelessWidget {
                         trailingTextTitle: '${AppTexts.price}: ',
                         trailingText: reward.price.toStringDecimal(),
                         actions: [
+                          reward.active && reward.availability > 0
+                              ? IconButton(
+                                  icon: const Icon(
+                                    Icons.edit,
+                                  ),
+                                  tooltip: AppTexts.edit,
+                                  onPressed: () {
+                                    rewardController.selectedReward = reward;
+                                    rewardController.selectedView =
+                                        RewardViewState.edit;
+                                  },
+                                )
+                              : const SizedBox(),
                           reward.active
                               ? IconButton(
                                   icon: const Icon(

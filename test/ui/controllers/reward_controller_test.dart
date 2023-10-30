@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:gami_acad_web/repository/models/create_reward.dart';
+import 'package:gami_acad_web/repository/models/edit_reward.dart';
 import 'package:gami_acad_web/repository/reward_repository.dart';
 import 'package:gami_acad_web/repository/models/exceptions/service_unavailable_exception.dart';
 import 'package:gami_acad_web/repository/models/exceptions/unauthorized_exception.dart';
@@ -43,6 +44,11 @@ void main() {
       description: 'description',
       price: 100,
       availability: 100,
+    );
+
+    EditReward editReward = EditReward(
+      name: 'name',
+      description: 'description',
     );
 
     setUp(() {
@@ -201,6 +207,108 @@ void main() {
           description: newReward.description,
           price: newReward.price,
           availability: newReward.availability,
+        );
+
+        // Assert
+        expect(rewardController.state, ViewState.idle);
+        expect(result, false);
+      });
+    });
+
+    group('editReward', () {
+      test('should return true when successful editing reward', () async {
+        // Arrange
+        when(
+          rewardRepository.editReward(
+            rewardId: rewardId,
+            editReward: anyNamed('editReward'),
+          ),
+        ).thenAnswer((_) async => Result(status: true, message: 'Success'));
+        rewardController = RewardController(
+          userId: userId,
+          rewardRepository: rewardRepository,
+        );
+
+        // Act
+        var result = await rewardController.editReward(
+          rewardId: rewardId,
+          name: editReward.name,
+          description: editReward.description,
+        );
+
+        // Assert
+        expect(rewardController.state, ViewState.idle);
+        expect(result, true);
+      });
+
+      test('should return unsuccessful result on failed edit reward', () async {
+        // Arrange
+        when(
+          rewardRepository.editReward(
+            rewardId: rewardId,
+            editReward: anyNamed('editReward'),
+          ),
+        ).thenAnswer((_) async => Result(status: false, message: 'Error'));
+        rewardController = RewardController(
+          userId: userId,
+          rewardRepository: rewardRepository,
+        );
+
+        // Act
+        var result = await rewardController.editReward(
+          rewardId: rewardId,
+          name: editReward.name,
+          description: editReward.description,
+        );
+
+        // Assert
+        expect(rewardController.state, ViewState.idle);
+        expect(result, false);
+      });
+
+      test('should throw when unauthorized', () async {
+        // Arrange
+        when(
+          rewardRepository.editReward(
+            rewardId: rewardId,
+            editReward: anyNamed('editReward'),
+          ),
+        ).thenThrow((_) async => UnauthorizedException);
+        rewardController = RewardController(
+          userId: userId,
+          rewardRepository: rewardRepository,
+        );
+
+        // Act and Assert
+        try {
+          await rewardController.editReward(
+            rewardId: rewardId,
+            name: editReward.name,
+            description: editReward.description,
+          );
+        } catch (e) {
+          expect(e.runtimeType, UnauthorizedException);
+        }
+      });
+
+      test('should return error when another exception', () async {
+        // Arrange
+        when(
+          rewardRepository.editReward(
+            rewardId: rewardId,
+            editReward: anyNamed('editReward'),
+          ),
+        ).thenThrow((_) async => ServiceUnavailableException);
+        rewardController = RewardController(
+          userId: userId,
+          rewardRepository: rewardRepository,
+        );
+
+        // Act
+        var result = await rewardController.editReward(
+          rewardId: rewardId,
+          name: editReward.name,
+          description: editReward.description,
         );
 
         // Assert
