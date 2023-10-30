@@ -1,29 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:gami_acad_web/ui/controllers/mission_controller.dart';
+import 'package:gami_acad_web/ui/controllers/reward_controller.dart';
 import 'package:gami_acad_web/ui/utils/app_colors.dart';
 import 'package:gami_acad_web/ui/utils/app_texts.dart';
-import 'package:gami_acad_web/ui/utils/extensions/date_extension.dart';
 import 'package:gami_acad_web/ui/utils/extensions/int_extension.dart';
 import 'package:gami_acad_web/ui/views/base_section_view.dart';
 import 'package:gami_acad_web/ui/widgets/default_action_dialog.dart';
 import 'package:provider/provider.dart';
 
-class MissionDetailsView extends StatelessWidget {
-  const MissionDetailsView({super.key});
+class RewardDetailsView extends StatelessWidget {
+  final double maxViewItemsWidth = 600;
+  const RewardDetailsView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<MissionController>(
-      builder: (context, missionController, _) {
+    return Consumer<RewardController>(
+      builder: (context, rewardController, _) {
         return BaseSectionView(
-          viewTitle: missionController.selectedMission.name,
+          viewTitle: rewardController.selectedReward.name,
           headerActions: [
-            missionController.selectedMission.active &&
-                    missionController.selectedMission.expirationDate
-                        .isAfter(DateTime.now())
+            rewardController.selectedReward.active &&
+                    rewardController.selectedReward.availability > 0
                 ? TextButton.icon(
                     onPressed: () =>
-                        missionController.selectedView = MissionViewState.edit,
+                        rewardController.selectedView = RewardViewState.edit,
                     icon: const Icon(
                       Icons.edit,
                     ),
@@ -35,7 +34,7 @@ class MissionDetailsView extends StatelessWidget {
                     ),
                   )
                 : const SizedBox(),
-            missionController.selectedMission.active
+            rewardController.selectedReward.active
                 ? TextButton.icon(
                     onPressed: () {
                       showDialog(
@@ -45,10 +44,10 @@ class MissionDetailsView extends StatelessWidget {
                           actionText: AppTexts.yes,
                           action: deactivateAction(
                             context: context,
-                            missionController: missionController,
-                            missionId: missionController.selectedMission.id,
+                            rewardController: rewardController,
+                            rewardId: rewardController.selectedReward.id,
                           ),
-                          contentText: AppTexts.missionDeactivateConfirmation,
+                          contentText: AppTexts.rewardDeactivateConfirmation,
                         ),
                       );
                     },
@@ -64,7 +63,7 @@ class MissionDetailsView extends StatelessWidget {
                   )
                 : const SizedBox()
           ],
-          state: missionController.state,
+          state: rewardController.state,
           body: SingleChildScrollView(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Column(
@@ -72,7 +71,7 @@ class MissionDetailsView extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
-                  '#${missionController.selectedMission.number.toStringLeadingZeroes()}',
+                  '#${rewardController.selectedReward.number.toStringLeadingZeroes()}',
                 ),
                 const Divider(height: 20),
                 Padding(
@@ -87,7 +86,7 @@ class MissionDetailsView extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
                       const Text(
-                        '${AppTexts.points}:',
+                        '${AppTexts.price}:',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                         ),
@@ -96,14 +95,13 @@ class MissionDetailsView extends StatelessWidget {
                         height: 5,
                       ),
                       Text(
-                        missionController.selectedMission.points
-                            .toStringDecimal(),
+                        rewardController.selectedReward.price.toStringDecimal(),
                       ),
                       const SizedBox(
                         height: 10,
                       ),
                       const Text(
-                        '${AppTexts.expirationDate}:',
+                        '${AppTexts.rewardAvailability}:',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                         ),
@@ -112,7 +110,7 @@ class MissionDetailsView extends StatelessWidget {
                         height: 5,
                       ),
                       Text(
-                        '${missionController.selectedMission.expirationDate.toLocalDateExtendedString()} ${AppTexts.at} ${missionController.selectedMission.expirationDate.toLocalTimeString()}h',
+                        rewardController.selectedReward.availability.toString(),
                       ),
                       const SizedBox(
                         height: 10,
@@ -127,7 +125,7 @@ class MissionDetailsView extends StatelessWidget {
                         height: 5,
                       ),
                       Text(
-                        missionController.selectedMission.description,
+                        rewardController.selectedReward.description,
                         textAlign: TextAlign.justify,
                       ),
                       const SizedBox(
@@ -141,9 +139,8 @@ class MissionDetailsView extends StatelessWidget {
                           ),
                         ),
                         onPressed: () {
-                          missionController.getMissions();
-                          missionController.selectedView =
-                              MissionViewState.list;
+                          rewardController.getRewards();
+                          rewardController.selectedView = RewardViewState.list;
                         },
                         child: const Text(AppTexts.back),
                       ),
@@ -160,26 +157,26 @@ class MissionDetailsView extends StatelessWidget {
 
   void Function() deactivateAction({
     required BuildContext context,
-    required MissionController missionController,
-    required String missionId,
+    required RewardController rewardController,
+    required String rewardId,
   }) {
     return () {
-      missionController.deactivateMission(missionId: missionId).then(
+      rewardController.deactivateReward(rewardId: rewardId).then(
         (result) {
           if (result) {
-            missionController.selectedMission.active = false;
+            rewardController.selectedReward.active = false;
           }
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               duration: const Duration(seconds: 2),
               content: Text(
                 result
-                    ? AppTexts.missionDeactivateSuccess
-                    : AppTexts.missionDeactivateError,
+                    ? AppTexts.rewardDeactivateSuccess
+                    : AppTexts.rewardDeactivateError,
               ),
             ),
           );
-          missionController.getMissions();
+          rewardController.getRewards();
         },
       );
     };
