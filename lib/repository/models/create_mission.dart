@@ -3,13 +3,11 @@ class CreateMission {
   String description;
   int points;
   DateTime expirationDate;
-  String createdBy;
   CreateMission({
     required this.name,
     required this.description,
     required this.points,
     required this.expirationDate,
-    required this.createdBy,
   });
 
   factory CreateMission.fromJson(Map<String, dynamic> json) => CreateMission(
@@ -17,7 +15,6 @@ class CreateMission {
         description: json['description'],
         points: json['points'],
         expirationDate: DateTime.parse(json['expirationDate']),
-        createdBy: json['createdBy'],
       );
 
   Map<String, dynamic> toJson() => {
@@ -25,6 +22,5 @@ class CreateMission {
         'description': description,
         'points': points,
         'expirationDate': expirationDate.toIso8601String(),
-        'createdBy': createdBy,
       };
 }

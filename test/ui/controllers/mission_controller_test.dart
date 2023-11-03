@@ -46,7 +46,6 @@ void main() {
       description: 'description',
       points: 100,
       expirationDate: DateTime.now(),
-      createdBy: userId,
     );
 
     EditMission editMission = EditMission(

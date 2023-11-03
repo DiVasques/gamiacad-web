@@ -66,7 +66,9 @@ class _MissionCreateViewState extends State<MissionCreateView> {
                   DefaultTextField(
                     controller: _nameController,
                     hintText: AppTexts.name,
-                    constraints: const BoxConstraints(maxWidth: 600),
+                    constraints: BoxConstraints(
+                      maxWidth: widget.maxViewItemsWidth,
+                    ),
                     focusNode: _nameFocus,
                     textInputAction: TextInputAction.next,
                     onFieldSubmitted: (_) {
@@ -85,7 +87,9 @@ class _MissionCreateViewState extends State<MissionCreateView> {
                   DefaultTextField(
                     controller: _descriptionController,
                     hintText: AppTexts.description,
-                    constraints: const BoxConstraints(maxWidth: 600),
+                    constraints: BoxConstraints(
+                      maxWidth: widget.maxViewItemsWidth,
+                    ),
                     maxLines: 8,
                     focusNode: _descriptionFocus,
                     textInputAction: TextInputAction.next,
