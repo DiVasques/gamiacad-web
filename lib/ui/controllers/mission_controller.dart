@@ -72,7 +72,6 @@ class MissionController extends BaseController {
       description: description,
       points: points,
       expirationDate: expirationDate,
-      createdBy: userId,
     );
     setState(ViewState.busy);
     try {
