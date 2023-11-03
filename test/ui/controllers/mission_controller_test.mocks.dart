@@ -72,6 +72,24 @@ class MockMissionRepository extends _i1.Mock implements _i3.MissionRepository {
       ) as _i5.Future<_i2.Result>);
 
   @override
+  _i5.Future<_i2.Result> refreshMission({required String? missionId}) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #refreshMission,
+          [],
+          {#missionId: missionId},
+        ),
+        returnValue: _i5.Future<_i2.Result>.value(_FakeResult_0(
+          this,
+          Invocation.method(
+            #refreshMission,
+            [],
+            {#missionId: missionId},
+          ),
+        )),
+      ) as _i5.Future<_i2.Result>);
+
+  @override
   _i5.Future<_i2.Result> createMission(
           {required _i6.CreateMission? newMission}) =>
       (super.noSuchMethod(

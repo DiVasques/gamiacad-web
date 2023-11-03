@@ -192,9 +192,10 @@ class _MissionEditViewState extends State<MissionEditView> {
                               ),
                             );
                             if (result) {
-                              missionController.getMissions();
-                              missionController.selectedView =
-                                  MissionViewState.list;
+                              await missionController.refreshMissionData(
+                                missionId: missionController.selectedMission.id,
+                                viewState: MissionViewState.details,
+                              );
                             }
                           },
                           child: const Text(AppTexts.edit),

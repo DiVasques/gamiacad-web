@@ -50,6 +50,40 @@ class MissionRepository {
     }
   }
 
+  Future<Result> refreshMission({required String missionId}) async {
+    try {
+      var response = await _gamiAcadDioClient.get(
+        path: '/mission/$missionId',
+      );
+      var result = Result(
+        status: false,
+        code: response.statusCode,
+        message: response.statusMessage,
+      );
+      if (response.statusCode == 200) {
+        result.status = true;
+        for (var (index, mission) in missions.indexed) {
+          if (mission.id == missionId) {
+            missions[index] = Mission.fromJson(response.data);
+            break;
+          }
+        }
+        return result;
+      }
+      return result;
+    } on DioException catch (error) {
+      if (error.response?.statusCode == 401) {
+        throw UnauthorizedException();
+      }
+      if (error.response?.statusCode == 403) {
+        throw ForbiddenException();
+      }
+      throw ServiceUnavailableException();
+    } catch (e) {
+      throw ServiceUnavailableException();
+    }
+  }
+
   Future<Result> createMission({required CreateMission newMission}) async {
     try {
       var response = await _gamiAcadDioClient.post(

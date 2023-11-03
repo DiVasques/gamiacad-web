@@ -25,6 +25,8 @@ void main() {
 
     String missionId = 'missionId';
 
+    MissionViewState viewState = MissionViewState.details;
+
     Mission mission = Mission(
         id: missionId,
         name: 'name',
@@ -396,6 +398,89 @@ void main() {
         // Act
         var result =
             await missionController.deactivateMission(missionId: missionId);
+
+        // Assert
+        expect(missionController.state, ViewState.idle);
+        expect(result, false);
+      });
+    });
+
+    group('refreshMissionData', () {
+      test('should return true when successful refreshing mission', () async {
+        // Arrange
+        when(missionRepository.refreshMission(missionId: missionId))
+            .thenAnswer((_) async => Result(status: true, message: 'Success'));
+        missionController = MissionController(
+          userId: userId,
+          missionRepository: missionRepository,
+        );
+
+        // Act
+        var result = await missionController.refreshMissionData(
+          missionId: missionId,
+          viewState: viewState,
+        );
+
+        // Assert
+        expect(missionController.state, ViewState.idle);
+        expect(missionController.selectedView, viewState);
+        expect(result, true);
+      });
+
+      test('should return unsuccessful result when failing', () async {
+        // Arrange
+        when(missionRepository.refreshMission(missionId: missionId))
+            .thenAnswer((_) async => Result(status: false, message: 'Error'));
+        missionController = MissionController(
+          userId: userId,
+          missionRepository: missionRepository,
+        );
+
+        // Act
+        var result = await missionController.refreshMissionData(
+          missionId: missionId,
+          viewState: viewState,
+        );
+
+        // Assert
+        expect(missionController.state, ViewState.idle);
+        expect(result, false);
+      });
+
+      test('should throw when unauthorized', () async {
+        // Arrange
+        when(missionRepository.refreshMission(missionId: missionId))
+            .thenThrow((_) async => UnauthorizedException);
+        missionController = MissionController(
+          userId: userId,
+          missionRepository: missionRepository,
+        );
+
+        // Act and Assert
+        try {
+          await missionController.refreshMissionData(
+            missionId: missionId,
+            viewState: viewState,
+          );
+        } catch (e) {
+          expect(e.runtimeType, UnauthorizedException);
+        }
+      });
+
+      test('should return error when another exception', () async {
+        // Arrange
+        when(missionRepository.refreshMission(missionId: missionId))
+            .thenThrow((_) async => ServiceUnavailableException);
+        missionController = MissionController(
+          userId: userId,
+          missionRepository: missionRepository,
+        );
+
+        // Act
+        var result = await missionController.refreshMissionData(
+          missionId: missionId,
+          viewState: viewState,
+        );
 
         // Assert
         expect(missionController.state, ViewState.idle);

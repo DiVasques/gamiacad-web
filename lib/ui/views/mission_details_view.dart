@@ -17,6 +17,12 @@ class MissionDetailsView extends StatelessWidget {
       builder: (context, missionController, _) {
         return BaseSectionView(
           viewTitle: missionController.selectedMission.name,
+          reloadAction: () {
+            missionController.refreshMissionData(
+              missionId: missionController.selectedMission.id,
+              viewState: MissionViewState.details,
+            );
+          },
           headerActions: [
             missionController.selectedMission.active &&
                     missionController.selectedMission.expirationDate

@@ -133,4 +133,27 @@ class MissionController extends BaseController {
       setState(ViewState.idle);
     }
   }
+
+  Future<bool> refreshMissionData({
+    required String missionId,
+    required MissionViewState viewState,
+  }) async {
+    setState(ViewState.busy);
+    try {
+      Result result = await _missionRepository.refreshMission(
+        missionId: missionId,
+      );
+      return result.status;
+    } on UnauthorizedException {
+      rethrow;
+    } catch (e) {
+      return false;
+    } finally {
+      selectedMission = missions.singleWhere(
+        (mission) => mission.id == missionId,
+      );
+      setState(ViewState.idle);
+      selectedView = viewState;
+    }
+  }
 }
