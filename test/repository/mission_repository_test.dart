@@ -174,6 +174,128 @@ void main() {
       });
     });
 
+    group('refreshMission', () {
+      test('should return success refreshMission', () async {
+        // Arrange
+        Mission alteredMission = mission;
+        alteredMission.name = 'Edited Name';
+        missionRepository.missions = [mission];
+        Response response = Response(
+          requestOptions: RequestOptions(),
+          statusCode: 200,
+          statusMessage: 'Success',
+          data: alteredMission.toJson(),
+        );
+        when(gamiAcadDioClient.get(
+          path: '/mission/$missionId',
+        )).thenAnswer((_) async => response);
+
+        // Act
+        final result =
+            await missionRepository.refreshMission(missionId: missionId);
+
+        // Assert
+        expect(result.status, true);
+        expect(result.message, 'Success');
+        expect(missionRepository.missions[0].id, alteredMission.id);
+        expect(missionRepository.missions[0].name, alteredMission.name);
+        expect(
+          missionRepository.missions[0].description,
+          alteredMission.description,
+        );
+        expect(missionRepository.missions[0].number, alteredMission.number);
+        expect(missionRepository.missions[0].points, alteredMission.points);
+        expect(missionRepository.missions[0].expirationDate,
+            alteredMission.expirationDate);
+        expect(
+            missionRepository.missions[0].createdAt, alteredMission.createdAt);
+        expect(
+            missionRepository.missions[0].updatedAt, alteredMission.updatedAt);
+        expect(
+            missionRepository.missions[0].createdBy, alteredMission.createdBy);
+        expect(missionRepository.missions[0].participants,
+            alteredMission.participants);
+        expect(missionRepository.missions[0].completers,
+            alteredMission.completers);
+      });
+
+      test('should return unauthorized when 401', () async {
+        // Arrange
+        when(gamiAcadDioClient.get(
+          path: '/mission/$missionId',
+        )).thenAnswer(
+          (_) async => throw DioException(
+            requestOptions: RequestOptions(),
+            response:
+                Response(requestOptions: RequestOptions(), statusCode: 401),
+          ),
+        );
+
+        // Act and Assert
+        try {
+          await missionRepository.refreshMission(missionId: missionId);
+        } catch (e) {
+          expect(e.runtimeType, UnauthorizedException);
+        }
+      });
+
+      test('should return forbidden', () async {
+        // Arrange
+        when(gamiAcadDioClient.get(
+          path: '/mission/$missionId',
+        )).thenAnswer(
+          (_) async => throw DioException(
+            requestOptions: RequestOptions(),
+            response:
+                Response(requestOptions: RequestOptions(), statusCode: 403),
+          ),
+        );
+
+        // Act and Assert
+        try {
+          await missionRepository.refreshMission(missionId: missionId);
+        } catch (e) {
+          expect(e.runtimeType, ForbiddenException);
+        }
+      });
+
+      test('should return service unavailable', () async {
+        // Arrange
+        when(gamiAcadDioClient.get(
+          path: '/mission/$missionId',
+        )).thenAnswer(
+          (_) async => throw DioException(
+            requestOptions: RequestOptions(),
+            response:
+                Response(requestOptions: RequestOptions(), statusCode: 404),
+          ),
+        );
+
+        // Act and Assert
+        try {
+          await missionRepository.refreshMission(missionId: missionId);
+        } catch (e) {
+          expect(e.runtimeType, ServiceUnavailableException);
+        }
+      });
+
+      test('should return service unavailable when unknown error', () async {
+        // Arrange
+        when(gamiAcadDioClient.get(
+          path: '/mission/$missionId',
+        )).thenAnswer(
+          (_) async => throw Exception(),
+        );
+
+        // Act and Assert
+        try {
+          await missionRepository.refreshMission(missionId: missionId);
+        } catch (e) {
+          expect(e.runtimeType, ServiceUnavailableException);
+        }
+      });
+    });
+
     group('createMission', () {
       test('should return success createMission', () async {
         // Arrange
