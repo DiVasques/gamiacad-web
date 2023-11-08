@@ -17,6 +17,7 @@ dependencies:
   provider: ^6.0.5
   flutter_localizations:
     sdk: flutter
+  gap: ^3.0.1
 
 dev_dependencies:
   flutter_test:

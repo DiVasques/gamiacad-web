@@ -180,9 +180,6 @@ class _MissionCreateViewState extends State<MissionCreateView> {
                         TextButton(
                           style: TextButton.styleFrom(
                             backgroundColor: AppColors.errorGray,
-                            textStyle: const TextStyle(
-                              color: Colors.white,
-                            ),
                           ),
                           onPressed: () {
                             missionController.getMissions();

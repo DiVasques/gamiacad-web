@@ -6,7 +6,7 @@ class Reward {
   int price;
   int availability;
   DateTime createdAt;
-  DateTime updatedAt;
+  DateTime? updatedAt;
   List<String> claimers;
   List<String> handed;
   bool active;
@@ -32,7 +32,7 @@ class Reward {
         price: json['price'],
         availability: json['availability'],
         createdAt: DateTime.parse(json['createdAt']),
-        updatedAt: DateTime.parse(json['updatedAt']),
+        updatedAt: DateTime.parse(json['updatedAt'] ?? ''),
         claimers: (json['claimers'] as List<dynamic>)
             .map((p) => p as String)
             .toList(),
@@ -49,7 +49,7 @@ class Reward {
         'price': price,
         'availability': availability,
         'createdAt': createdAt.toIso8601String(),
-        'updatedAt': updatedAt.toIso8601String(),
+        'updatedAt': updatedAt?.toIso8601String(),
         'claimers': claimers,
         'handed': handed,
         'active': active,

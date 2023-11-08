@@ -37,7 +37,6 @@ class DefaultErrorView extends StatelessWidget {
           IconButton(
             icon: const Icon(
               Icons.replay_outlined,
-              // size: 30,
             ),
             onPressed: onPressed,
             color: AppColors.errorGray,

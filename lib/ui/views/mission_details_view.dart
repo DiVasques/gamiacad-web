@@ -2,13 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:gami_acad_web/ui/controllers/mission_controller.dart';
 import 'package:gami_acad_web/ui/utils/app_colors.dart';
 import 'package:gami_acad_web/ui/utils/app_texts.dart';
-import 'package:gami_acad_web/ui/utils/extensions/date_extension.dart';
 import 'package:gami_acad_web/ui/utils/extensions/int_extension.dart';
 import 'package:gami_acad_web/ui/views/base_section_view.dart';
 import 'package:gami_acad_web/ui/widgets/default_action_dialog.dart';
+import 'package:gami_acad_web/ui/widgets/mission_infos.dart';
+import 'package:gami_acad_web/ui/widgets/participating_users_info.dart';
+import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
 
 class MissionDetailsView extends StatelessWidget {
+  final double maxViewItemsWidth = 600;
   const MissionDetailsView({super.key});
 
   @override
@@ -86,76 +89,35 @@ class MissionDetailsView extends StatelessWidget {
                     left: 20,
                     right: 20,
                     top: 15,
-                    bottom: 200,
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: <Widget>[
-                      const Text(
-                        '${AppTexts.points}:',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      Text(
-                        missionController.selectedMission.points
-                            .toStringDecimal(),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      const Text(
-                        '${AppTexts.expirationDate}:',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      Text(
-                        '${missionController.selectedMission.expirationDate.toLocalDateExtendedString()} ${AppTexts.at} ${missionController.selectedMission.expirationDate.toLocalTimeString()}h',
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      const Text(
-                        '${AppTexts.description}:',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      Text(
-                        missionController.selectedMission.description,
-                        textAlign: TextAlign.justify,
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      TextButton(
-                        style: TextButton.styleFrom(
-                          backgroundColor: AppColors.errorGray,
-                          textStyle: const TextStyle(
-                            color: Colors.white,
-                          ),
-                        ),
-                        onPressed: () {
-                          missionController.getMissions();
-                          missionController.selectedView =
-                              MissionViewState.list;
-                        },
-                        child: const Text(AppTexts.back),
-                      ),
-                    ],
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: Wrap(
+                      alignment: WrapAlignment.spaceBetween,
+                      spacing: 100,
+                      runSpacing: 20,
+                      children: [
+                        MissionInfos(maxViewItemsWidth: maxViewItemsWidth),
+                        missionController.selectedMission.active
+                            ? ParticipatingUsersInfo(
+                                maxViewItemsWidth: maxViewItemsWidth)
+                            : const SizedBox(),
+                      ],
+                    ),
                   ),
                 ),
+                const Gap(20),
+                TextButton(
+                  style: TextButton.styleFrom(
+                    backgroundColor: AppColors.errorGray,
+                  ),
+                  onPressed: () {
+                    missionController.getMissions();
+                    missionController.selectedView = MissionViewState.list;
+                  },
+                  child: const Text(AppTexts.back),
+                ),
+                const Gap(20),
               ],
             ),
           ),

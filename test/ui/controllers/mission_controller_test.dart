@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:gami_acad_web/repository/mission_repository.dart';
-import 'package:gami_acad_web/repository/models/create_mission.dart';
-import 'package:gami_acad_web/repository/models/edit_mission.dart';
 import 'package:gami_acad_web/repository/models/exceptions/service_unavailable_exception.dart';
 import 'package:gami_acad_web/repository/models/exceptions/unauthorized_exception.dart';
-import 'package:gami_acad_web/repository/models/mission.dart';
 import 'package:gami_acad_web/repository/models/result.dart';
 import 'package:gami_acad_web/ui/controllers/mission_controller.dart';
 import 'package:gami_acad_web/ui/utils/view_state.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
+import '../../mocks/mission_mocks.dart';
+import '../../mocks/user_mocks.dart';
 import 'mission_controller_test.mocks.dart';
 
 @GenerateMocks([MissionRepository])
@@ -21,43 +20,12 @@ void main() {
     late MissionController missionController;
     late MockMissionRepository missionRepository;
 
-    String userId = 'userId';
-
-    String missionId = 'missionId';
-
     MissionViewState viewState = MissionViewState.details;
-
-    Mission mission = Mission(
-        id: missionId,
-        name: 'name',
-        description: 'description',
-        number: 1,
-        points: 100,
-        expirationDate: DateTime.now(),
-        createdAt: DateTime.now(),
-        updatedAt: DateTime.now(),
-        createdBy: 'createdBy',
-        participants: ["123"],
-        completers: ["456"],
-        active: true);
-
-    CreateMission newMission = CreateMission(
-      name: 'name',
-      description: 'description',
-      points: 100,
-      expirationDate: DateTime.now(),
-    );
-
-    EditMission editMission = EditMission(
-      name: 'name',
-      description: 'description',
-      expirationDate: DateTime.now(),
-    );
 
     setUp(() {
       missionRepository = MockMissionRepository();
 
-      when(missionRepository.missions).thenReturn([mission]);
+      when(missionRepository.missions).thenReturn([MissionMocks.mission]);
     });
 
     group('getMissions', () {
@@ -66,7 +34,7 @@ void main() {
         when(missionRepository.getMissions())
             .thenAnswer((_) async => Result(status: true, message: 'Success'));
         missionController = MissionController(
-          userId: userId,
+          userId: UserMocks.userId,
           missionRepository: missionRepository,
         );
 
@@ -83,7 +51,7 @@ void main() {
         when(missionRepository.getMissions())
             .thenAnswer((_) async => Result(status: false, message: 'Error'));
         missionController = MissionController(
-          userId: userId,
+          userId: UserMocks.userId,
           missionRepository: missionRepository,
         );
 
@@ -100,7 +68,7 @@ void main() {
         when(missionRepository.getMissions())
             .thenThrow((_) async => UnauthorizedException);
         missionController = MissionController(
-          userId: userId,
+          userId: UserMocks.userId,
           missionRepository: missionRepository,
         );
 
@@ -117,7 +85,7 @@ void main() {
         when(missionRepository.getMissions())
             .thenThrow((_) async => ServiceUnavailableException);
         missionController = MissionController(
-          userId: userId,
+          userId: UserMocks.userId,
           missionRepository: missionRepository,
         );
 
@@ -136,16 +104,16 @@ void main() {
                 newMission: anyNamed('newMission')))
             .thenAnswer((_) async => Result(status: true, message: 'Success'));
         missionController = MissionController(
-          userId: userId,
+          userId: UserMocks.userId,
           missionRepository: missionRepository,
         );
 
         // Act
         var result = await missionController.createMission(
-          name: newMission.name,
-          description: newMission.description,
-          points: newMission.points,
-          expirationDate: newMission.expirationDate,
+          name: MissionMocks.newMission.name,
+          description: MissionMocks.newMission.description,
+          points: MissionMocks.newMission.points,
+          expirationDate: MissionMocks.newMission.expirationDate,
         );
 
         // Assert
@@ -160,16 +128,16 @@ void main() {
                 newMission: anyNamed('newMission')))
             .thenAnswer((_) async => Result(status: false, message: 'Error'));
         missionController = MissionController(
-          userId: userId,
+          userId: UserMocks.userId,
           missionRepository: missionRepository,
         );
 
         // Act
         var result = await missionController.createMission(
-          name: newMission.name,
-          description: newMission.description,
-          points: newMission.points,
-          expirationDate: newMission.expirationDate,
+          name: MissionMocks.newMission.name,
+          description: MissionMocks.newMission.description,
+          points: MissionMocks.newMission.points,
+          expirationDate: MissionMocks.newMission.expirationDate,
         );
 
         // Assert
@@ -183,17 +151,17 @@ void main() {
                 newMission: anyNamed('newMission')))
             .thenThrow((_) async => UnauthorizedException);
         missionController = MissionController(
-          userId: userId,
+          userId: UserMocks.userId,
           missionRepository: missionRepository,
         );
 
         // Act and Assert
         try {
           await missionController.createMission(
-            name: newMission.name,
-            description: newMission.description,
-            points: newMission.points,
-            expirationDate: newMission.expirationDate,
+            name: MissionMocks.newMission.name,
+            description: MissionMocks.newMission.description,
+            points: MissionMocks.newMission.points,
+            expirationDate: MissionMocks.newMission.expirationDate,
           );
         } catch (e) {
           expect(e.runtimeType, UnauthorizedException);
@@ -206,16 +174,16 @@ void main() {
                 newMission: anyNamed('newMission')))
             .thenThrow((_) async => ServiceUnavailableException);
         missionController = MissionController(
-          userId: userId,
+          userId: UserMocks.userId,
           missionRepository: missionRepository,
         );
 
         // Act
         var result = await missionController.createMission(
-          name: newMission.name,
-          description: newMission.description,
-          points: newMission.points,
-          expirationDate: newMission.expirationDate,
+          name: MissionMocks.newMission.name,
+          description: MissionMocks.newMission.description,
+          points: MissionMocks.newMission.points,
+          expirationDate: MissionMocks.newMission.expirationDate,
         );
 
         // Assert
@@ -229,21 +197,21 @@ void main() {
         // Arrange
         when(
           missionRepository.editMission(
-            missionId: missionId,
+            missionId: MissionMocks.missionId,
             editMission: anyNamed('editMission'),
           ),
         ).thenAnswer((_) async => Result(status: true, message: 'Success'));
         missionController = MissionController(
-          userId: userId,
+          userId: UserMocks.userId,
           missionRepository: missionRepository,
         );
 
         // Act
         var result = await missionController.editMission(
-          missionId: missionId,
-          name: editMission.name,
-          description: editMission.description,
-          expirationDate: editMission.expirationDate,
+          missionId: MissionMocks.missionId,
+          name: MissionMocks.editMission.name,
+          description: MissionMocks.editMission.description,
+          expirationDate: MissionMocks.editMission.expirationDate,
         );
 
         // Assert
@@ -256,21 +224,21 @@ void main() {
         // Arrange
         when(
           missionRepository.editMission(
-            missionId: missionId,
+            missionId: MissionMocks.missionId,
             editMission: anyNamed('editMission'),
           ),
         ).thenAnswer((_) async => Result(status: false, message: 'Error'));
         missionController = MissionController(
-          userId: userId,
+          userId: UserMocks.userId,
           missionRepository: missionRepository,
         );
 
         // Act
         var result = await missionController.editMission(
-          missionId: missionId,
-          name: editMission.name,
-          description: editMission.description,
-          expirationDate: editMission.expirationDate,
+          missionId: MissionMocks.missionId,
+          name: MissionMocks.editMission.name,
+          description: MissionMocks.editMission.description,
+          expirationDate: MissionMocks.editMission.expirationDate,
         );
 
         // Assert
@@ -282,22 +250,22 @@ void main() {
         // Arrange
         when(
           missionRepository.editMission(
-            missionId: missionId,
+            missionId: MissionMocks.missionId,
             editMission: anyNamed('editMission'),
           ),
         ).thenThrow((_) async => UnauthorizedException);
         missionController = MissionController(
-          userId: userId,
+          userId: UserMocks.userId,
           missionRepository: missionRepository,
         );
 
         // Act and Assert
         try {
           await missionController.editMission(
-            missionId: missionId,
-            name: editMission.name,
-            description: editMission.description,
-            expirationDate: editMission.expirationDate,
+            missionId: MissionMocks.missionId,
+            name: MissionMocks.editMission.name,
+            description: MissionMocks.editMission.description,
+            expirationDate: MissionMocks.editMission.expirationDate,
           );
         } catch (e) {
           expect(e.runtimeType, UnauthorizedException);
@@ -308,21 +276,21 @@ void main() {
         // Arrange
         when(
           missionRepository.editMission(
-            missionId: missionId,
+            missionId: MissionMocks.missionId,
             editMission: anyNamed('editMission'),
           ),
         ).thenThrow((_) async => ServiceUnavailableException);
         missionController = MissionController(
-          userId: userId,
+          userId: UserMocks.userId,
           missionRepository: missionRepository,
         );
 
         // Act
         var result = await missionController.editMission(
-          missionId: missionId,
-          name: editMission.name,
-          description: editMission.description,
-          expirationDate: editMission.expirationDate,
+          missionId: MissionMocks.missionId,
+          name: MissionMocks.editMission.name,
+          description: MissionMocks.editMission.description,
+          expirationDate: MissionMocks.editMission.expirationDate,
         );
 
         // Assert
@@ -334,16 +302,17 @@ void main() {
     group('deactivateMission', () {
       test('should return true when successful deactivating mission', () async {
         // Arrange
-        when(missionRepository.deactivateMission(missionId: missionId))
+        when(missionRepository.deactivateMission(
+                missionId: MissionMocks.missionId))
             .thenAnswer((_) async => Result(status: true, message: 'Success'));
         missionController = MissionController(
-          userId: userId,
+          userId: UserMocks.userId,
           missionRepository: missionRepository,
         );
 
         // Act
-        var result =
-            await missionController.deactivateMission(missionId: missionId);
+        var result = await missionController.deactivateMission(
+            missionId: MissionMocks.missionId);
 
         // Assert
         expect(missionController.state, ViewState.idle);
@@ -352,16 +321,17 @@ void main() {
 
       test('should return unsuccessful result when failing', () async {
         // Arrange
-        when(missionRepository.deactivateMission(missionId: missionId))
+        when(missionRepository.deactivateMission(
+                missionId: MissionMocks.missionId))
             .thenAnswer((_) async => Result(status: false, message: 'Error'));
         missionController = MissionController(
-          userId: userId,
+          userId: UserMocks.userId,
           missionRepository: missionRepository,
         );
 
         // Act
-        var result =
-            await missionController.deactivateMission(missionId: missionId);
+        var result = await missionController.deactivateMission(
+            missionId: MissionMocks.missionId);
 
         // Assert
         expect(missionController.state, ViewState.idle);
@@ -370,16 +340,18 @@ void main() {
 
       test('should throw when unauthorized', () async {
         // Arrange
-        when(missionRepository.deactivateMission(missionId: missionId))
+        when(missionRepository.deactivateMission(
+                missionId: MissionMocks.missionId))
             .thenThrow((_) async => UnauthorizedException);
         missionController = MissionController(
-          userId: userId,
+          userId: UserMocks.userId,
           missionRepository: missionRepository,
         );
 
         // Act and Assert
         try {
-          await missionController.deactivateMission(missionId: missionId);
+          await missionController.deactivateMission(
+              missionId: MissionMocks.missionId);
         } catch (e) {
           expect(e.runtimeType, UnauthorizedException);
         }
@@ -387,16 +359,17 @@ void main() {
 
       test('should return error when another exception', () async {
         // Arrange
-        when(missionRepository.deactivateMission(missionId: missionId))
+        when(missionRepository.deactivateMission(
+                missionId: MissionMocks.missionId))
             .thenThrow((_) async => ServiceUnavailableException);
         missionController = MissionController(
-          userId: userId,
+          userId: UserMocks.userId,
           missionRepository: missionRepository,
         );
 
         // Act
-        var result =
-            await missionController.deactivateMission(missionId: missionId);
+        var result = await missionController.deactivateMission(
+            missionId: MissionMocks.missionId);
 
         // Assert
         expect(missionController.state, ViewState.idle);
@@ -407,16 +380,17 @@ void main() {
     group('refreshMissionData', () {
       test('should return true when successful refreshing mission', () async {
         // Arrange
-        when(missionRepository.refreshMission(missionId: missionId))
+        when(missionRepository.refreshMission(
+                missionId: MissionMocks.missionId))
             .thenAnswer((_) async => Result(status: true, message: 'Success'));
         missionController = MissionController(
-          userId: userId,
+          userId: UserMocks.userId,
           missionRepository: missionRepository,
         );
 
         // Act
         var result = await missionController.refreshMissionData(
-          missionId: missionId,
+          missionId: MissionMocks.missionId,
           viewState: viewState,
         );
 
@@ -428,16 +402,17 @@ void main() {
 
       test('should return unsuccessful result when failing', () async {
         // Arrange
-        when(missionRepository.refreshMission(missionId: missionId))
+        when(missionRepository.refreshMission(
+                missionId: MissionMocks.missionId))
             .thenAnswer((_) async => Result(status: false, message: 'Error'));
         missionController = MissionController(
-          userId: userId,
+          userId: UserMocks.userId,
           missionRepository: missionRepository,
         );
 
         // Act
         var result = await missionController.refreshMissionData(
-          missionId: missionId,
+          missionId: MissionMocks.missionId,
           viewState: viewState,
         );
 
@@ -448,17 +423,18 @@ void main() {
 
       test('should throw when unauthorized', () async {
         // Arrange
-        when(missionRepository.refreshMission(missionId: missionId))
+        when(missionRepository.refreshMission(
+                missionId: MissionMocks.missionId))
             .thenThrow((_) async => UnauthorizedException);
         missionController = MissionController(
-          userId: userId,
+          userId: UserMocks.userId,
           missionRepository: missionRepository,
         );
 
         // Act and Assert
         try {
           await missionController.refreshMissionData(
-            missionId: missionId,
+            missionId: MissionMocks.missionId,
             viewState: viewState,
           );
         } catch (e) {
@@ -468,16 +444,17 @@ void main() {
 
       test('should return error when another exception', () async {
         // Arrange
-        when(missionRepository.refreshMission(missionId: missionId))
+        when(missionRepository.refreshMission(
+                missionId: MissionMocks.missionId))
             .thenThrow((_) async => ServiceUnavailableException);
         missionController = MissionController(
-          userId: userId,
+          userId: UserMocks.userId,
           missionRepository: missionRepository,
         );
 
         // Act
         var result = await missionController.refreshMissionData(
-          missionId: missionId,
+          missionId: MissionMocks.missionId,
           viewState: viewState,
         );
 

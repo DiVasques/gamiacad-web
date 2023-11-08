@@ -1,8 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:gami_acad_web/repository/models/create_mission.dart';
-import 'package:gami_acad_web/repository/models/edit_mission.dart';
 import 'package:gami_acad_web/repository/models/mission.dart';
 import 'package:gami_acad_web/repository/models/exceptions/forbidden_exception.dart';
 import 'package:gami_acad_web/repository/models/exceptions/service_unavailable_exception.dart';
@@ -12,6 +10,8 @@ import 'package:gami_acad_web/services/gamiacad_dio_client.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
+import '../mocks/mission_mocks.dart';
+import '../mocks/user_mocks.dart';
 import 'mission_repository_test.mocks.dart';
 
 @GenerateMocks([GamiAcadDioClient])
@@ -20,35 +20,6 @@ void main() {
   group('MissionRepository', () {
     late MissionRepository missionRepository;
     late MockGamiAcadDioClient gamiAcadDioClient;
-
-    String missionId = 'id';
-
-    Mission mission = Mission(
-        id: missionId,
-        name: 'name',
-        description: 'description',
-        number: 1,
-        points: 100,
-        expirationDate: DateTime.now(),
-        createdAt: DateTime.now(),
-        updatedAt: DateTime.now(),
-        createdBy: 'createdBy',
-        participants: ["123"],
-        completers: ["456"],
-        active: true);
-
-    CreateMission newMission = CreateMission(
-      name: 'name',
-      description: 'description',
-      points: 100,
-      expirationDate: DateTime.now(),
-    );
-
-    EditMission editMission = EditMission(
-      name: 'name',
-      description: 'description',
-      expirationDate: DateTime.now(),
-    );
 
     setUp(() {
       gamiAcadDioClient = MockGamiAcadDioClient();
@@ -65,7 +36,7 @@ void main() {
           statusCode: 200,
           statusMessage: 'Success',
           data: {
-            'missions': [mission.toJson()],
+            'missions': [MissionMocks.mission.toJson()],
           },
         );
         when(gamiAcadDioClient.get(
@@ -78,22 +49,28 @@ void main() {
         // Assert
         expect(result.status, true);
         expect(result.message, 'Success');
-        expect(missionRepository.missions[0].id, mission.id);
-        expect(missionRepository.missions[0].name, mission.name);
+        expect(missionRepository.missions[0].id, MissionMocks.mission.id);
+        expect(missionRepository.missions[0].name, MissionMocks.mission.name);
         expect(
           missionRepository.missions[0].description,
-          mission.description,
+          MissionMocks.mission.description,
         );
-        expect(missionRepository.missions[0].number, mission.number);
-        expect(missionRepository.missions[0].points, mission.points);
-        expect(missionRepository.missions[0].expirationDate,
-            mission.expirationDate);
-        expect(missionRepository.missions[0].createdAt, mission.createdAt);
-        expect(missionRepository.missions[0].updatedAt, mission.updatedAt);
-        expect(missionRepository.missions[0].createdBy, mission.createdBy);
         expect(
-            missionRepository.missions[0].participants, mission.participants);
-        expect(missionRepository.missions[0].completers, mission.completers);
+            missionRepository.missions[0].number, MissionMocks.mission.number);
+        expect(
+            missionRepository.missions[0].points, MissionMocks.mission.points);
+        expect(missionRepository.missions[0].expirationDate,
+            MissionMocks.mission.expirationDate);
+        expect(missionRepository.missions[0].createdAt,
+            MissionMocks.mission.createdAt);
+        expect(missionRepository.missions[0].updatedAt,
+            MissionMocks.mission.updatedAt);
+        expect(missionRepository.missions[0].createdBy,
+            MissionMocks.mission.createdBy);
+        expect(missionRepository.missions[0].participants,
+            MissionMocks.mission.participants);
+        expect(missionRepository.missions[0].completers,
+            MissionMocks.mission.completers);
       });
 
       test('should return unauthorized when 401', () async {
@@ -176,9 +153,9 @@ void main() {
     group('refreshMission', () {
       test('should return success refreshMission', () async {
         // Arrange
-        Mission alteredMission = mission;
+        Mission alteredMission = MissionMocks.mission;
         alteredMission.name = 'Edited Name';
-        missionRepository.missions = [mission];
+        missionRepository.missions = [MissionMocks.mission];
         Response response = Response(
           requestOptions: RequestOptions(),
           statusCode: 200,
@@ -186,12 +163,12 @@ void main() {
           data: alteredMission.toJson(),
         );
         when(gamiAcadDioClient.get(
-          path: '/mission/$missionId',
+          path: '/mission/${MissionMocks.missionId}',
         )).thenAnswer((_) async => response);
 
         // Act
-        final result =
-            await missionRepository.refreshMission(missionId: missionId);
+        final result = await missionRepository.refreshMission(
+            missionId: MissionMocks.missionId);
 
         // Assert
         expect(result.status, true);
@@ -221,7 +198,7 @@ void main() {
       test('should return unauthorized when 401', () async {
         // Arrange
         when(gamiAcadDioClient.get(
-          path: '/mission/$missionId',
+          path: '/mission/${MissionMocks.missionId}',
         )).thenAnswer(
           (_) async => throw DioException(
             requestOptions: RequestOptions(),
@@ -232,7 +209,8 @@ void main() {
 
         // Act and Assert
         try {
-          await missionRepository.refreshMission(missionId: missionId);
+          await missionRepository.refreshMission(
+              missionId: MissionMocks.missionId);
         } catch (e) {
           expect(e.runtimeType, UnauthorizedException);
         }
@@ -241,7 +219,7 @@ void main() {
       test('should return forbidden', () async {
         // Arrange
         when(gamiAcadDioClient.get(
-          path: '/mission/$missionId',
+          path: '/mission/${MissionMocks.missionId}',
         )).thenAnswer(
           (_) async => throw DioException(
             requestOptions: RequestOptions(),
@@ -252,7 +230,8 @@ void main() {
 
         // Act and Assert
         try {
-          await missionRepository.refreshMission(missionId: missionId);
+          await missionRepository.refreshMission(
+              missionId: MissionMocks.missionId);
         } catch (e) {
           expect(e.runtimeType, ForbiddenException);
         }
@@ -261,7 +240,7 @@ void main() {
       test('should return service unavailable', () async {
         // Arrange
         when(gamiAcadDioClient.get(
-          path: '/mission/$missionId',
+          path: '/mission/${MissionMocks.missionId}',
         )).thenAnswer(
           (_) async => throw DioException(
             requestOptions: RequestOptions(),
@@ -272,7 +251,8 @@ void main() {
 
         // Act and Assert
         try {
-          await missionRepository.refreshMission(missionId: missionId);
+          await missionRepository.refreshMission(
+              missionId: MissionMocks.missionId);
         } catch (e) {
           expect(e.runtimeType, ServiceUnavailableException);
         }
@@ -281,14 +261,15 @@ void main() {
       test('should return service unavailable when unknown error', () async {
         // Arrange
         when(gamiAcadDioClient.get(
-          path: '/mission/$missionId',
+          path: '/mission/${MissionMocks.missionId}',
         )).thenAnswer(
           (_) async => throw Exception(),
         );
 
         // Act and Assert
         try {
-          await missionRepository.refreshMission(missionId: missionId);
+          await missionRepository.refreshMission(
+              missionId: MissionMocks.missionId);
         } catch (e) {
           expect(e.runtimeType, ServiceUnavailableException);
         }
@@ -305,12 +286,12 @@ void main() {
         );
         when(gamiAcadDioClient.post(
           path: '/mission',
-          body: newMission.toJson(),
+          body: MissionMocks.newMission.toJson(),
         )).thenAnswer((_) async => response);
 
         // Act
-        final result =
-            await missionRepository.createMission(newMission: newMission);
+        final result = await missionRepository.createMission(
+            newMission: MissionMocks.newMission);
 
         // Assert
         expect(result.status, true);
@@ -321,7 +302,7 @@ void main() {
         // Arrange
         when(gamiAcadDioClient.post(
           path: '/mission',
-          body: newMission.toJson(),
+          body: MissionMocks.newMission.toJson(),
         )).thenAnswer(
           (_) async => throw DioException(
             requestOptions: RequestOptions(),
@@ -332,7 +313,8 @@ void main() {
 
         // Act and Assert
         try {
-          await missionRepository.createMission(newMission: newMission);
+          await missionRepository.createMission(
+              newMission: MissionMocks.newMission);
         } catch (e) {
           expect(e.runtimeType, UnauthorizedException);
         }
@@ -342,7 +324,7 @@ void main() {
         // Arrange
         when(gamiAcadDioClient.post(
           path: '/mission',
-          body: newMission.toJson(),
+          body: MissionMocks.newMission.toJson(),
         )).thenAnswer(
           (_) async => throw DioException(
             requestOptions: RequestOptions(),
@@ -353,7 +335,8 @@ void main() {
 
         // Act and Assert
         try {
-          await missionRepository.createMission(newMission: newMission);
+          await missionRepository.createMission(
+              newMission: MissionMocks.newMission);
         } catch (e) {
           expect(e.runtimeType, ForbiddenException);
         }
@@ -363,7 +346,7 @@ void main() {
         // Arrange
         when(gamiAcadDioClient.post(
           path: '/mission',
-          body: newMission.toJson(),
+          body: MissionMocks.newMission.toJson(),
         )).thenAnswer(
           (_) async => throw DioException(
             requestOptions: RequestOptions(),
@@ -374,7 +357,8 @@ void main() {
 
         // Act and Assert
         try {
-          await missionRepository.createMission(newMission: newMission);
+          await missionRepository.createMission(
+              newMission: MissionMocks.newMission);
         } catch (e) {
           expect(e.runtimeType, ServiceUnavailableException);
         }
@@ -384,14 +368,15 @@ void main() {
         // Arrange
         when(gamiAcadDioClient.post(
           path: '/mission',
-          body: newMission.toJson(),
+          body: MissionMocks.newMission.toJson(),
         )).thenAnswer(
           (_) async => throw Exception(),
         );
 
         // Act and Assert
         try {
-          await missionRepository.createMission(newMission: newMission);
+          await missionRepository.createMission(
+              newMission: MissionMocks.newMission);
         } catch (e) {
           expect(e.runtimeType, ServiceUnavailableException);
         }
@@ -407,13 +392,15 @@ void main() {
           statusMessage: 'Success',
         );
         when(gamiAcadDioClient.patch(
-          path: '/mission/$missionId',
-          body: editMission.toJson(),
+          path: '/mission/${MissionMocks.missionId}',
+          body: MissionMocks.editMission.toJson(),
         )).thenAnswer((_) async => response);
 
         // Act
         final result = await missionRepository.editMission(
-            missionId: missionId, editMission: editMission);
+          missionId: MissionMocks.missionId,
+          editMission: MissionMocks.editMission,
+        );
 
         // Assert
         expect(result.status, true);
@@ -423,8 +410,8 @@ void main() {
       test('should return unauthorized when 401', () async {
         // Arrange
         when(gamiAcadDioClient.patch(
-          path: '/mission/$missionId',
-          body: editMission.toJson(),
+          path: '/mission/${MissionMocks.missionId}',
+          body: MissionMocks.editMission.toJson(),
         )).thenAnswer(
           (_) async => throw DioException(
             requestOptions: RequestOptions(),
@@ -436,7 +423,9 @@ void main() {
         // Act and Assert
         try {
           await missionRepository.editMission(
-              missionId: missionId, editMission: editMission);
+            missionId: MissionMocks.missionId,
+            editMission: MissionMocks.editMission,
+          );
         } catch (e) {
           expect(e.runtimeType, UnauthorizedException);
         }
@@ -445,8 +434,8 @@ void main() {
       test('should return forbidden', () async {
         // Arrange
         when(gamiAcadDioClient.patch(
-          path: '/mission/$missionId',
-          body: editMission.toJson(),
+          path: '/mission/${MissionMocks.missionId}',
+          body: MissionMocks.editMission.toJson(),
         )).thenAnswer(
           (_) async => throw DioException(
             requestOptions: RequestOptions(),
@@ -458,7 +447,9 @@ void main() {
         // Act and Assert
         try {
           await missionRepository.editMission(
-              missionId: missionId, editMission: editMission);
+            missionId: MissionMocks.missionId,
+            editMission: MissionMocks.editMission,
+          );
         } catch (e) {
           expect(e.runtimeType, ForbiddenException);
         }
@@ -467,8 +458,8 @@ void main() {
       test('should return service unavailable', () async {
         // Arrange
         when(gamiAcadDioClient.patch(
-          path: '/mission/$missionId',
-          body: editMission.toJson(),
+          path: '/mission/${MissionMocks.missionId}',
+          body: MissionMocks.editMission.toJson(),
         )).thenAnswer(
           (_) async => throw DioException(
             requestOptions: RequestOptions(),
@@ -480,7 +471,9 @@ void main() {
         // Act and Assert
         try {
           await missionRepository.editMission(
-              missionId: missionId, editMission: editMission);
+            missionId: MissionMocks.missionId,
+            editMission: MissionMocks.editMission,
+          );
         } catch (e) {
           expect(e.runtimeType, ServiceUnavailableException);
         }
@@ -489,8 +482,8 @@ void main() {
       test('should return service unavailable when unknown error', () async {
         // Arrange
         when(gamiAcadDioClient.patch(
-          path: '/mission/$missionId',
-          body: editMission.toJson(),
+          path: '/mission/${MissionMocks.missionId}',
+          body: MissionMocks.editMission.toJson(),
         )).thenAnswer(
           (_) async => throw Exception(),
         );
@@ -498,7 +491,9 @@ void main() {
         // Act and Assert
         try {
           await missionRepository.editMission(
-              missionId: missionId, editMission: editMission);
+            missionId: MissionMocks.missionId,
+            editMission: MissionMocks.editMission,
+          );
         } catch (e) {
           expect(e.runtimeType, ServiceUnavailableException);
         }
@@ -514,12 +509,12 @@ void main() {
           statusMessage: 'Success',
         );
         when(gamiAcadDioClient.delete(
-          path: '/mission/$missionId',
+          path: '/mission/${MissionMocks.missionId}',
         )).thenAnswer((_) async => response);
 
         // Act
-        final result =
-            await missionRepository.deactivateMission(missionId: missionId);
+        final result = await missionRepository.deactivateMission(
+            missionId: MissionMocks.missionId);
 
         // Assert
         expect(result.status, true);
@@ -529,7 +524,7 @@ void main() {
       test('should return unauthorized when 401', () async {
         // Arrange
         when(gamiAcadDioClient.delete(
-          path: '/mission/$missionId',
+          path: '/mission/${MissionMocks.missionId}',
         )).thenAnswer(
           (_) async => throw DioException(
             requestOptions: RequestOptions(),
@@ -540,7 +535,8 @@ void main() {
 
         // Act and Assert
         try {
-          await missionRepository.deactivateMission(missionId: missionId);
+          await missionRepository.deactivateMission(
+              missionId: MissionMocks.missionId);
         } catch (e) {
           expect(e.runtimeType, UnauthorizedException);
         }
@@ -549,7 +545,7 @@ void main() {
       test('should return forbidden', () async {
         // Arrange
         when(gamiAcadDioClient.delete(
-          path: '/mission/$missionId',
+          path: '/mission/${MissionMocks.missionId}',
         )).thenAnswer(
           (_) async => throw DioException(
             requestOptions: RequestOptions(),
@@ -560,7 +556,8 @@ void main() {
 
         // Act and Assert
         try {
-          await missionRepository.deactivateMission(missionId: missionId);
+          await missionRepository.deactivateMission(
+              missionId: MissionMocks.missionId);
         } catch (e) {
           expect(e.runtimeType, ForbiddenException);
         }
@@ -569,7 +566,7 @@ void main() {
       test('should return service unavailable', () async {
         // Arrange
         when(gamiAcadDioClient.delete(
-          path: '/mission/$missionId',
+          path: '/mission/${MissionMocks.missionId}',
         )).thenAnswer(
           (_) async => throw DioException(
             requestOptions: RequestOptions(),
@@ -580,7 +577,8 @@ void main() {
 
         // Act and Assert
         try {
-          await missionRepository.deactivateMission(missionId: missionId);
+          await missionRepository.deactivateMission(
+              missionId: MissionMocks.missionId);
         } catch (e) {
           expect(e.runtimeType, ServiceUnavailableException);
         }
@@ -589,14 +587,125 @@ void main() {
       test('should return service unavailable when unknown error', () async {
         // Arrange
         when(gamiAcadDioClient.delete(
-          path: '/mission/$missionId',
+          path: '/mission/${MissionMocks.missionId}',
         )).thenAnswer(
           (_) async => throw Exception(),
         );
 
         // Act and Assert
         try {
-          await missionRepository.deactivateMission(missionId: missionId);
+          await missionRepository.deactivateMission(
+              missionId: MissionMocks.missionId);
+        } catch (e) {
+          expect(e.runtimeType, ServiceUnavailableException);
+        }
+      });
+    });
+
+    group('completeMission', () {
+      test('should return success completeMission', () async {
+        // Arrange
+        Response response = Response(
+          requestOptions: RequestOptions(),
+          statusCode: 204,
+          statusMessage: 'Success',
+        );
+        when(gamiAcadDioClient.patch(
+          path: '/mission/${MissionMocks.missionId}/${UserMocks.userId}',
+        )).thenAnswer((_) async => response);
+
+        // Act
+        final result = await missionRepository.completeMission(
+            userId: UserMocks.userId, missionId: MissionMocks.missionId);
+
+        // Assert
+        expect(result.status, true);
+        expect(result.message, 'Success');
+      });
+
+      test('should return unauthorized when 401', () async {
+        // Arrange
+        when(gamiAcadDioClient.patch(
+          path: '/mission/${MissionMocks.missionId}/${UserMocks.userId}',
+        )).thenAnswer(
+          (_) async => throw DioException(
+            requestOptions: RequestOptions(),
+            response:
+                Response(requestOptions: RequestOptions(), statusCode: 401),
+          ),
+        );
+
+        // Act and Assert
+        try {
+          await missionRepository.completeMission(
+            userId: UserMocks.userId,
+            missionId: MissionMocks.missionId,
+          );
+        } catch (e) {
+          expect(e.runtimeType, UnauthorizedException);
+        }
+      });
+
+      test('should return forbidden', () async {
+        // Arrange
+        when(gamiAcadDioClient.patch(
+          path: '/mission/${MissionMocks.missionId}/${UserMocks.userId}',
+        )).thenAnswer(
+          (_) async => throw DioException(
+            requestOptions: RequestOptions(),
+            response:
+                Response(requestOptions: RequestOptions(), statusCode: 403),
+          ),
+        );
+
+        // Act and Assert
+        try {
+          await missionRepository.completeMission(
+            userId: UserMocks.userId,
+            missionId: MissionMocks.missionId,
+          );
+        } catch (e) {
+          expect(e.runtimeType, ForbiddenException);
+        }
+      });
+
+      test('should return service unavailable', () async {
+        // Arrange
+        when(gamiAcadDioClient.patch(
+          path: '/mission/${MissionMocks.missionId}/${UserMocks.userId}',
+        )).thenAnswer(
+          (_) async => throw DioException(
+            requestOptions: RequestOptions(),
+            response:
+                Response(requestOptions: RequestOptions(), statusCode: 404),
+          ),
+        );
+
+        // Act and Assert
+        try {
+          await missionRepository.completeMission(
+            userId: UserMocks.userId,
+            missionId: MissionMocks.missionId,
+          );
+        } catch (e) {
+          expect(e.runtimeType, ServiceUnavailableException);
+        }
+      });
+
+      test('should return service unavailable when unknown error', () async {
+        // Arrange
+        when(gamiAcadDioClient.patch(
+          path: '/mission/${MissionMocks.missionId}/${UserMocks.userId}',
+        )).thenAnswer(
+          (_) async => throw Exception(),
+        );
+
+        // Act and Assert
+        try {
+          await missionRepository.completeMission(
+            userId: UserMocks.userId,
+            missionId: MissionMocks.missionId,
+          );
         } catch (e) {
           expect(e.runtimeType, ServiceUnavailableException);
         }
