@@ -156,9 +156,6 @@ class _RewardCreateViewState extends State<RewardCreateView> {
                         TextButton(
                           style: TextButton.styleFrom(
                             backgroundColor: AppColors.errorGray,
-                            textStyle: const TextStyle(
-                              color: Colors.white,
-                            ),
                           ),
                           onPressed: () {
                             rewardController.getRewards();

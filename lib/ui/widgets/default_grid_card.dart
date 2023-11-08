@@ -47,10 +47,9 @@ class DefaultGridCard extends StatelessWidget {
               Text(
                 subTitle,
               ),
-              RichText(
-                textAlign: TextAlign.center,
-                text: TextSpan(
-                  children: <TextSpan>[
+              Text.rich(
+                TextSpan(
+                  children: [
                     TextSpan(
                       text: trailingTextTitle,
                       style: const TextStyle(

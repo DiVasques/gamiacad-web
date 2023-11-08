@@ -36,9 +36,6 @@ class DefaultActionDialog extends StatelessWidget {
         TextButton(
           style: TextButton.styleFrom(
             backgroundColor: AppColors.errorGray,
-            textStyle: const TextStyle(
-              color: Colors.white,
-            ),
           ),
           onPressed: () {
             Navigator.of(context).pop();

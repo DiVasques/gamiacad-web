@@ -5,6 +5,7 @@ import 'package:gami_acad_web/ui/utils/app_texts.dart';
 import 'package:gami_acad_web/ui/utils/extensions/int_extension.dart';
 import 'package:gami_acad_web/ui/views/base_section_view.dart';
 import 'package:gami_acad_web/ui/widgets/default_action_dialog.dart';
+import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
 
 class RewardDetailsView extends StatelessWidget {
@@ -128,15 +129,10 @@ class RewardDetailsView extends StatelessWidget {
                         rewardController.selectedReward.description,
                         textAlign: TextAlign.justify,
                       ),
-                      const SizedBox(
-                        height: 20,
-                      ),
+                      const Gap(20),
                       TextButton(
                         style: TextButton.styleFrom(
                           backgroundColor: AppColors.errorGray,
-                          textStyle: const TextStyle(
-                            color: Colors.white,
-                          ),
                         ),
                         onPressed: () {
                           rewardController.getRewards();
@@ -144,6 +140,7 @@ class RewardDetailsView extends StatelessWidget {
                         },
                         child: const Text(AppTexts.back),
                       ),
+                      const Gap(20),
                     ],
                   ),
                 ),

@@ -21,6 +21,7 @@ void main() async {
 }
 
 class MainApp extends StatelessWidget {
+  static const String defaultFontFamily = 'Montserrat';
   const MainApp({super.key});
 
   @override
@@ -47,6 +48,7 @@ class MainApp extends StatelessWidget {
             color: AppColors.primaryColor,
             fontWeight: FontWeight.bold,
             fontSize: 25,
+            fontFamily: defaultFontFamily,
           ),
           elevation: 1,
           backgroundColor: AppColors.backgroundColor,
@@ -67,9 +69,11 @@ class MainApp extends StatelessWidget {
         textButtonTheme: TextButtonThemeData(
           style: TextButton.styleFrom(
             backgroundColor: AppColors.primaryColor,
+            disabledBackgroundColor: AppColors.errorGray,
             iconColor: Colors.white,
             surfaceTintColor: Colors.white,
             textStyle: const TextStyle(
+              fontFamily: defaultFontFamily,
               color: Colors.white,
             ),
             foregroundColor: Colors.white,
@@ -80,8 +84,14 @@ class MainApp extends StatelessWidget {
           elevation: 2,
         ),
         snackBarTheme: const SnackBarThemeData(
-            behavior: SnackBarBehavior.floating, width: 400),
-        fontFamily: 'Montserrat',
+          behavior: SnackBarBehavior.floating,
+          contentTextStyle: TextStyle(
+            color: Colors.white,
+            fontFamily: defaultFontFamily,
+          ),
+          width: 400,
+        ),
+        fontFamily: defaultFontFamily,
         primaryColor: AppColors.primaryColor,
         scaffoldBackgroundColor: AppColors.backgroundColor,
       ),

@@ -3,8 +3,11 @@ class AppTexts {
   static const at = 'às';
   static const back = 'Voltar';
   static const cancel = 'Cancelar';
+  static const complete = 'Completar';
+  static const completersList = 'Concluídos';
   static const confirmation = 'Confirmação';
   static const create = 'Criar';
+  static const createdBy = 'Criado por';
   static const datePlaceholder = '01/01/2001 00:00';
   static const deactivate = 'Desativar';
   static const description = 'Descrição';
@@ -17,6 +20,7 @@ class AppTexts {
   static const logout = 'Sair';
   static const name = 'Nome';
   static const ok = 'Ok';
+  static const participatingList = 'Participando';
   static const password = 'Senha';
   static const points = 'Pontos';
   static const price = 'Preço';
@@ -28,6 +32,10 @@ class AppTexts {
   static const loginExpiredLongText =
       'Entre novamente com suas credenciais para continuar utilizando a aplicação.';
   static const missionCreate = 'Criar Missão';
+  static const missionCompleteError =
+      'Erro ao completar a Missão. Tente novamente mais tarde.';
+  static const missionCompleteSuccess =
+      'Missão completada com sucesso para os participantes selecionados!';
   static const missionCreateError =
       'Erro ao criar a Missão. Tente novamente mais tarde.';
   static const missionCreateSuccess = 'Missão criada com sucesso!';

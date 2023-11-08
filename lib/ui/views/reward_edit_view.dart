@@ -100,9 +100,6 @@ class _RewardEditViewState extends State<RewardEditView> {
                         TextButton(
                           style: TextButton.styleFrom(
                             backgroundColor: AppColors.errorGray,
-                            textStyle: const TextStyle(
-                              color: Colors.white,
-                            ),
                           ),
                           onPressed: () {
                             rewardController.getRewards();
