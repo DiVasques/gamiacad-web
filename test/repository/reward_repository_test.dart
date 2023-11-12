@@ -1,9 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:gami_acad_web/repository/models/create_reward.dart';
-import 'package:gami_acad_web/repository/models/edit_reward.dart';
-import 'package:gami_acad_web/repository/models/reward.dart';
 import 'package:gami_acad_web/repository/models/exceptions/forbidden_exception.dart';
 import 'package:gami_acad_web/repository/models/exceptions/service_unavailable_exception.dart';
 import 'package:gami_acad_web/repository/models/exceptions/unauthorized_exception.dart';
@@ -12,6 +9,7 @@ import 'package:gami_acad_web/services/gamiacad_dio_client.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
+import '../mocks/reward_mocks.dart';
 import 'reward_repository_test.mocks.dart';
 
 @GenerateMocks([GamiAcadDioClient])
@@ -20,34 +18,6 @@ void main() {
   group('RewardRepository', () {
     late RewardRepository rewardRepository;
     late MockGamiAcadDioClient gamiAcadDioClient;
-
-    String rewardId = 'id';
-
-    Reward reward = Reward(
-      id: rewardId,
-      name: 'name',
-      description: 'description',
-      number: 1,
-      price: 100,
-      availability: 100,
-      createdAt: DateTime.now(),
-      updatedAt: DateTime.now(),
-      claimers: ["123"],
-      handed: ["456"],
-      active: true,
-    );
-
-    CreateReward newReward = CreateReward(
-      name: 'name',
-      description: 'description',
-      price: 100,
-      availability: 100,
-    );
-
-    EditReward editReward = EditReward(
-      name: 'name',
-      description: 'description',
-    );
 
     setUp(() {
       gamiAcadDioClient = MockGamiAcadDioClient();
@@ -64,7 +34,7 @@ void main() {
           statusCode: 200,
           statusMessage: 'Success',
           data: {
-            'rewards': [reward.toJson()],
+            'rewards': [RewardMocks.reward.toJson()],
           },
         );
         when(gamiAcadDioClient.get(
@@ -77,19 +47,28 @@ void main() {
         // Assert
         expect(result.status, true);
         expect(result.message, 'Success');
-        expect(rewardRepository.rewards[0].id, reward.id);
-        expect(rewardRepository.rewards[0].name, reward.name);
+        expect(rewardRepository.rewards[0].id, RewardMocks.reward.id);
+        expect(rewardRepository.rewards[0].name, RewardMocks.reward.name);
         expect(
           rewardRepository.rewards[0].description,
-          reward.description,
+          RewardMocks.reward.description,
         );
-        expect(rewardRepository.rewards[0].number, reward.number);
-        expect(rewardRepository.rewards[0].price, reward.price);
-        expect(rewardRepository.rewards[0].availability, reward.availability);
-        expect(rewardRepository.rewards[0].createdAt, reward.createdAt);
-        expect(rewardRepository.rewards[0].updatedAt, reward.updatedAt);
-        expect(rewardRepository.rewards[0].claimers, reward.claimers);
-        expect(rewardRepository.rewards[0].handed, reward.handed);
+        expect(rewardRepository.rewards[0].number, RewardMocks.reward.number);
+        expect(rewardRepository.rewards[0].price, RewardMocks.reward.price);
+        expect(rewardRepository.rewards[0].availability,
+            RewardMocks.reward.availability);
+        expect(rewardRepository.rewards[0].createdAt,
+            RewardMocks.reward.createdAt);
+        expect(rewardRepository.rewards[0].updatedAt,
+            RewardMocks.reward.updatedAt);
+        expect(rewardRepository.rewards[0].claimers[0].id,
+            RewardMocks.reward.claimers[0].id);
+        expect(rewardRepository.rewards[0].claimers[0].date,
+            RewardMocks.reward.claimers[0].date);
+        expect(rewardRepository.rewards[0].handed[0].id,
+            RewardMocks.reward.handed[0].id);
+        expect(rewardRepository.rewards[0].handed[0].date,
+            RewardMocks.reward.handed[0].date);
       });
 
       test('should return unauthorized when 401', () async {
@@ -179,12 +158,12 @@ void main() {
         );
         when(gamiAcadDioClient.post(
           path: '/reward',
-          body: newReward.toJson(),
+          body: RewardMocks.newReward.toJson(),
         )).thenAnswer((_) async => response);
 
         // Act
-        final result =
-            await rewardRepository.createReward(newReward: newReward);
+        final result = await rewardRepository.createReward(
+            newReward: RewardMocks.newReward);
 
         // Assert
         expect(result.status, true);
@@ -195,7 +174,7 @@ void main() {
         // Arrange
         when(gamiAcadDioClient.post(
           path: '/reward',
-          body: newReward.toJson(),
+          body: RewardMocks.newReward.toJson(),
         )).thenAnswer(
           (_) async => throw DioException(
             requestOptions: RequestOptions(),
@@ -206,7 +185,7 @@ void main() {
 
         // Act and Assert
         try {
-          await rewardRepository.createReward(newReward: newReward);
+          await rewardRepository.createReward(newReward: RewardMocks.newReward);
         } catch (e) {
           expect(e.runtimeType, UnauthorizedException);
         }
@@ -216,7 +195,7 @@ void main() {
         // Arrange
         when(gamiAcadDioClient.post(
           path: '/reward',
-          body: newReward.toJson(),
+          body: RewardMocks.newReward.toJson(),
         )).thenAnswer(
           (_) async => throw DioException(
             requestOptions: RequestOptions(),
@@ -227,7 +206,7 @@ void main() {
 
         // Act and Assert
         try {
-          await rewardRepository.createReward(newReward: newReward);
+          await rewardRepository.createReward(newReward: RewardMocks.newReward);
         } catch (e) {
           expect(e.runtimeType, ForbiddenException);
         }
@@ -237,7 +216,7 @@ void main() {
         // Arrange
         when(gamiAcadDioClient.post(
           path: '/reward',
-          body: newReward.toJson(),
+          body: RewardMocks.newReward.toJson(),
         )).thenAnswer(
           (_) async => throw DioException(
             requestOptions: RequestOptions(),
@@ -248,7 +227,7 @@ void main() {
 
         // Act and Assert
         try {
-          await rewardRepository.createReward(newReward: newReward);
+          await rewardRepository.createReward(newReward: RewardMocks.newReward);
         } catch (e) {
           expect(e.runtimeType, ServiceUnavailableException);
         }
@@ -258,14 +237,14 @@ void main() {
         // Arrange
         when(gamiAcadDioClient.post(
           path: '/reward',
-          body: newReward.toJson(),
+          body: RewardMocks.newReward.toJson(),
         )).thenAnswer(
           (_) async => throw Exception(),
         );
 
         // Act and Assert
         try {
-          await rewardRepository.createReward(newReward: newReward);
+          await rewardRepository.createReward(newReward: RewardMocks.newReward);
         } catch (e) {
           expect(e.runtimeType, ServiceUnavailableException);
         }
@@ -281,13 +260,13 @@ void main() {
           statusMessage: 'Success',
         );
         when(gamiAcadDioClient.patch(
-          path: '/reward/$rewardId',
-          body: editReward.toJson(),
+          path: '/reward/${RewardMocks.rewardId}',
+          body: RewardMocks.editReward.toJson(),
         )).thenAnswer((_) async => response);
 
         // Act
         final result = await rewardRepository.editReward(
-            rewardId: rewardId, editReward: editReward);
+            rewardId: RewardMocks.rewardId, editReward: RewardMocks.editReward);
 
         // Assert
         expect(result.status, true);
@@ -297,8 +276,8 @@ void main() {
       test('should return unauthorized when 401', () async {
         // Arrange
         when(gamiAcadDioClient.patch(
-          path: '/reward/$rewardId',
-          body: editReward.toJson(),
+          path: '/reward/${RewardMocks.rewardId}',
+          body: RewardMocks.editReward.toJson(),
         )).thenAnswer(
           (_) async => throw DioException(
             requestOptions: RequestOptions(),
@@ -310,7 +289,8 @@ void main() {
         // Act and Assert
         try {
           await rewardRepository.editReward(
-              rewardId: rewardId, editReward: editReward);
+              rewardId: RewardMocks.rewardId,
+              editReward: RewardMocks.editReward);
         } catch (e) {
           expect(e.runtimeType, UnauthorizedException);
         }
@@ -319,8 +299,8 @@ void main() {
       test('should return forbidden', () async {
         // Arrange
         when(gamiAcadDioClient.patch(
-          path: '/reward/$rewardId',
-          body: editReward.toJson(),
+          path: '/reward/${RewardMocks.rewardId}',
+          body: RewardMocks.editReward.toJson(),
         )).thenAnswer(
           (_) async => throw DioException(
             requestOptions: RequestOptions(),
@@ -332,7 +312,8 @@ void main() {
         // Act and Assert
         try {
           await rewardRepository.editReward(
-              rewardId: rewardId, editReward: editReward);
+              rewardId: RewardMocks.rewardId,
+              editReward: RewardMocks.editReward);
         } catch (e) {
           expect(e.runtimeType, ForbiddenException);
         }
@@ -341,8 +322,8 @@ void main() {
       test('should return service unavailable', () async {
         // Arrange
         when(gamiAcadDioClient.patch(
-          path: '/reward/$rewardId',
-          body: editReward.toJson(),
+          path: '/reward/${RewardMocks.rewardId}',
+          body: RewardMocks.editReward.toJson(),
         )).thenAnswer(
           (_) async => throw DioException(
             requestOptions: RequestOptions(),
@@ -354,7 +335,8 @@ void main() {
         // Act and Assert
         try {
           await rewardRepository.editReward(
-              rewardId: rewardId, editReward: editReward);
+              rewardId: RewardMocks.rewardId,
+              editReward: RewardMocks.editReward);
         } catch (e) {
           expect(e.runtimeType, ServiceUnavailableException);
         }
@@ -363,8 +345,8 @@ void main() {
       test('should return service unavailable when unknown error', () async {
         // Arrange
         when(gamiAcadDioClient.patch(
-          path: '/reward/$rewardId',
-          body: editReward.toJson(),
+          path: '/reward/${RewardMocks.rewardId}',
+          body: RewardMocks.editReward.toJson(),
         )).thenAnswer(
           (_) async => throw Exception(),
         );
@@ -372,7 +354,8 @@ void main() {
         // Act and Assert
         try {
           await rewardRepository.editReward(
-              rewardId: rewardId, editReward: editReward);
+              rewardId: RewardMocks.rewardId,
+              editReward: RewardMocks.editReward);
         } catch (e) {
           expect(e.runtimeType, ServiceUnavailableException);
         }
@@ -388,12 +371,12 @@ void main() {
           statusMessage: 'Success',
         );
         when(gamiAcadDioClient.delete(
-          path: '/reward/$rewardId',
+          path: '/reward/${RewardMocks.rewardId}',
         )).thenAnswer((_) async => response);
 
         // Act
-        final result =
-            await rewardRepository.deactivateReward(rewardId: rewardId);
+        final result = await rewardRepository.deactivateReward(
+            rewardId: RewardMocks.rewardId);
 
         // Assert
         expect(result.status, true);
@@ -403,7 +386,7 @@ void main() {
       test('should return unauthorized when 401', () async {
         // Arrange
         when(gamiAcadDioClient.delete(
-          path: '/reward/$rewardId',
+          path: '/reward/${RewardMocks.rewardId}',
         )).thenAnswer(
           (_) async => throw DioException(
             requestOptions: RequestOptions(),
@@ -414,7 +397,8 @@ void main() {
 
         // Act and Assert
         try {
-          await rewardRepository.deactivateReward(rewardId: rewardId);
+          await rewardRepository.deactivateReward(
+              rewardId: RewardMocks.rewardId);
         } catch (e) {
           expect(e.runtimeType, UnauthorizedException);
         }
@@ -423,7 +407,7 @@ void main() {
       test('should return forbidden', () async {
         // Arrange
         when(gamiAcadDioClient.delete(
-          path: '/reward/$rewardId',
+          path: '/reward/${RewardMocks.rewardId}',
         )).thenAnswer(
           (_) async => throw DioException(
             requestOptions: RequestOptions(),
@@ -434,7 +418,8 @@ void main() {
 
         // Act and Assert
         try {
-          await rewardRepository.deactivateReward(rewardId: rewardId);
+          await rewardRepository.deactivateReward(
+              rewardId: RewardMocks.rewardId);
         } catch (e) {
           expect(e.runtimeType, ForbiddenException);
         }
@@ -443,7 +428,7 @@ void main() {
       test('should return service unavailable', () async {
         // Arrange
         when(gamiAcadDioClient.delete(
-          path: '/reward/$rewardId',
+          path: '/reward/${RewardMocks.rewardId}',
         )).thenAnswer(
           (_) async => throw DioException(
             requestOptions: RequestOptions(),
@@ -454,7 +439,8 @@ void main() {
 
         // Act and Assert
         try {
-          await rewardRepository.deactivateReward(rewardId: rewardId);
+          await rewardRepository.deactivateReward(
+              rewardId: RewardMocks.rewardId);
         } catch (e) {
           expect(e.runtimeType, ServiceUnavailableException);
         }
@@ -463,14 +449,15 @@ void main() {
       test('should return service unavailable when unknown error', () async {
         // Arrange
         when(gamiAcadDioClient.delete(
-          path: '/reward/$rewardId',
+          path: '/reward/${RewardMocks.rewardId}',
         )).thenAnswer(
           (_) async => throw Exception(),
         );
 
         // Act and Assert
         try {
-          await rewardRepository.deactivateReward(rewardId: rewardId);
+          await rewardRepository.deactivateReward(
+              rewardId: RewardMocks.rewardId);
         } catch (e) {
           expect(e.runtimeType, ServiceUnavailableException);
         }

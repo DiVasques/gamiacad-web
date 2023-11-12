@@ -1,3 +1,4 @@
+import 'package:gami_acad_web/repository/models/action_with_date.dart';
 import 'package:gami_acad_web/repository/models/user.dart';
 
 class Mission {
@@ -11,9 +12,9 @@ class Mission {
   DateTime? updatedAt;
   String createdBy;
   User createdByInfo;
-  List<String> participants;
+  List<ActionWithDate> participants;
   List<User> participantsInfo;
-  List<String> completers;
+  List<ActionWithDate> completers;
   List<User> completersInfo;
   bool active;
   Mission({
@@ -46,13 +47,13 @@ class Mission {
         createdBy: json['createdBy'],
         createdByInfo: User.fromJson(json['createdByInfo']),
         participants: (json['participants'] as List<dynamic>)
-            .map((p) => p as String)
+            .map((p) => ActionWithDate.fromJson(p))
             .toList(),
         participantsInfo: (json['participantsInfo'] as List<dynamic>)
             .map((p) => User.fromJson(p))
             .toList(),
         completers: (json['completers'] as List<dynamic>)
-            .map((c) => c as String)
+            .map((c) => ActionWithDate.fromJson(c))
             .toList(),
         completersInfo: (json['completersInfo'] as List<dynamic>)
             .map((c) => User.fromJson(c))
@@ -71,9 +72,9 @@ class Mission {
         'updatedAt': updatedAt?.toIso8601String(),
         'createdBy': createdBy,
         'createdByInfo': createdByInfo.toJson(),
-        'participants': participants,
+        'participants': participants.map((e) => e.toJson()).toList(),
         'participantsInfo': participantsInfo.map((e) => e.toJson()).toList(),
-        'completers': completers,
+        'completers': completers.map((e) => e.toJson()).toList(),
         'completersInfo': completersInfo..map((e) => e.toJson()).toList(),
         'active': active,
       };
