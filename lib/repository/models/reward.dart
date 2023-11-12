@@ -1,3 +1,5 @@
+import 'package:gami_acad_web/repository/models/action_with_date.dart';
+
 class Reward {
   String id;
   String name;
@@ -7,8 +9,8 @@ class Reward {
   int availability;
   DateTime createdAt;
   DateTime? updatedAt;
-  List<String> claimers;
-  List<String> handed;
+  List<ActionWithDate> claimers;
+  List<ActionWithDate> handed;
   bool active;
   Reward({
     required this.id,
@@ -34,10 +36,11 @@ class Reward {
         createdAt: DateTime.parse(json['createdAt']),
         updatedAt: DateTime.parse(json['updatedAt'] ?? ''),
         claimers: (json['claimers'] as List<dynamic>)
-            .map((p) => p as String)
+            .map((p) => ActionWithDate.fromJson(p))
             .toList(),
-        handed:
-            (json['handed'] as List<dynamic>).map((c) => c as String).toList(),
+        handed: (json['handed'] as List<dynamic>)
+            .map((c) => ActionWithDate.fromJson(c))
+            .toList(),
         active: json['active'],
       );
 
@@ -50,8 +53,8 @@ class Reward {
         'availability': availability,
         'createdAt': createdAt.toIso8601String(),
         'updatedAt': updatedAt?.toIso8601String(),
-        'claimers': claimers,
-        'handed': handed,
+        'claimers': claimers.map((e) => e.toJson()).toList(),
+        'handed': handed.map((e) => e.toJson()).toList(),
         'active': active,
       };
 }

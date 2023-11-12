@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:gami_acad_web/repository/models/create_reward.dart';
-import 'package:gami_acad_web/repository/models/edit_reward.dart';
 import 'package:gami_acad_web/repository/reward_repository.dart';
 import 'package:gami_acad_web/repository/models/exceptions/service_unavailable_exception.dart';
 import 'package:gami_acad_web/repository/models/exceptions/unauthorized_exception.dart';
-import 'package:gami_acad_web/repository/models/reward.dart';
 import 'package:gami_acad_web/repository/models/result.dart';
 import 'package:gami_acad_web/ui/controllers/reward_controller.dart';
 import 'package:gami_acad_web/ui/utils/view_state.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
+import '../../mocks/reward_mocks.dart';
+import '../../mocks/user_mocks.dart';
 import 'reward_controller_test.mocks.dart';
 
 @GenerateMocks([RewardRepository])
@@ -21,39 +20,9 @@ void main() {
     late RewardController rewardController;
     late MockRewardRepository rewardRepository;
 
-    String userId = 'userId';
-
-    String rewardId = 'id';
-
-    Reward reward = Reward(
-      id: rewardId,
-      name: 'name',
-      description: 'description',
-      number: 1,
-      price: 100,
-      availability: 100,
-      createdAt: DateTime.now(),
-      updatedAt: DateTime.now(),
-      claimers: ["123"],
-      handed: ["456"],
-      active: true,
-    );
-
-    CreateReward newReward = CreateReward(
-      name: 'name',
-      description: 'description',
-      price: 100,
-      availability: 100,
-    );
-
-    EditReward editReward = EditReward(
-      name: 'name',
-      description: 'description',
-    );
-
     setUp(() {
       rewardRepository = MockRewardRepository();
-      when(rewardRepository.rewards).thenReturn([reward]);
+      when(rewardRepository.rewards).thenReturn([RewardMocks.reward]);
     });
 
     group('getRewards', () {
@@ -62,7 +31,7 @@ void main() {
         when(rewardRepository.getRewards())
             .thenAnswer((_) async => Result(status: true, message: 'Success'));
         rewardController = RewardController(
-          userId: userId,
+          userId: UserMocks.userId,
           rewardRepository: rewardRepository,
         );
 
@@ -78,7 +47,7 @@ void main() {
         when(rewardRepository.getRewards())
             .thenAnswer((_) async => Result(status: false, message: 'Error'));
         rewardController = RewardController(
-          userId: userId,
+          userId: UserMocks.userId,
           rewardRepository: rewardRepository,
         );
 
@@ -95,7 +64,7 @@ void main() {
         when(rewardRepository.getRewards())
             .thenThrow((_) async => UnauthorizedException);
         rewardController = RewardController(
-          userId: userId,
+          userId: UserMocks.userId,
           rewardRepository: rewardRepository,
         );
 
@@ -112,7 +81,7 @@ void main() {
         when(rewardRepository.getRewards())
             .thenThrow((_) async => ServiceUnavailableException);
         rewardController = RewardController(
-          userId: userId,
+          userId: UserMocks.userId,
           rewardRepository: rewardRepository,
         );
 
@@ -130,16 +99,16 @@ void main() {
         when(rewardRepository.createReward(newReward: anyNamed('newReward')))
             .thenAnswer((_) async => Result(status: true, message: 'Success'));
         rewardController = RewardController(
-          userId: userId,
+          userId: UserMocks.userId,
           rewardRepository: rewardRepository,
         );
 
         // Act
         var result = await rewardController.createReward(
-          name: newReward.name,
-          description: newReward.description,
-          price: newReward.price,
-          availability: newReward.availability,
+          name: RewardMocks.newReward.name,
+          description: RewardMocks.newReward.description,
+          price: RewardMocks.newReward.price,
+          availability: RewardMocks.newReward.availability,
         );
 
         // Assert
@@ -153,16 +122,16 @@ void main() {
         when(rewardRepository.createReward(newReward: anyNamed('newReward')))
             .thenAnswer((_) async => Result(status: false, message: 'Error'));
         rewardController = RewardController(
-          userId: userId,
+          userId: UserMocks.userId,
           rewardRepository: rewardRepository,
         );
 
         // Act
         var result = await rewardController.createReward(
-          name: newReward.name,
-          description: newReward.description,
-          price: newReward.price,
-          availability: newReward.availability,
+          name: RewardMocks.newReward.name,
+          description: RewardMocks.newReward.description,
+          price: RewardMocks.newReward.price,
+          availability: RewardMocks.newReward.availability,
         );
 
         // Assert
@@ -175,17 +144,17 @@ void main() {
         when(rewardRepository.createReward(newReward: anyNamed('newReward')))
             .thenThrow((_) async => UnauthorizedException);
         rewardController = RewardController(
-          userId: userId,
+          userId: UserMocks.userId,
           rewardRepository: rewardRepository,
         );
 
         // Act and Assert
         try {
           await rewardController.createReward(
-            name: newReward.name,
-            description: newReward.description,
-            price: newReward.price,
-            availability: newReward.availability,
+            name: RewardMocks.newReward.name,
+            description: RewardMocks.newReward.description,
+            price: RewardMocks.newReward.price,
+            availability: RewardMocks.newReward.availability,
           );
         } catch (e) {
           expect(e.runtimeType, UnauthorizedException);
@@ -197,16 +166,16 @@ void main() {
         when(rewardRepository.createReward(newReward: anyNamed('newReward')))
             .thenThrow((_) async => ServiceUnavailableException);
         rewardController = RewardController(
-          userId: userId,
+          userId: UserMocks.userId,
           rewardRepository: rewardRepository,
         );
 
         // Act
         var result = await rewardController.createReward(
-          name: newReward.name,
-          description: newReward.description,
-          price: newReward.price,
-          availability: newReward.availability,
+          name: RewardMocks.newReward.name,
+          description: RewardMocks.newReward.description,
+          price: RewardMocks.newReward.price,
+          availability: RewardMocks.newReward.availability,
         );
 
         // Assert
@@ -220,20 +189,20 @@ void main() {
         // Arrange
         when(
           rewardRepository.editReward(
-            rewardId: rewardId,
+            rewardId: RewardMocks.rewardId,
             editReward: anyNamed('editReward'),
           ),
         ).thenAnswer((_) async => Result(status: true, message: 'Success'));
         rewardController = RewardController(
-          userId: userId,
+          userId: UserMocks.userId,
           rewardRepository: rewardRepository,
         );
 
         // Act
         var result = await rewardController.editReward(
-          rewardId: rewardId,
-          name: editReward.name,
-          description: editReward.description,
+          rewardId: RewardMocks.rewardId,
+          name: RewardMocks.editReward.name,
+          description: RewardMocks.editReward.description,
         );
 
         // Assert
@@ -245,20 +214,20 @@ void main() {
         // Arrange
         when(
           rewardRepository.editReward(
-            rewardId: rewardId,
+            rewardId: RewardMocks.rewardId,
             editReward: anyNamed('editReward'),
           ),
         ).thenAnswer((_) async => Result(status: false, message: 'Error'));
         rewardController = RewardController(
-          userId: userId,
+          userId: UserMocks.userId,
           rewardRepository: rewardRepository,
         );
 
         // Act
         var result = await rewardController.editReward(
-          rewardId: rewardId,
-          name: editReward.name,
-          description: editReward.description,
+          rewardId: RewardMocks.rewardId,
+          name: RewardMocks.editReward.name,
+          description: RewardMocks.editReward.description,
         );
 
         // Assert
@@ -270,21 +239,21 @@ void main() {
         // Arrange
         when(
           rewardRepository.editReward(
-            rewardId: rewardId,
+            rewardId: RewardMocks.rewardId,
             editReward: anyNamed('editReward'),
           ),
         ).thenThrow((_) async => UnauthorizedException);
         rewardController = RewardController(
-          userId: userId,
+          userId: UserMocks.userId,
           rewardRepository: rewardRepository,
         );
 
         // Act and Assert
         try {
           await rewardController.editReward(
-            rewardId: rewardId,
-            name: editReward.name,
-            description: editReward.description,
+            rewardId: RewardMocks.rewardId,
+            name: RewardMocks.editReward.name,
+            description: RewardMocks.editReward.description,
           );
         } catch (e) {
           expect(e.runtimeType, UnauthorizedException);
@@ -295,20 +264,20 @@ void main() {
         // Arrange
         when(
           rewardRepository.editReward(
-            rewardId: rewardId,
+            rewardId: RewardMocks.rewardId,
             editReward: anyNamed('editReward'),
           ),
         ).thenThrow((_) async => ServiceUnavailableException);
         rewardController = RewardController(
-          userId: userId,
+          userId: UserMocks.userId,
           rewardRepository: rewardRepository,
         );
 
         // Act
         var result = await rewardController.editReward(
-          rewardId: rewardId,
-          name: editReward.name,
-          description: editReward.description,
+          rewardId: RewardMocks.rewardId,
+          name: RewardMocks.editReward.name,
+          description: RewardMocks.editReward.description,
         );
 
         // Assert
@@ -320,16 +289,16 @@ void main() {
     group('deactivateReward', () {
       test('should return true when successful deactivating reward', () async {
         // Arrange
-        when(rewardRepository.deactivateReward(rewardId: rewardId))
+        when(rewardRepository.deactivateReward(rewardId: RewardMocks.rewardId))
             .thenAnswer((_) async => Result(status: true, message: 'Success'));
         rewardController = RewardController(
-          userId: userId,
+          userId: UserMocks.userId,
           rewardRepository: rewardRepository,
         );
 
         // Act
-        var result =
-            await rewardController.deactivateReward(rewardId: rewardId);
+        var result = await rewardController.deactivateReward(
+            rewardId: RewardMocks.rewardId);
 
         // Assert
         expect(rewardController.state, ViewState.idle);
@@ -338,16 +307,16 @@ void main() {
 
       test('should return unsuccessful result when failing', () async {
         // Arrange
-        when(rewardRepository.deactivateReward(rewardId: rewardId))
+        when(rewardRepository.deactivateReward(rewardId: RewardMocks.rewardId))
             .thenAnswer((_) async => Result(status: false, message: 'Error'));
         rewardController = RewardController(
-          userId: userId,
+          userId: UserMocks.userId,
           rewardRepository: rewardRepository,
         );
 
         // Act
-        var result =
-            await rewardController.deactivateReward(rewardId: rewardId);
+        var result = await rewardController.deactivateReward(
+            rewardId: RewardMocks.rewardId);
 
         // Assert
         expect(rewardController.state, ViewState.idle);
@@ -356,16 +325,17 @@ void main() {
 
       test('should throw when unauthorized', () async {
         // Arrange
-        when(rewardRepository.deactivateReward(rewardId: rewardId))
+        when(rewardRepository.deactivateReward(rewardId: RewardMocks.rewardId))
             .thenThrow((_) async => UnauthorizedException);
         rewardController = RewardController(
-          userId: userId,
+          userId: UserMocks.userId,
           rewardRepository: rewardRepository,
         );
 
         // Act and Assert
         try {
-          await rewardController.deactivateReward(rewardId: rewardId);
+          await rewardController.deactivateReward(
+              rewardId: RewardMocks.rewardId);
         } catch (e) {
           expect(e.runtimeType, UnauthorizedException);
         }
@@ -373,16 +343,16 @@ void main() {
 
       test('should return error when another exception', () async {
         // Arrange
-        when(rewardRepository.deactivateReward(rewardId: rewardId))
+        when(rewardRepository.deactivateReward(rewardId: RewardMocks.rewardId))
             .thenThrow((_) async => ServiceUnavailableException);
         rewardController = RewardController(
-          userId: userId,
+          userId: UserMocks.userId,
           rewardRepository: rewardRepository,
         );
 
         // Act
-        var result =
-            await rewardController.deactivateReward(rewardId: rewardId);
+        var result = await rewardController.deactivateReward(
+            rewardId: RewardMocks.rewardId);
 
         // Assert
         expect(rewardController.state, ViewState.idle);
