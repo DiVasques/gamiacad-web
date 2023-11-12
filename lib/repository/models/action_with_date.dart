@@ -8,11 +8,11 @@ class ActionWithDate {
 
   factory ActionWithDate.fromJson(Map<String, dynamic> json) => ActionWithDate(
         id: json['id'],
-        date: json['date'],
+        date: DateTime.parse(json['date']),
       );
 
   Map<String, dynamic> toJson() => {
         'id': id,
-        'date': date,
+        'date': date.toIso8601String(),
       };
 }

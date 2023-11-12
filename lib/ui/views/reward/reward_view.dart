@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:gami_acad_web/ui/controllers/reward_controller.dart';
-import 'package:gami_acad_web/ui/views/reward_create_view.dart';
-import 'package:gami_acad_web/ui/views/reward_details_view.dart';
-import 'package:gami_acad_web/ui/views/reward_edit_view.dart';
-import 'package:gami_acad_web/ui/views/reward_list_view.dart';
+import 'package:gami_acad_web/ui/views/reward/reward_create_view.dart';
+import 'package:gami_acad_web/ui/views/reward/reward_details_view.dart';
+import 'package:gami_acad_web/ui/views/reward/reward_edit_view.dart';
+import 'package:gami_acad_web/ui/views/reward/reward_list_view.dart';
 import 'package:provider/provider.dart';
 
 class RewardView extends StatelessWidget {
