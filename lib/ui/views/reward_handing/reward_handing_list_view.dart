@@ -96,6 +96,7 @@ class RewardHandingListView extends StatelessWidget {
                                       icon: const Icon(
                                         Icons.delivery_dining_rounded,
                                       ),
+                                      tooltip: AppTexts.rewardHand,
                                       onPressed: () {
                                         showDialog(
                                           context: context,

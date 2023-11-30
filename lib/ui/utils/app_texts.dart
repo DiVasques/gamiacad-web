@@ -4,6 +4,7 @@ class AppTexts {
   static const at = 'às';
   static const back = 'Voltar';
   static const cancel = 'Cancelar';
+  static const claimersList = 'Resgatantes';
   static const complete = 'Completar';
   static const completersList = 'Concluídos';
   static const confirmation = 'Confirmação';
@@ -18,6 +19,7 @@ class AppTexts {
   static const error = 'Erro';
   static const expirationDate = 'Disponível até';
   static const gamiAcadLongTitle = 'Portal do Admin GamiAcad';
+  static const handedList = 'Entregues';
   static const invalidPassword = 'Senha deve ter mais de 12 caracteres';
   static const invalidRegistration = 'CPF inválido';
   static const logout = 'Sair';
@@ -31,7 +33,10 @@ class AppTexts {
   static const quantity = 'Quantidade';
   static const registration = 'CPF';
   static const reward = 'Recompensa';
+  static const rewardHand = 'Entregar Recompensa';
+  static const userGivePrivilege = 'Dar Privilégio';
   static const userManagement = 'Gerenciamento de Usuários';
+  static const userRevokePrivilege = 'Remover Privilégio';
   static const yes = 'Sim';
   static const login = 'Entrar';
   static const loginExpired = 'Login Expirado.';
