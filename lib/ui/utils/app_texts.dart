@@ -68,4 +68,9 @@ class AppTexts {
   static const rewardList = 'Lista de Recompensas';
   static const rewardHanding = 'Entrega de Recompensas';
   static const rewardHandingClaimerName = 'Nome do Resgatante';
+  static const rewardHandingConfirmation = 'Deseja entregar essa recompensa?';
+  static const rewardHandingError =
+      'Erro ao entregar a Recompensa. Tente novamente mais tarde.';
+  static const rewardHandingSuccess = 'Recompensa entregue com sucesso!';
+  static const rewardHandingHandReward = 'Entregar';
 }

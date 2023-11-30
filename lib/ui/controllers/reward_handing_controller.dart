@@ -42,4 +42,24 @@ class RewardHandingController extends BaseController {
       setState(ViewState.error);
     }
   }
+
+  Future<bool> handReward({
+    required String rewardId,
+    required String userId,
+  }) async {
+    setState(ViewState.busy);
+    try {
+      Result result = await _rewardRepository.handReward(
+        rewardId: rewardId,
+        userId: userId,
+      );
+      return result.status;
+    } on UnauthorizedException {
+      rethrow;
+    } catch (e) {
+      return false;
+    } finally {
+      setState(ViewState.idle);
+    }
+  }
 }

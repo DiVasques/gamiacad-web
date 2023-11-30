@@ -10,6 +10,7 @@ import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
 import '../mocks/reward_mocks.dart';
+import '../mocks/user_mocks.dart';
 import 'reward_repository_test.mocks.dart';
 
 @GenerateMocks([GamiAcadDioClient])
@@ -574,6 +575,128 @@ void main() {
         try {
           await rewardRepository.deactivateReward(
               rewardId: RewardMocks.rewardId);
+        } catch (e) {
+          expect(e.runtimeType, ServiceUnavailableException);
+        }
+      });
+    });
+
+    group('handReward', () {
+      test('should return success handReward', () async {
+        // Arrange
+        Response response = Response(
+          requestOptions: RequestOptions(),
+          statusCode: 204,
+          statusMessage: 'Success',
+        );
+        when(
+          gamiAcadDioClient.patch(
+            path: '/reward/${RewardMocks.rewardId}/${UserMocks.userId}',
+          ),
+        ).thenAnswer((_) async => response);
+
+        // Act
+        final result = await rewardRepository.handReward(
+          rewardId: RewardMocks.rewardId,
+          userId: UserMocks.userId,
+        );
+
+        // Assert
+        expect(result.status, true);
+        expect(result.message, 'Success');
+      });
+
+      test('should return unauthorized when 401', () async {
+        // Arrange
+        when(
+          gamiAcadDioClient.patch(
+            path: '/reward/${RewardMocks.rewardId}/${UserMocks.userId}',
+          ),
+        ).thenAnswer(
+          (_) async => throw DioException(
+            requestOptions: RequestOptions(),
+            response:
+                Response(requestOptions: RequestOptions(), statusCode: 401),
+          ),
+        );
+
+        // Act and Assert
+        try {
+          await rewardRepository.handReward(
+            rewardId: RewardMocks.rewardId,
+            userId: UserMocks.userId,
+          );
+        } catch (e) {
+          expect(e.runtimeType, UnauthorizedException);
+        }
+      });
+
+      test('should return forbidden', () async {
+        // Arrange
+        when(
+          gamiAcadDioClient.patch(
+            path: '/reward/${RewardMocks.rewardId}/${UserMocks.userId}',
+          ),
+        ).thenAnswer(
+          (_) async => throw DioException(
+            requestOptions: RequestOptions(),
+            response:
+                Response(requestOptions: RequestOptions(), statusCode: 403),
+          ),
+        );
+
+        // Act and Assert
+        try {
+          await rewardRepository.handReward(
+            rewardId: RewardMocks.rewardId,
+            userId: UserMocks.userId,
+          );
+        } catch (e) {
+          expect(e.runtimeType, ForbiddenException);
+        }
+      });
+
+      test('should return service unavailable', () async {
+        // Arrange
+        when(
+          gamiAcadDioClient.patch(
+            path: '/reward/${RewardMocks.rewardId}/${UserMocks.userId}',
+          ),
+        ).thenAnswer(
+          (_) async => throw DioException(
+            requestOptions: RequestOptions(),
+            response:
+                Response(requestOptions: RequestOptions(), statusCode: 404),
+          ),
+        );
+
+        // Act and Assert
+        try {
+          await rewardRepository.handReward(
+            rewardId: RewardMocks.rewardId,
+            userId: UserMocks.userId,
+          );
+        } catch (e) {
+          expect(e.runtimeType, ServiceUnavailableException);
+        }
+      });
+
+      test('should return service unavailable when unknown error', () async {
+        // Arrange
+        when(
+          gamiAcadDioClient.patch(
+            path: '/reward/${RewardMocks.rewardId}/${UserMocks.userId}',
+          ),
+        ).thenAnswer(
+          (_) async => throw Exception(),
+        );
+
+        // Act and Assert
+        try {
+          await rewardRepository.handReward(
+            rewardId: RewardMocks.rewardId,
+            userId: UserMocks.userId,
+          );
         } catch (e) {
           expect(e.runtimeType, ServiceUnavailableException);
         }
