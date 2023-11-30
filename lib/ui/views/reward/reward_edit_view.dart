@@ -129,9 +129,10 @@ class _RewardEditViewState extends State<RewardEditView> {
                               ),
                             );
                             if (result) {
-                              rewardController.getRewards();
-                              rewardController.selectedView =
-                                  RewardViewState.list;
+                              await rewardController.refreshRewardData(
+                                rewardId: rewardController.selectedReward.id,
+                                viewState: RewardViewState.details,
+                              );
                             }
                           },
                           child: const Text(AppTexts.edit),

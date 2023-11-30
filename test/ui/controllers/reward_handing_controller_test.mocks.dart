@@ -104,6 +104,24 @@ class MockRewardRepository extends _i1.Mock implements _i3.RewardRepository {
       ) as _i6.Future<_i2.Result>);
 
   @override
+  _i6.Future<_i2.Result> refreshReward({required String? rewardId}) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #refreshReward,
+          [],
+          {#rewardId: rewardId},
+        ),
+        returnValue: _i6.Future<_i2.Result>.value(_FakeResult_0(
+          this,
+          Invocation.method(
+            #refreshReward,
+            [],
+            {#rewardId: rewardId},
+          ),
+        )),
+      ) as _i6.Future<_i2.Result>);
+
+  @override
   _i6.Future<_i2.Result> createReward({required _i7.CreateReward? newReward}) =>
       (super.noSuchMethod(
         Invocation.method(

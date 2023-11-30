@@ -20,6 +20,8 @@ void main() {
     late RewardController rewardController;
     late MockRewardRepository rewardRepository;
 
+    RewardViewState viewState = RewardViewState.details;
+
     setUp(() {
       rewardRepository = MockRewardRepository();
       when(rewardRepository.rewards).thenReturn([RewardMocks.reward]);
@@ -353,6 +355,89 @@ void main() {
         // Act
         var result = await rewardController.deactivateReward(
             rewardId: RewardMocks.rewardId);
+
+        // Assert
+        expect(rewardController.state, ViewState.idle);
+        expect(result, false);
+      });
+    });
+
+    group('refreshRewardData', () {
+      test('should return true when successful refreshing reward', () async {
+        // Arrange
+        when(rewardRepository.refreshReward(rewardId: RewardMocks.rewardId))
+            .thenAnswer((_) async => Result(status: true, message: 'Success'));
+        rewardController = RewardController(
+          userId: UserMocks.userId,
+          rewardRepository: rewardRepository,
+        );
+
+        // Act
+        var result = await rewardController.refreshRewardData(
+          rewardId: RewardMocks.rewardId,
+          viewState: viewState,
+        );
+
+        // Assert
+        expect(rewardController.state, ViewState.idle);
+        expect(rewardController.selectedView, viewState);
+        expect(result, true);
+      });
+
+      test('should return unsuccessful result when failing', () async {
+        // Arrange
+        when(rewardRepository.refreshReward(rewardId: RewardMocks.rewardId))
+            .thenAnswer((_) async => Result(status: false, message: 'Error'));
+        rewardController = RewardController(
+          userId: UserMocks.userId,
+          rewardRepository: rewardRepository,
+        );
+
+        // Act
+        var result = await rewardController.refreshRewardData(
+          rewardId: RewardMocks.rewardId,
+          viewState: viewState,
+        );
+
+        // Assert
+        expect(rewardController.state, ViewState.idle);
+        expect(result, false);
+      });
+
+      test('should throw when unauthorized', () async {
+        // Arrange
+        when(rewardRepository.refreshReward(rewardId: RewardMocks.rewardId))
+            .thenThrow((_) async => UnauthorizedException);
+        rewardController = RewardController(
+          userId: UserMocks.userId,
+          rewardRepository: rewardRepository,
+        );
+
+        // Act and Assert
+        try {
+          await rewardController.refreshRewardData(
+            rewardId: RewardMocks.rewardId,
+            viewState: viewState,
+          );
+        } catch (e) {
+          expect(e.runtimeType, UnauthorizedException);
+        }
+      });
+
+      test('should return error when another exception', () async {
+        // Arrange
+        when(rewardRepository.refreshReward(rewardId: RewardMocks.rewardId))
+            .thenThrow((_) async => ServiceUnavailableException);
+        rewardController = RewardController(
+          userId: UserMocks.userId,
+          rewardRepository: rewardRepository,
+        );
+
+        // Act
+        var result = await rewardController.refreshRewardData(
+          rewardId: RewardMocks.rewardId,
+          viewState: viewState,
+        );
 
         // Assert
         expect(rewardController.state, ViewState.idle);

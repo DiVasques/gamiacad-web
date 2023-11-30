@@ -130,4 +130,27 @@ class RewardController extends BaseController {
       setState(ViewState.idle);
     }
   }
+
+  Future<bool> refreshRewardData({
+    required String rewardId,
+    required RewardViewState viewState,
+  }) async {
+    setState(ViewState.busy);
+    try {
+      Result result = await _rewardRepository.refreshReward(
+        rewardId: rewardId,
+      );
+      return result.status;
+    } on UnauthorizedException {
+      rethrow;
+    } catch (e) {
+      return false;
+    } finally {
+      selectedReward = rewards.singleWhere(
+        (reward) => reward.id == rewardId,
+      );
+      setState(ViewState.idle);
+      selectedView = viewState;
+    }
+  }
 }

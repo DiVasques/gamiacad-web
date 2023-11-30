@@ -20,6 +20,12 @@ class RewardDetailsView extends StatelessWidget {
       builder: (context, rewardController, _) {
         return BaseSectionView(
           viewTitle: rewardController.selectedReward.name,
+          reloadAction: () {
+            rewardController.refreshRewardData(
+              rewardId: rewardController.selectedReward.id,
+              viewState: RewardViewState.details,
+            );
+          },
           headerActions: [
             rewardController.selectedReward.active &&
                     rewardController.selectedReward.availability > 0
