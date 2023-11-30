@@ -53,6 +53,15 @@ class RewardHandingTableHeaders {
         ),
       ),
     ),
+    Padding(
+      padding: _tableHeaderPadding,
+      child: Text(
+        AppTexts.rewardHandingHandReward,
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    ),
   ];
 
   static TableRow build() {

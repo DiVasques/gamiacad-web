@@ -66,6 +66,11 @@ class MainApp extends StatelessWidget {
           space: 2,
           color: Colors.black54,
         ),
+        iconButtonTheme: IconButtonThemeData(
+          style: IconButton.styleFrom(
+            foregroundColor: AppColors.primaryColor,
+          ),
+        ),
         textButtonTheme: TextButtonThemeData(
           style: TextButton.styleFrom(
             backgroundColor: AppColors.primaryColor,

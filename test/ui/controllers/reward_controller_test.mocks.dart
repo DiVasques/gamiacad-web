@@ -165,4 +165,31 @@ class MockRewardRepository extends _i1.Mock implements _i3.RewardRepository {
           ),
         )),
       ) as _i6.Future<_i2.Result>);
+
+  @override
+  _i6.Future<_i2.Result> handReward({
+    required String? rewardId,
+    required String? userId,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #handReward,
+          [],
+          {
+            #rewardId: rewardId,
+            #userId: userId,
+          },
+        ),
+        returnValue: _i6.Future<_i2.Result>.value(_FakeResult_0(
+          this,
+          Invocation.method(
+            #handReward,
+            [],
+            {
+              #rewardId: rewardId,
+              #userId: userId,
+            },
+          ),
+        )),
+      ) as _i6.Future<_i2.Result>);
 }

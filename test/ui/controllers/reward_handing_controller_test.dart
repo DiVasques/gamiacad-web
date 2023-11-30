@@ -17,7 +17,7 @@ import 'reward_controller_test.mocks.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   group('RewardHandingController', () {
-    late RewardHandingController rewardController;
+    late RewardHandingController rewardHandingController;
     late MockRewardRepository rewardRepository;
 
     setUp(() {
@@ -31,16 +31,16 @@ void main() {
         // Arrange
         when(rewardRepository.getClaimedRewards())
             .thenAnswer((_) async => Result(status: true, message: 'Success'));
-        rewardController = RewardHandingController(
+        rewardHandingController = RewardHandingController(
           userId: UserMocks.userId,
           rewardRepository: rewardRepository,
         );
 
         // Act
-        await rewardController.getClaimedRewards();
+        await rewardHandingController.getClaimedRewards();
 
         // Assert
-        expect(rewardController.state, ViewState.idle);
+        expect(rewardHandingController.state, ViewState.idle);
       });
 
       test('should return unsuccessful result on failed get claimed rewards',
@@ -48,31 +48,31 @@ void main() {
         // Arrange
         when(rewardRepository.getClaimedRewards())
             .thenAnswer((_) async => Result(status: false, message: 'Error'));
-        rewardController = RewardHandingController(
+        rewardHandingController = RewardHandingController(
           userId: UserMocks.userId,
           rewardRepository: rewardRepository,
         );
 
         // Act
-        await rewardController.getClaimedRewards();
+        await rewardHandingController.getClaimedRewards();
 
         // Assert
-        expect(rewardController.errorMessage, 'Error');
-        expect(rewardController.state, ViewState.error);
+        expect(rewardHandingController.errorMessage, 'Error');
+        expect(rewardHandingController.state, ViewState.error);
       });
 
       test('should throw when unauthorized', () async {
         // Arrange
         when(rewardRepository.getClaimedRewards())
             .thenThrow((_) async => UnauthorizedException);
-        rewardController = RewardHandingController(
+        rewardHandingController = RewardHandingController(
           userId: UserMocks.userId,
           rewardRepository: rewardRepository,
         );
 
         // Act and Assert
         try {
-          await rewardController.getClaimedRewards();
+          await rewardHandingController.getClaimedRewards();
         } catch (e) {
           expect(e.runtimeType, UnauthorizedException);
         }
@@ -82,16 +82,114 @@ void main() {
         // Arrange
         when(rewardRepository.getClaimedRewards())
             .thenThrow((_) async => ServiceUnavailableException);
-        rewardController = RewardHandingController(
+        rewardHandingController = RewardHandingController(
           userId: UserMocks.userId,
           rewardRepository: rewardRepository,
         );
 
         // Act
-        await rewardController.getClaimedRewards();
+        await rewardHandingController.getClaimedRewards();
 
         // Assert
-        expect(rewardController.state, ViewState.error);
+        expect(rewardHandingController.state, ViewState.error);
+      });
+    });
+
+    group('handReward', () {
+      test('should return true when successful handing reward', () async {
+        // Arrange
+        when(
+          rewardRepository.handReward(
+            rewardId: RewardMocks.rewardId,
+            userId: UserMocks.userId,
+          ),
+        ).thenAnswer((_) async => Result(status: true, message: 'Success'));
+        rewardHandingController = RewardHandingController(
+          userId: UserMocks.userId,
+          rewardRepository: rewardRepository,
+        );
+
+        // Act
+        var result = await rewardHandingController.handReward(
+          rewardId: RewardMocks.rewardId,
+          userId: UserMocks.userId,
+        );
+
+        // Assert
+        expect(rewardHandingController.state, ViewState.idle);
+        expect(result, true);
+      });
+
+      test('should return unsuccessful result when failing', () async {
+        // Arrange
+        when(
+          rewardRepository.handReward(
+            rewardId: RewardMocks.rewardId,
+            userId: UserMocks.userId,
+          ),
+        ).thenAnswer((_) async => Result(status: false, message: 'Error'));
+        rewardHandingController = RewardHandingController(
+          userId: UserMocks.userId,
+          rewardRepository: rewardRepository,
+        );
+
+        // Act
+        var result = await rewardHandingController.handReward(
+          rewardId: RewardMocks.rewardId,
+          userId: UserMocks.userId,
+        );
+
+        // Assert
+        expect(rewardHandingController.state, ViewState.idle);
+        expect(result, false);
+      });
+
+      test('should throw when unauthorized', () async {
+        // Arrange
+        when(
+          rewardRepository.handReward(
+            rewardId: RewardMocks.rewardId,
+            userId: UserMocks.userId,
+          ),
+        ).thenThrow((_) async => UnauthorizedException);
+        rewardHandingController = RewardHandingController(
+          userId: UserMocks.userId,
+          rewardRepository: rewardRepository,
+        );
+
+        // Act and Assert
+        try {
+          await rewardHandingController.handReward(
+            rewardId: RewardMocks.rewardId,
+            userId: UserMocks.userId,
+          );
+        } catch (e) {
+          expect(e.runtimeType, UnauthorizedException);
+        }
+      });
+
+      test('should return error when another exception', () async {
+        // Arrange
+        when(
+          rewardRepository.handReward(
+            rewardId: RewardMocks.rewardId,
+            userId: UserMocks.userId,
+          ),
+        ).thenThrow((_) async => ServiceUnavailableException);
+        rewardHandingController = RewardHandingController(
+          userId: UserMocks.userId,
+          rewardRepository: rewardRepository,
+        );
+
+        // Act
+        var result = await rewardHandingController.handReward(
+          rewardId: RewardMocks.rewardId,
+          userId: UserMocks.userId,
+        );
+
+        // Assert
+        expect(rewardHandingController.state, ViewState.idle);
+        expect(result, false);
       });
     });
   });

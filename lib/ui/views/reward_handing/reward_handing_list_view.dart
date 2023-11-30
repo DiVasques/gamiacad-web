@@ -5,13 +5,14 @@ import 'package:gami_acad_web/ui/utils/app_texts.dart';
 import 'package:gami_acad_web/ui/utils/extensions/date_extension.dart';
 import 'package:gami_acad_web/ui/utils/view_state.dart';
 import 'package:gami_acad_web/ui/views/base_section_view.dart';
+import 'package:gami_acad_web/ui/widgets/default_action_dialog.dart';
 import 'package:gami_acad_web/ui/widgets/reward_handing_table_headers.dart';
 import 'package:gami_acad_web/ui/widgets/default_error_view.dart';
 import 'package:provider/provider.dart';
 
 class RewardHandingListView extends StatelessWidget {
   static const EdgeInsets _tableRowPadding =
-      EdgeInsets.only(top: 10, left: 15, right: 15);
+      EdgeInsets.only(top: 10, left: 15, right: 15, bottom: 5);
   const RewardHandingListView({super.key});
 
   @override
@@ -39,6 +40,7 @@ class RewardHandingListView extends StatelessWidget {
                   0: IntrinsicColumnWidth(),
                   3: IntrinsicColumnWidth(),
                   4: IntrinsicColumnWidth(),
+                  5: IntrinsicColumnWidth(),
                 },
                 defaultVerticalAlignment: TableCellVerticalAlignment.bottom,
                 border: TableBorder.symmetric(
@@ -88,6 +90,33 @@ class RewardHandingListView extends StatelessWidget {
                                       reward.claimDate.toLocalDateTimeString(),
                                     ),
                                   ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(2),
+                                    child: IconButton(
+                                      icon: const Icon(
+                                        Icons.delivery_dining_rounded,
+                                      ),
+                                      onPressed: () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) =>
+                                              DefaultActionDialog(
+                                            titleText: AppTexts.confirmation,
+                                            actionText: AppTexts.yes,
+                                            action: handRewardAction(
+                                              context: context,
+                                              rewardHandingController:
+                                                  rewardHandingController,
+                                              rewardId: reward.id,
+                                              userId: reward.claimer.id,
+                                            ),
+                                            contentText: AppTexts
+                                                .rewardHandingConfirmation,
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ),
                                 ],
                               ),
                             )
@@ -99,5 +128,32 @@ class RewardHandingListView extends StatelessWidget {
         );
       },
     );
+  }
+
+  void Function() handRewardAction({
+    required BuildContext context,
+    required RewardHandingController rewardHandingController,
+    required String rewardId,
+    required String userId,
+  }) {
+    return () {
+      rewardHandingController
+          .handReward(rewardId: rewardId, userId: userId)
+          .then(
+        (result) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              duration: const Duration(seconds: 2),
+              content: Text(
+                result
+                    ? AppTexts.rewardHandingSuccess
+                    : AppTexts.rewardHandingError,
+              ),
+            ),
+          );
+          rewardHandingController.getClaimedRewards();
+        },
+      );
+    };
   }
 }
