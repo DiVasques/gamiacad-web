@@ -84,6 +84,9 @@ class UserManagementListView extends StatelessWidget {
                                             : Icons
                                                 .check_box_outline_blank_rounded,
                                       ),
+                                      tooltip: user.admin
+                                          ? AppTexts.userRevokePrivilege
+                                          : AppTexts.userGivePrivilege,
                                       onPressed: () {
                                         showDialog(
                                           context: context,
@@ -92,11 +95,12 @@ class UserManagementListView extends StatelessWidget {
                                             titleText: AppTexts.confirmation,
                                             actionText: AppTexts.yes,
                                             action: updateUserPrivilegesAction(
-                                                context: context,
-                                                userManagementController:
-                                                    userManagementController,
-                                                userId: user.id,
-                                                admin: !user.admin),
+                                              context: context,
+                                              userManagementController:
+                                                  userManagementController,
+                                              userId: user.id,
+                                              admin: !user.admin,
+                                            ),
                                             contentText: AppTexts
                                                 .userManagementUpdatePrivilegesConfirmation,
                                           ),

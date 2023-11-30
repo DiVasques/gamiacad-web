@@ -1,4 +1,5 @@
 import 'package:gami_acad_web/repository/models/action_with_date.dart';
+import 'package:gami_acad_web/repository/models/user.dart';
 
 class Reward {
   String id;
@@ -10,7 +11,9 @@ class Reward {
   DateTime createdAt;
   DateTime? updatedAt;
   List<ActionWithDate> claimers;
+  List<User> claimersInfo;
   List<ActionWithDate> handed;
+  List<User> handedInfo;
   bool active;
   Reward({
     required this.id,
@@ -22,7 +25,9 @@ class Reward {
     required this.createdAt,
     required this.updatedAt,
     required this.claimers,
+    required this.claimersInfo,
     required this.handed,
+    required this.handedInfo,
     required this.active,
   });
 
@@ -38,8 +43,14 @@ class Reward {
         claimers: (json['claimers'] as List<dynamic>)
             .map((p) => ActionWithDate.fromJson(p))
             .toList(),
+        claimersInfo: (json['claimersInfo'] as List<dynamic>)
+            .map((p) => User.fromJson(p))
+            .toList(),
         handed: (json['handed'] as List<dynamic>)
             .map((c) => ActionWithDate.fromJson(c))
+            .toList(),
+        handedInfo: (json['handedInfo'] as List<dynamic>)
+            .map((p) => User.fromJson(p))
             .toList(),
         active: json['active'],
       );
@@ -54,7 +65,9 @@ class Reward {
         'createdAt': createdAt.toIso8601String(),
         'updatedAt': updatedAt?.toIso8601String(),
         'claimers': claimers.map((e) => e.toJson()).toList(),
+        'claimersInfo': claimersInfo.map((e) => e.toJson()).toList(),
         'handed': handed.map((e) => e.toJson()).toList(),
+        'handedInfo': handedInfo.map((e) => e.toJson()).toList(),
         'active': active,
       };
 }

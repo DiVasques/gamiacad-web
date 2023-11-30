@@ -5,6 +5,8 @@ import 'package:gami_acad_web/repository/models/create_reward.dart';
 import 'package:gami_acad_web/repository/models/edit_reward.dart';
 import 'package:gami_acad_web/repository/models/reward.dart';
 
+import 'user_mocks.dart';
+
 class RewardMocks {
   static String rewardId = 'id';
 
@@ -19,17 +21,23 @@ class RewardMocks {
     updatedAt: DateTime.now(),
     claimers: [
       ActionWithDate(
-        id: '123',
+        id: UserMocks.userId,
         date: DateTime.now(),
-        createdBy: '123',
+        createdBy: UserMocks.userId,
       ),
+    ],
+    claimersInfo: [
+      UserMocks.user,
     ],
     handed: [
       ActionWithDate(
-        id: '456',
+        id: UserMocks.user2Id,
         date: DateTime.now(),
         createdBy: '789',
       ),
+    ],
+    handedInfo: [
+      UserMocks.user2,
     ],
     active: true,
   );

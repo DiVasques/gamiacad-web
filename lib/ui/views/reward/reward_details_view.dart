@@ -5,6 +5,8 @@ import 'package:gami_acad_web/ui/utils/app_texts.dart';
 import 'package:gami_acad_web/ui/utils/extensions/int_extension.dart';
 import 'package:gami_acad_web/ui/views/base_section_view.dart';
 import 'package:gami_acad_web/ui/widgets/default_action_dialog.dart';
+import 'package:gami_acad_web/ui/widgets/handed_user_info.dart';
+import 'package:gami_acad_web/ui/widgets/reward_infos.dart';
 import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
 
@@ -80,70 +82,32 @@ class RewardDetailsView extends StatelessWidget {
                     left: 20,
                     right: 20,
                     top: 15,
-                    bottom: 200,
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: <Widget>[
-                      const Text(
-                        '${AppTexts.price}:',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      Text(
-                        rewardController.selectedReward.price.toStringDecimal(),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      const Text(
-                        '${AppTexts.rewardAvailability}:',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      Text(
-                        rewardController.selectedReward.availability.toString(),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      const Text(
-                        '${AppTexts.description}:',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      Text(
-                        rewardController.selectedReward.description,
-                        textAlign: TextAlign.justify,
-                      ),
-                      const Gap(20),
-                      TextButton(
-                        style: TextButton.styleFrom(
-                          backgroundColor: AppColors.errorGray,
-                        ),
-                        onPressed: () {
-                          rewardController.getRewards();
-                          rewardController.selectedView = RewardViewState.list;
-                        },
-                        child: const Text(AppTexts.back),
-                      ),
-                      const Gap(20),
-                    ],
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: Wrap(
+                      alignment: WrapAlignment.spaceBetween,
+                      spacing: 100,
+                      runSpacing: 20,
+                      children: [
+                        RewardInfos(maxViewItemsWidth: maxViewItemsWidth),
+                        HandedUserInfo(maxViewItemsWidth: maxViewItemsWidth),
+                      ],
+                    ),
                   ),
                 ),
+                const Gap(20),
+                TextButton(
+                  style: TextButton.styleFrom(
+                    backgroundColor: AppColors.errorGray,
+                  ),
+                  onPressed: () {
+                    rewardController.getRewards();
+                    rewardController.selectedView = RewardViewState.list;
+                  },
+                  child: const Text(AppTexts.back),
+                ),
+                const Gap(20),
               ],
             ),
           ),
