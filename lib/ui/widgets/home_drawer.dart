@@ -49,6 +49,15 @@ class HomeDrawer extends StatelessWidget {
                 drawerTitle: AppTexts.rewardHanding,
                 viewState: SelectedViewState.rewardHanding,
               ),
+              HomeDrawerItem(
+                drawerSize: drawerSize,
+                drawerTextWidth: drawerTextWidth,
+                animationDuration: animationDuration,
+                animationCurve: animationCurve,
+                icon: Icons.manage_accounts_rounded,
+                drawerTitle: AppTexts.userManagement,
+                viewState: SelectedViewState.userManagement,
+              ),
               Expanded(
                 child: InkWell(
                   onTap: homeController.drawerTapFunction,
