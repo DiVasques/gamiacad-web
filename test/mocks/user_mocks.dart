@@ -32,6 +32,7 @@ class UserMocks {
     name: 'user name',
     email: 'email@email.com',
     admin: true,
+    active: true,
     registration: '12345678901',
     balance: 0,
     totalPoints: 1000,

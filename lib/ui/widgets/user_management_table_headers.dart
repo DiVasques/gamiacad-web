@@ -44,6 +44,15 @@ class UserManagementTableHeaders {
         ),
       ),
     ),
+    Padding(
+      padding: _tableHeaderPadding,
+      child: Text(
+        AppTexts.active,
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    ),
   ];
 
   static TableRow build() {

@@ -40,6 +40,7 @@ class UserManagementListView extends StatelessWidget {
                   1: IntrinsicColumnWidth(),
                   2: IntrinsicColumnWidth(),
                   3: IntrinsicColumnWidth(),
+                  4: IntrinsicColumnWidth(),
                 },
                 defaultVerticalAlignment: TableCellVerticalAlignment.bottom,
                 border: TableBorder.symmetric(
@@ -108,6 +109,39 @@ class UserManagementListView extends StatelessWidget {
                                       },
                                     ),
                                   ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(2),
+                                    child: IconButton(
+                                      icon: Icon(
+                                        user.active
+                                            ? Icons.check_box_rounded
+                                            : Icons
+                                                .check_box_outline_blank_rounded,
+                                      ),
+                                      tooltip: user.active
+                                          ? AppTexts.userActivate
+                                          : AppTexts.userDeactivate,
+                                      onPressed: () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) =>
+                                              DefaultActionDialog(
+                                            titleText: AppTexts.confirmation,
+                                            actionText: AppTexts.yes,
+                                            action: updateUserStatusAction(
+                                              context: context,
+                                              userManagementController:
+                                                  userManagementController,
+                                              userId: user.id,
+                                              active: !user.active,
+                                            ),
+                                            contentText: AppTexts
+                                                .userManagementUpdateStatusConfirmation,
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ),
                                 ],
                               ),
                             )
@@ -119,6 +153,33 @@ class UserManagementListView extends StatelessWidget {
         );
       },
     );
+  }
+
+  void Function() updateUserStatusAction({
+    required BuildContext context,
+    required UserManagementController userManagementController,
+    required String userId,
+    required bool active,
+  }) {
+    return () {
+      userManagementController
+          .updateUserStatus(userId: userId, active: active)
+          .then(
+        (result) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              duration: const Duration(seconds: 2),
+              content: Text(
+                result
+                    ? AppTexts.userManagementUpdateStatusSuccess
+                    : AppTexts.userManagementUpdateStatusError,
+              ),
+            ),
+          );
+          userManagementController.getUsers();
+        },
+      );
+    };
   }
 
   void Function() updateUserPrivilegesAction({

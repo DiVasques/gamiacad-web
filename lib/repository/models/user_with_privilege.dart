@@ -2,6 +2,7 @@ import 'package:gami_acad_web/repository/models/user.dart';
 
 class UserWithPrivilege extends User {
   bool admin;
+  bool active;
 
   UserWithPrivilege({
     required super.id,
@@ -13,6 +14,7 @@ class UserWithPrivilege extends User {
     required super.createdAt,
     required super.updatedAt,
     required this.admin,
+    required this.active,
   });
 
   factory UserWithPrivilege.fromJson(Map<String, dynamic> json) =>
@@ -21,6 +23,7 @@ class UserWithPrivilege extends User {
         name: json['name'],
         email: json['email'],
         admin: json['admin'],
+        active: json['active'],
         registration: json['registration'],
         balance: json['balance'],
         totalPoints: json['totalPoints'],
@@ -34,6 +37,7 @@ class UserWithPrivilege extends User {
         'name': name,
         'email': email,
         'admin': admin,
+        'active': active,
         'registration': registration,
         'balance': balance,
         'totalPoints': totalPoints,

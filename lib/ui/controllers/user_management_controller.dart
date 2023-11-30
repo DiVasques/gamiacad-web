@@ -43,6 +43,26 @@ class UserManagementController extends BaseController {
     }
   }
 
+  Future<bool> updateUserStatus({
+    required String userId,
+    required bool active,
+  }) async {
+    setState(ViewState.busy);
+    try {
+      Result result = await _userRepository.updateUserStatus(
+        userId: userId,
+        active: active,
+      );
+      return result.status;
+    } on UnauthorizedException {
+      rethrow;
+    } catch (e) {
+      return false;
+    } finally {
+      setState(ViewState.idle);
+    }
+  }
+
   Future<bool> updateUserPrivileges({
     required String userId,
     required bool admin,
