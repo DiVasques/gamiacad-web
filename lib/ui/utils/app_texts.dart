@@ -1,4 +1,5 @@
 class AppTexts {
+  static const active = 'Ativo';
   static const add = 'Adicionar';
   static const admin = 'Administrador';
   static const at = 'às';
@@ -34,6 +35,8 @@ class AppTexts {
   static const registration = 'CPF';
   static const reward = 'Recompensa';
   static const rewardHand = 'Entregar Recompensa';
+  static const userActivate = 'Ativar Usuário';
+  static const userDeactivate = 'Desativar Usuário';
   static const userGivePrivilege = 'Dar Privilégio';
   static const userManagement = 'Gerenciamento de Usuários';
   static const userRevokePrivilege = 'Remover Privilégio';
@@ -81,6 +84,12 @@ class AppTexts {
       'Erro ao entregar a Recompensa. Tente novamente mais tarde.';
   static const rewardHandingSuccess = 'Recompensa entregue com sucesso!';
   static const rewardHandingHandReward = 'Entregar';
+  static const userManagementUpdateStatusConfirmation =
+      'Deseja atualizar o status desse usuário?';
+  static const userManagementUpdateStatusError =
+      'Erro ao atualizar o status. Tente novamente mais tarde.';
+  static const userManagementUpdateStatusSuccess =
+      'Status atualizado com sucesso!';
   static const userManagementUpdatePrivilegesConfirmation =
       'Deseja atualizar os privilégios desse usuário?';
   static const userManagementUpdatePrivilegesError =

@@ -93,6 +93,93 @@ void main() {
       });
     });
 
+    group('updateUserStatus', () {
+      test('should return true when successful updating user privileges',
+          () async {
+        // Arrange
+        bool active = true;
+        when(
+          userRepository.updateUserStatus(
+              userId: UserMocks.userId, active: active),
+        ).thenAnswer((_) async => Result(status: true, message: 'Success'));
+        userManagementController = UserManagementController(
+          userId: UserMocks.userId,
+          userRepository: userRepository,
+        );
+
+        // Act
+        var result = await userManagementController.updateUserStatus(
+            userId: UserMocks.userId, active: active);
+
+        // Assert
+        expect(userManagementController.state, ViewState.idle);
+        expect(result, true);
+      });
+
+      test('should return unsuccessful result when failing', () async {
+        // Arrange
+        bool active = true;
+        when(
+          userRepository.updateUserStatus(
+              userId: UserMocks.userId, active: active),
+        ).thenAnswer((_) async => Result(status: false, message: 'Error'));
+        userManagementController = UserManagementController(
+          userId: UserMocks.userId,
+          userRepository: userRepository,
+        );
+
+        // Act
+        var result = await userManagementController.updateUserStatus(
+            userId: UserMocks.userId, active: active);
+
+        // Assert
+        expect(userManagementController.state, ViewState.idle);
+        expect(result, false);
+      });
+
+      test('should throw when unauthorized', () async {
+        // Arrange
+        bool active = true;
+        when(
+          userRepository.updateUserStatus(
+              userId: UserMocks.userId, active: active),
+        ).thenThrow((_) async => UnauthorizedException);
+        userManagementController = UserManagementController(
+          userId: UserMocks.userId,
+          userRepository: userRepository,
+        );
+
+        // Act and Assert
+        try {
+          await userManagementController.updateUserStatus(
+              userId: UserMocks.userId, active: active);
+        } catch (e) {
+          expect(e.runtimeType, UnauthorizedException);
+        }
+      });
+
+      test('should return error when another exception', () async {
+        // Arrange
+        bool active = true;
+        when(
+          userRepository.updateUserStatus(
+              userId: UserMocks.userId, active: active),
+        ).thenThrow((_) async => ServiceUnavailableException);
+        userManagementController = UserManagementController(
+          userId: UserMocks.userId,
+          userRepository: userRepository,
+        );
+
+        // Act
+        var result = await userManagementController.updateUserStatus(
+            userId: UserMocks.userId, active: active);
+
+        // Assert
+        expect(userManagementController.state, ViewState.idle);
+        expect(result, false);
+      });
+    });
+
     group('updateUserPrivileges', () {
       test('should return true when successful updating user privileges',
           () async {
