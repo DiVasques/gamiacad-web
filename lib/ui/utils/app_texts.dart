@@ -1,5 +1,6 @@
 class AppTexts {
   static const add = 'Adicionar';
+  static const admin = 'Administrador';
   static const at = 'às';
   static const back = 'Voltar';
   static const cancel = 'Cancelar';
@@ -7,6 +8,7 @@ class AppTexts {
   static const completersList = 'Concluídos';
   static const confirmation = 'Confirmação';
   static const create = 'Criar';
+  static const createdAt = 'Data de Criação';
   static const createdBy = 'Criado por';
   static const date = 'Data';
   static const datePlaceholder = '01/01/2001 00:00';
@@ -29,6 +31,7 @@ class AppTexts {
   static const quantity = 'Quantidade';
   static const registration = 'CPF';
   static const reward = 'Recompensa';
+  static const userManagement = 'Gerenciamento de Usuários';
   static const yes = 'Sim';
   static const login = 'Entrar';
   static const loginExpired = 'Login Expirado.';

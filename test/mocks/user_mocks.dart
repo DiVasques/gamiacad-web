@@ -1,4 +1,5 @@
 import 'package:gami_acad_web/repository/models/user.dart';
+import 'package:gami_acad_web/repository/models/user_with_privilege.dart';
 
 class UserMocks {
   static String userId = 'userId';
@@ -22,6 +23,18 @@ class UserMocks {
     registration: '12345678902',
     balance: 1000,
     totalPoints: 2000,
+    createdAt: DateTime(2023),
+    updatedAt: null,
+  );
+
+  static UserWithPrivilege userWithPrivilege = UserWithPrivilege(
+    id: userId,
+    name: 'user name',
+    email: 'email@email.com',
+    admin: true,
+    registration: '12345678901',
+    balance: 0,
+    totalPoints: 1000,
     createdAt: DateTime(2023),
     updatedAt: null,
   );

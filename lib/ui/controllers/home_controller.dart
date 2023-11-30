@@ -2,7 +2,7 @@ import 'package:gami_acad_web/repository/auth_repository.dart';
 import 'package:gami_acad_web/ui/controllers/base_controller.dart';
 import 'package:gami_acad_web/ui/utils/view_state.dart';
 
-enum SelectedViewState { mission, reward, rewardHanding }
+enum SelectedViewState { mission, reward, rewardHanding, userManagement }
 
 class HomeController extends BaseController {
   late String userId;
