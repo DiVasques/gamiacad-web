@@ -83,6 +83,40 @@ class RewardRepository {
     }
   }
 
+  Future<Result> refreshReward({required String rewardId}) async {
+    try {
+      var response = await _gamiAcadDioClient.get(
+        path: '/reward/$rewardId',
+      );
+      var result = Result(
+        status: false,
+        code: response.statusCode,
+        message: response.statusMessage,
+      );
+      if (response.statusCode == 200) {
+        result.status = true;
+        for (var (index, reward) in rewards.indexed) {
+          if (reward.id == rewardId) {
+            rewards[index] = Reward.fromJson(response.data);
+            break;
+          }
+        }
+        return result;
+      }
+      return result;
+    } on DioException catch (error) {
+      if (error.response?.statusCode == 401) {
+        throw UnauthorizedException();
+      }
+      if (error.response?.statusCode == 403) {
+        throw ForbiddenException();
+      }
+      throw ServiceUnavailableException();
+    } catch (e) {
+      throw ServiceUnavailableException();
+    }
+  }
+
   Future<Result> createReward({required CreateReward newReward}) async {
     try {
       var response = await _gamiAcadDioClient.post(
