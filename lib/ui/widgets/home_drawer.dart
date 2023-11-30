@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 
 class HomeDrawer extends StatelessWidget {
   final int drawerSize = 56;
-  final double drawerTextWidth = 200;
+  final double drawerTextWidth = 300;
   final Duration animationDuration = const Duration(milliseconds: 100);
   final Curve animationCurve = Curves.fastOutSlowIn;
   const HomeDrawer({super.key});
@@ -39,6 +39,15 @@ class HomeDrawer extends StatelessWidget {
                 icon: Icons.shopping_basket_rounded,
                 drawerTitle: AppTexts.rewardList,
                 viewState: SelectedViewState.reward,
+              ),
+              HomeDrawerItem(
+                drawerSize: drawerSize,
+                drawerTextWidth: drawerTextWidth,
+                animationDuration: animationDuration,
+                animationCurve: animationCurve,
+                icon: Icons.delivery_dining_rounded,
+                drawerTitle: AppTexts.rewardHanding,
+                viewState: SelectedViewState.rewardHanding,
               ),
               Expanded(
                 child: InkWell(

@@ -1,18 +1,17 @@
-class User {
-  String id;
-  String name;
+import 'package:gami_acad_web/repository/models/base_user.dart';
+
+class User extends BaseUser {
   String email;
-  String registration;
   int balance;
   int totalPoints;
   DateTime createdAt;
   DateTime? updatedAt;
 
   User({
-    required this.id,
-    required this.name,
+    required super.id,
+    required super.name,
     required this.email,
-    required this.registration,
+    required super.registration,
     required this.balance,
     required this.totalPoints,
     required this.createdAt,
@@ -30,6 +29,7 @@ class User {
         updatedAt: DateTime.tryParse(json['updatedAt'] ?? ''),
       );
 
+  @override
   Map<String, dynamic> toJson() => {
         '_id': id,
         'name': name,
