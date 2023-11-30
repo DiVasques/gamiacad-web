@@ -1,4 +1,6 @@
 import 'package:gami_acad_web/repository/models/action_with_date.dart';
+import 'package:gami_acad_web/repository/models/base_user.dart';
+import 'package:gami_acad_web/repository/models/claimed_reward.dart';
 import 'package:gami_acad_web/repository/models/create_reward.dart';
 import 'package:gami_acad_web/repository/models/edit_reward.dart';
 import 'package:gami_acad_web/repository/models/reward.dart';
@@ -15,8 +17,20 @@ class RewardMocks {
     availability: 100,
     createdAt: DateTime.now(),
     updatedAt: DateTime.now(),
-    claimers: [ActionWithDate(id: '123', date: DateTime.now())],
-    handed: [ActionWithDate(id: '456', date: DateTime.now())],
+    claimers: [
+      ActionWithDate(
+        id: '123',
+        date: DateTime.now(),
+        createdBy: '123',
+      ),
+    ],
+    handed: [
+      ActionWithDate(
+        id: '456',
+        date: DateTime.now(),
+        createdBy: '789',
+      ),
+    ],
     active: true,
   );
 
@@ -30,5 +44,18 @@ class RewardMocks {
   static EditReward editReward = EditReward(
     name: 'name',
     description: 'description',
+  );
+
+  static ClaimedReward claimedReward = ClaimedReward(
+    id: rewardId,
+    name: 'name',
+    number: 1,
+    price: 100,
+    claimDate: DateTime.now(),
+    claimer: BaseUser(
+      id: '123',
+      name: 'Claimer Name',
+      registration: '12345678909',
+    ),
   );
 }

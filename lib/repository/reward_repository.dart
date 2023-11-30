@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:gami_acad_web/repository/models/claimed_reward.dart';
 import 'package:gami_acad_web/repository/models/create_reward.dart';
 import 'package:gami_acad_web/repository/models/edit_reward.dart';
 import 'package:gami_acad_web/repository/models/exceptions/forbidden_exception.dart';
@@ -10,6 +11,7 @@ import 'package:gami_acad_web/services/gamiacad_dio_client.dart';
 
 class RewardRepository {
   late List<Reward> rewards;
+  late List<ClaimedReward> claimedRewards;
 
   late final GamiAcadDioClient _gamiAcadDioClient;
 
@@ -33,6 +35,37 @@ class RewardRepository {
         result.status = true;
         rewards = (response.data['rewards'] as List<dynamic>)
             .map((reward) => Reward.fromJson(reward))
+            .toList();
+        return result;
+      }
+      return result;
+    } on DioException catch (error) {
+      if (error.response?.statusCode == 401) {
+        throw UnauthorizedException();
+      }
+      if (error.response?.statusCode == 403) {
+        throw ForbiddenException();
+      }
+      throw ServiceUnavailableException();
+    } catch (e) {
+      throw ServiceUnavailableException();
+    }
+  }
+
+  Future<Result> getClaimedRewards() async {
+    try {
+      var response = await _gamiAcadDioClient.get(
+        path: '/reward/claimed',
+      );
+      var result = Result(
+        status: false,
+        code: response.statusCode,
+        message: response.statusMessage,
+      );
+      if (response.statusCode == 200) {
+        result.status = true;
+        claimedRewards = (response.data['rewards'] as List<dynamic>)
+            .map((reward) => ClaimedReward.fromJson(reward))
             .toList();
         return result;
       }

@@ -8,6 +8,7 @@ class AppTexts {
   static const confirmation = 'Confirmação';
   static const create = 'Criar';
   static const createdBy = 'Criado por';
+  static const date = 'Data';
   static const datePlaceholder = '01/01/2001 00:00';
   static const deactivate = 'Desativar';
   static const description = 'Descrição';
@@ -19,6 +20,7 @@ class AppTexts {
   static const invalidRegistration = 'CPF inválido';
   static const logout = 'Sair';
   static const name = 'Nome';
+  static const number = '#';
   static const ok = 'Ok';
   static const participatingList = 'Participando';
   static const password = 'Senha';
@@ -26,6 +28,7 @@ class AppTexts {
   static const price = 'Preço';
   static const quantity = 'Quantidade';
   static const registration = 'CPF';
+  static const reward = 'Recompensa';
   static const yes = 'Sim';
   static const login = 'Entrar';
   static const loginExpired = 'Login Expirado.';
@@ -63,4 +66,6 @@ class AppTexts {
       'Erro ao editar a Recompensa. Tente novamente mais tarde.';
   static const rewardEditSuccess = 'Recompensa editada com sucesso!';
   static const rewardList = 'Lista de Recompensas';
+  static const rewardHanding = 'Entrega de Recompensas';
+  static const rewardHandingClaimerName = 'Nome do Resgatante';
 }
