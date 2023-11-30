@@ -76,4 +76,10 @@ class AppTexts {
       'Erro ao entregar a Recompensa. Tente novamente mais tarde.';
   static const rewardHandingSuccess = 'Recompensa entregue com sucesso!';
   static const rewardHandingHandReward = 'Entregar';
+  static const userManagementUpdatePrivilegesConfirmation =
+      'Deseja atualizar os privilégios desse usuário?';
+  static const userManagementUpdatePrivilegesError =
+      'Erro ao atualizar os privilégios. Tente novamente mais tarde.';
+  static const userManagementUpdatePrivilegesSuccess =
+      'Privilégios atualizados com sucesso!';
 }

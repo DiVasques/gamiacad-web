@@ -5,6 +5,7 @@ import 'package:gami_acad_web/ui/utils/app_texts.dart';
 import 'package:gami_acad_web/ui/utils/extensions/date_extension.dart';
 import 'package:gami_acad_web/ui/utils/view_state.dart';
 import 'package:gami_acad_web/ui/views/base_section_view.dart';
+import 'package:gami_acad_web/ui/widgets/default_action_dialog.dart';
 import 'package:gami_acad_web/ui/widgets/default_error_view.dart';
 import 'package:gami_acad_web/ui/widgets/user_management_table_headers.dart';
 import 'package:provider/provider.dart';
@@ -83,7 +84,24 @@ class UserManagementListView extends StatelessWidget {
                                             : Icons
                                                 .check_box_outline_blank_rounded,
                                       ),
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) =>
+                                              DefaultActionDialog(
+                                            titleText: AppTexts.confirmation,
+                                            actionText: AppTexts.yes,
+                                            action: updateUserPrivilegesAction(
+                                                context: context,
+                                                userManagementController:
+                                                    userManagementController,
+                                                userId: user.id,
+                                                admin: !user.admin),
+                                            contentText: AppTexts
+                                                .userManagementUpdatePrivilegesConfirmation,
+                                          ),
+                                        );
+                                      },
                                     ),
                                   ),
                                 ],
@@ -97,5 +115,32 @@ class UserManagementListView extends StatelessWidget {
         );
       },
     );
+  }
+
+  void Function() updateUserPrivilegesAction({
+    required BuildContext context,
+    required UserManagementController userManagementController,
+    required String userId,
+    required bool admin,
+  }) {
+    return () {
+      userManagementController
+          .updateUserPrivileges(userId: userId, admin: admin)
+          .then(
+        (result) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              duration: const Duration(seconds: 2),
+              content: Text(
+                result
+                    ? AppTexts.userManagementUpdatePrivilegesSuccess
+                    : AppTexts.userManagementUpdatePrivilegesError,
+              ),
+            ),
+          );
+          userManagementController.getUsers();
+        },
+      );
+    };
   }
 }

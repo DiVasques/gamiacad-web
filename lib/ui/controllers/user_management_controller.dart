@@ -42,4 +42,24 @@ class UserManagementController extends BaseController {
       setState(ViewState.error);
     }
   }
+
+  Future<bool> updateUserPrivileges({
+    required String userId,
+    required bool admin,
+  }) async {
+    setState(ViewState.busy);
+    try {
+      Result result = await _userRepository.updateUserPrivileges(
+        userId: userId,
+        admin: admin,
+      );
+      return result.status;
+    } on UnauthorizedException {
+      rethrow;
+    } catch (e) {
+      return false;
+    } finally {
+      setState(ViewState.idle);
+    }
+  }
 }
