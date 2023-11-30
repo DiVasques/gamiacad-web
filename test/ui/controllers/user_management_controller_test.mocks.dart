@@ -69,4 +69,31 @@ class MockUserRepository extends _i1.Mock implements _i3.UserRepository {
           ),
         )),
       ) as _i5.Future<_i2.Result>);
+
+  @override
+  _i5.Future<_i2.Result> updateUserPrivileges({
+    required String? userId,
+    required bool? admin,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #updateUserPrivileges,
+          [],
+          {
+            #userId: userId,
+            #admin: admin,
+          },
+        ),
+        returnValue: _i5.Future<_i2.Result>.value(_FakeResult_0(
+          this,
+          Invocation.method(
+            #updateUserPrivileges,
+            [],
+            {
+              #userId: userId,
+              #admin: admin,
+            },
+          ),
+        )),
+      ) as _i5.Future<_i2.Result>);
 }

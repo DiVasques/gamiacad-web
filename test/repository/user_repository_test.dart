@@ -141,5 +141,137 @@ void main() {
         }
       });
     });
+
+    group('updateUserPrivileges', () {
+      test('should return success updateUserPrivileges', () async {
+        // Arrange
+        bool admin = true;
+        Response response = Response(
+          requestOptions: RequestOptions(),
+          statusCode: 204,
+          statusMessage: 'Success',
+        );
+        when(
+          gamiAcadDioClient.patch(
+            path: '/admin/${UserMocks.userId}',
+            body: {'admin': admin},
+          ),
+        ).thenAnswer((_) async => response);
+
+        // Act
+        final result = await userRepository.updateUserPrivileges(
+          userId: UserMocks.userId,
+          admin: admin,
+        );
+
+        // Assert
+        expect(result.status, true);
+        expect(result.message, 'Success');
+      });
+
+      test('should return unauthorized when 401', () async {
+        // Arrange
+        bool admin = true;
+        when(
+          gamiAcadDioClient.patch(
+            path: '/admin/${UserMocks.userId}',
+            body: {'admin': admin},
+          ),
+        ).thenAnswer(
+          (_) async => throw DioException(
+            requestOptions: RequestOptions(),
+            response:
+                Response(requestOptions: RequestOptions(), statusCode: 401),
+          ),
+        );
+
+        // Act and Assert
+        try {
+          await userRepository.updateUserPrivileges(
+            userId: UserMocks.userId,
+            admin: admin,
+          );
+        } catch (e) {
+          expect(e.runtimeType, UnauthorizedException);
+        }
+      });
+
+      test('should return forbidden', () async {
+        // Arrange
+        bool admin = true;
+        when(
+          gamiAcadDioClient.patch(
+            path: '/admin/${UserMocks.userId}',
+            body: {'admin': admin},
+          ),
+        ).thenAnswer(
+          (_) async => throw DioException(
+            requestOptions: RequestOptions(),
+            response:
+                Response(requestOptions: RequestOptions(), statusCode: 403),
+          ),
+        );
+
+        // Act and Assert
+        try {
+          await userRepository.updateUserPrivileges(
+            userId: UserMocks.userId,
+            admin: admin,
+          );
+        } catch (e) {
+          expect(e.runtimeType, ForbiddenException);
+        }
+      });
+
+      test('should return service unavailable', () async {
+        // Arrange
+        bool admin = true;
+        when(
+          gamiAcadDioClient.patch(
+            path: '/admin/${UserMocks.userId}',
+            body: {'admin': admin},
+          ),
+        ).thenAnswer(
+          (_) async => throw DioException(
+            requestOptions: RequestOptions(),
+            response:
+                Response(requestOptions: RequestOptions(), statusCode: 404),
+          ),
+        );
+
+        // Act and Assert
+        try {
+          await userRepository.updateUserPrivileges(
+            userId: UserMocks.userId,
+            admin: admin,
+          );
+        } catch (e) {
+          expect(e.runtimeType, ServiceUnavailableException);
+        }
+      });
+
+      test('should return service unavailable when unknown error', () async {
+        // Arrange
+        bool admin = true;
+        when(
+          gamiAcadDioClient.patch(
+            path: '/admin/${UserMocks.userId}',
+            body: {'admin': admin},
+          ),
+        ).thenAnswer(
+          (_) async => throw Exception(),
+        );
+
+        // Act and Assert
+        try {
+          await userRepository.updateUserPrivileges(
+            userId: UserMocks.userId,
+            admin: admin,
+          );
+        } catch (e) {
+          expect(e.runtimeType, ServiceUnavailableException);
+        }
+      });
+    });
   });
 }

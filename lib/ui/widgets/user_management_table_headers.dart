@@ -3,7 +3,7 @@ import 'package:gami_acad_web/ui/utils/app_texts.dart';
 
 class UserManagementTableHeaders {
   static const EdgeInsets _tableHeaderPadding =
-      EdgeInsets.only(left: 15, right: 15, top: 10);
+      EdgeInsets.only(left: 15, right: 15, top: 10, bottom: 5);
 
   static const List<Widget> _tableHeaders = [
     Padding(
