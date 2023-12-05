@@ -52,7 +52,6 @@ class _LoginInputsState extends State<LoginInputs> {
         return Column(
           children: [
             DefaultTextField(
-              initValue: '12345678909',
               validator: validateRegistration,
               labelText: AppTexts.registration,
               style: style,
@@ -69,7 +68,6 @@ class _LoginInputsState extends State<LoginInputs> {
               height: 20,
             ),
             DefaultTextField(
-              initValue: 'V!12341234123',
               validator: validatePwd,
               labelText: AppTexts.password,
               style: style,
