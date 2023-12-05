@@ -4,9 +4,8 @@ import 'package:intl/intl.dart';
 class FieldValidators {
   static String? validateMissionOrRewardName(String? input) {
     input!.trim();
-    RegExp validMissionNamePattern = RegExp(
-        r'''^[ a-z\dA-ZàèìòùÀÈÌÒÙáéíóúýÁÉÍÓÚÝâêîôûÂÊÎÔÛãñõÃÑÕäëïöüÿÄËÏÖÜŸçÇßØøÅåÆæœ`'-]+$''');
-    if (validMissionNamePattern.hasMatch(input)) {
+    RegExp validNamePattern = RegExp(r'''^[ \p{L}\p{N}`'-]+$''', unicode: true);
+    if (validNamePattern.hasMatch(input)) {
       return null;
     } else {
       return ErrorMessages.invalidName;
@@ -15,11 +14,12 @@ class FieldValidators {
 
   static String? validateDescription(String? input) {
     input!.trim();
-    RegExp validDescriptionPattern = RegExp(r'^[\w\s,.]+$');
+    RegExp validDescriptionPattern =
+        RegExp(r'^[\p{L}\p{N}\s.,?!$-]+$', unicode: true);
     if (validDescriptionPattern.hasMatch(input)) {
       return null;
     } else {
-      return ErrorMessages.invalidName;
+      return ErrorMessages.invalidDescription;
     }
   }
 
