@@ -21,9 +21,10 @@ jobs:
 
       - name: Create .env file
         run: |
-          touch .env
-          echo GAMIACAD_API_URL=${{ vars.GAMIACAD_API_URL }} >> .env
-          echo CLIENT_ID=${{ secrets.CLIENT_ID }} >> .env
+          cat > .env <<EOF
+          GAMIACAD_API_URL=${{ vars.GAMIACAD_API_URL }}
+          CLIENT_ID=${{ secrets.CLIENT_ID }}
+          EOF
 
       - uses: subosito/flutter-action@v2
         with:
