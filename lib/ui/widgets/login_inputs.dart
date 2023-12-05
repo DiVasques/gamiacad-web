@@ -55,7 +55,7 @@ class _LoginInputsState extends State<LoginInputs> {
               validator: validateRegistration,
               labelText: AppTexts.registration,
               style: style,
-              keyboardType: TextInputType.emailAddress,
+              keyboardType: TextInputType.number,
               onSaved: (value) => loginController.registration = value,
               focusNode: _registrationFocus,
               textInputAction: TextInputAction.next,
