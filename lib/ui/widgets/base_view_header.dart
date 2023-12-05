@@ -19,15 +19,13 @@ class BaseViewHeader extends StatelessWidget {
         crossAxisAlignment: WrapCrossAlignment.center,
         spacing: 20,
         children: [
-          Flexible(
-            child: Text(
-              viewTitle,
-              textAlign: TextAlign.start,
-              softWrap: true,
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 30,
-              ),
+          Text(
+            viewTitle,
+            textAlign: TextAlign.start,
+            softWrap: true,
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 30,
             ),
           ),
           reloadAction != null
